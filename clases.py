@@ -9,7 +9,7 @@ class Ambiente:
 
     def modifica_atributo(self,pokemon):
         '''
-        Modifica los atributos de los pokemones del equipo segun el ambiente en el que estén y el tipo que sea el pokemon.
+        Modifica los atributos de los pokemones del equipo segun el ambiente en el que estén y el tipo que sea el pokemon. Si el tipo de ambiente y pokemon cooincide, se le suma los stats; sino, se le restan.
         Parámetros:
         pokemon: pokemon
         Objeto de tipo pokemon, el cual se va a utilizar para ver el tipo y modificar los atributos segun corresponda.
@@ -21,20 +21,37 @@ class Ambiente:
             pokemon.ataque= pokemon.ataque-0.20
             pokemon.defensa= pokemon.defensa - 0.05
             pokemon.speed= pokemon.speed - 0.25
+        else:
+            pokemon.ataque= pokemon.ataque+0.20
+            pokemon.defensa= pokemon.defensa + 0.05
+            pokemon.speed= pokemon.speed + 0.25
 
-        elif self.tipo_ambiente=='tierra' and pokemon.tipo!='tierra':
+        if self.tipo_ambiente=='tierra' and pokemon.tipo!='tierra':
             pokemon.ataque= pokemon.ataque-0.20
             pokemon.defensa= pokemon.defensa - 0.15
             pokemon.speed= pokemon.speed - 0.15
-        elif self.tipo_ambiente=='rayos' and pokemon.tipo!='electrico':
+        else:
+            pokemon.ataque= pokemon.ataque + 0.20
+            pokemon.defensa= pokemon.defensa + 0.15
+            pokemon.speed= pokemon.speed + 0.15
+        
+        if self.tipo_ambiente=='rayos' and pokemon.tipo!='electrico':
             pokemon.ataque= pokemon.ataque-0.15
             pokemon.defensa= pokemon.defensa - 0.2
             pokemon.speed= pokemon.speed - 0.05
-        elif self.tipo_ambiente=='fuego' and pokemon.tipo!='fuego':
+        else:
+            pokemon.ataque= pokemon.ataque+0.15
+            pokemon.defensa= pokemon.defensa + 0.2
+            pokemon.speed= pokemon.speed + 0.05
+        
+        if self.tipo_ambiente=='fuego' and pokemon.tipo!='fuego':
             pokemon.ataque= pokemon.ataque-0.5
             pokemon.defensa= pokemon.defensa - 0.15
             pokemon.speed= pokemon.speed - 0.1
-        
+        else:
+            pokemon.ataque= pokemon.ataque + 0.5
+            pokemon.defensa= pokemon.defensa + 0.15
+            pokemon.speed= pokemon.speed + 0.1
 
 
 
