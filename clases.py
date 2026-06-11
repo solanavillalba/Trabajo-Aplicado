@@ -14,7 +14,7 @@ class Ambiente:
         pokemon: pokemon
         Objeto de tipo pokemon, el cual se va a utilizar para ver el tipo y modificar los atributos segun corresponda.
 
-        Return: None
+        Return: no devuelve ningún valor
         '''
 
         if self.tipo_ambiente=='agua' and pokemon.tipo!='agua':
@@ -53,7 +53,9 @@ class Evento_aleatorio:
 
         Parámetros:
         pokemon: pokemon
-        objeto de tipo pokemon en el cual se le va a modificar su atributo de ivida.
+        objeto de tipo pokemon en el cual se le va a modificar su atributo de vida.
+
+        Return: no devuelve ningún valor 
         '''
         pokemon.vida+=self.vida
         if self.vida==1:
