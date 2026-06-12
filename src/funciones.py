@@ -65,16 +65,30 @@ def Ronda(pokemon1, pokemon2, eventos_random):
     
     if accion1=="atacar" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque
-        print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se modificó a {pokemon1.vida}")
+        if pokemon1.vida < 0:
+            pokemon1.vida = 0
+        print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
         pokemon2.vida-=pokemon1.ataque
-        print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se modificó a {pokemon2.vida}")
+        if pokemon2.vida < 0:
+            pokemon2.vida = 0
+        print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
+        if pokemon1.vida == 0 and pokemon2.vida == 0:
+            print("Ambos pokemones murieron")
+        elif pokemon1.vida == 0:
+            print(f"{pokemon1.nombre} murió")
+        elif pokemon2.vida == 0:
+            print(f"{pokemon2.nombre} murió")
 
     elif (accion1=="esquivar" or accion1=="defender") and (accion2=="esquivar" or accion2=="defender"):
         print("Ningun pokemon ataco, no se modificó la vida de ninguno")
 
     elif accion1=="atacar" and accion2=="defender":
         pokemon2.vida-=pokemon1.ataque*pokemon2.defensa
-        print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se modificó a {pokemon2.vida}")
+        if pokemon2.vida < 0:
+            pokemon2.vida = 0
+            print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
+        else:
+            print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
 
     elif accion1=="atacar" and accion2=="esquivar":
         esquiva_sino = [True, False]
@@ -84,11 +98,19 @@ def Ronda(pokemon1, pokemon2, eventos_random):
             print(f"{pokemon2.nombre} esquivó el ataque de {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
         else:
             pokemon2.vida-=pokemon1.ataque
-            print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se modificó a {pokemon2.vida}")
+            if pokemon2.vida < 0:
+                pokemon2.vida = 0
+                print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
+            else:
+                print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
 
     elif accion1=="defender" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque*pokemon1.defensa
-        print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se modificó a {pokemon1.vida}")
+        if pokemon1.vida < 0:
+            pokemon1.vida = 0
+            print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
+        else:
+            print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
 
     elif accion1=="esquivar" and accion2=="atacar":
         esquiva_sino = [True, False]
@@ -98,11 +120,13 @@ def Ronda(pokemon1, pokemon2, eventos_random):
             print(f"{pokemon1.nombre} esquivó el ataque de {pokemon2.nombre} y su vida se mantuvo en {pokemon1.vida}")   
         else:
             pokemon1.vida-=pokemon2.ataque
-            print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se modificó a {pokemon1.vida}")
+            if pokemon1.vida < 0:
+                pokemon1.vida = 0
+                print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
+            else:    
+            print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
 
-    if pokemon1.vida < 0:
-        pokemon1.vida = 0
-    if pokemon2.vida < 0:
-        pokemon2.vida = 0
+
+
 
     return pokemon1, pokemon2
