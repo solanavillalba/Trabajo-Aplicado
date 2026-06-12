@@ -1,3 +1,5 @@
+import random
+
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_cpu=0, puntos_usuario=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
