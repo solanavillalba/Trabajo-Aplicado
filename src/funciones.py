@@ -16,7 +16,7 @@ def rango_atributos(ataque, defensa,speed,special_defense,vida):
     if defensa < 80:
         defensa=0.75
     elif 80<=defensa<=110:
-        ataque=0.5
+        defensa=0.5
     else:
         defensa=0.25
     
@@ -29,8 +29,10 @@ def rango_atributos(ataque, defensa,speed,special_defense,vida):
     
     if special_defense < 60:
         special_defense=0
+
     elif 60<=special_defense<=80:
         special_defense=0.5
+
     else:
         special_defense=1
         
@@ -97,5 +99,10 @@ def Ronda(pokemon1, pokemon2, eventos_random):
         else:
             pokemon1.vida-=pokemon2.ataque
             print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se modificó a {pokemon1.vida}")
-    
+
+    if pokemon1.vida < 0:
+        pokemon1.vida = 0
+    if pokemon2.vida < 0:
+        pokemon2.vida = 0
+
     return pokemon1, pokemon2
