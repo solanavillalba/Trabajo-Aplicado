@@ -1,5 +1,6 @@
 import requests
 import random
+from clases import Pokemon
 
 
 def poke_api (pokemon):
@@ -89,6 +90,21 @@ def rango_atributos(diccio):
     else:
         diccio["adaptabilidad"]=1
     return diccio
+
+def crear_pokemon(pokemon):
+    '''
+    Recibe el nombre de un pokemon, hace la consulta a la API, convierte los datos a rangos y devuelve un objeto Pokemon con los atributos correspondientes.
+    Parámetros:
+    pokemon: str. El nombre del pokemon que se quiere consultar. Debe ser el nombre en ingles y en minuscula.
+
+    Retorna:
+    Pokemon: Un objeto Pokemon con los atributos correspondientes al pokemon consultado.
+    '''
+    datos_crudos=poke_api(pokemon)
+    datos_casteados=rango_atributos(datos_crudos)
+    poke_creado=Pokemon(datos_casteados)
+
+    return poke_creado
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_cpu=0, puntos_usuario=0):
