@@ -92,7 +92,7 @@ def rango_atributos(diccio):
 
     
         
-    vida=5
+   
 
     return diccio
 
