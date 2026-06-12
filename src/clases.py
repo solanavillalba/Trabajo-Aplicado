@@ -82,30 +82,30 @@ class Pokemon:
             self.speed = dicc['speed']
             self.tipo = dicc['tipo']
 
-def cambiar_atributo(self, atributo, numero_boost):
+    def cambiar_atributo(self, atributo, numero_boost):
     
-   if atributo == "ataque":
-        self.ataque += numero_boost
-        self.speed  -= numero_boost
+        if atributo == "ataque":
+            self.ataque += numero_boost
+            self.speed  -= numero_boost
     
-    elif atributo == "defensa":
-        self.defensa       += numero_boost
-        self.adaptabilidad -= numero_boost
+         elif atributo == "defensa":
+            self.defensa       += numero_boost
+            self.adaptabilidad -= numero_boost
     
-    elif atributo == "special_defense":
-        self.adaptabilidad += numero_boost
-        self.defensa       -= numero_boost
+        elif atributo == "special_defense":
+            self.adaptabilidad += numero_boost
+            self.defensa       -= numero_boost
 
-    elif atributo == "speed":
-        self.speed += numero_boost
-        self.ataque -= numero_boost
+        elif atributo == "speed":
+            self.speed += numero_boost
+            self.ataque -= numero_boost
 
-    else:
-        print(f"'{atributo}' no es válido.")
-        return
+        else:
+            print(f"'{atributo}' no es válido.")
+            return
 
-    print(f"{self.nombre}: subiste '{atributo}'")
-    print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
+        print(f"{self.nombre}: subiste '{atributo}'")
+        print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
 
 
     
