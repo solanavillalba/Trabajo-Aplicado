@@ -82,3 +82,10 @@ for pokemon in pok_cpu:
     #funcion_ambiente(pokemon)
     pass
 
+# CAMBIAR ATRIBUTOS 
+
+numero_boost=  # definir después, un solo lugar
+
+atributo = input("¿Qué atributo querés subir? (ataque / defensa / speed / adaptabilidad): ")
+
+pokemon.cambiar_atributo(atributo, numero_boost)
