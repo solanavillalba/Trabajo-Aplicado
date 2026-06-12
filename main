@@ -1,6 +1,10 @@
 import random
+import src.funciones as f
+import src.clases as c
 
 print("¡Bienvenido al juego de Pokemon!")
+
+#HABRIA QUE EXPLICAR TOD LO DE ATAQUE, DEFENSA, VELOCIDAD, ADAPTABILIDAD, AMBIENTES Y EVENTOS. Y DE LA BANCA, SI TU POKEMON ESTA HERIDO SE RESERVA.
 
 #TIENEN QUE SER CAMBIADOS A LOS OBJETOS POKEMONES, NO DEJAR COMO STR
 pokemones_equipo1 = {
@@ -59,10 +63,13 @@ lista_ambientes = ["playa", "bosque", "volcan", "tormenta"]
 num_amb = random.randint(0, (len(lista_ambientes)-1))
 ambiente = lista_ambientes[num_amb]
 
+#TIENEN QUE SER CAMBIADOS A LOS OBJETOS AMBIENTES, NO DEJAR COMO STR
 print(f"Ambiente seleccionado al azar: {ambiente}")
 
+#TIENEN QUE SER CAMBIADOS A LOS OBJETOS EVENTOS, NO DEJAR COMO STR
+eventos_random = ["lluvia", "nieve", "granizo", "sol"]
+
 # CAMBIO DE ATRIBUTO POR AMBIENTE
-#TIENEN QUE SER CAMBIADOS A LOS OBJETOS AMBIENTES, NO DEJAR COMO STR
 
 for pokemon in pok_usuario:
     #funcion_ambiente(pokemon)
@@ -71,3 +78,4 @@ for pokemon in pok_usuario:
 for pokemon in pok_cpu:
     #funcion_ambiente(pokemon)
     pass
+

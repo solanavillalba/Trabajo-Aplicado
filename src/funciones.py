@@ -40,7 +40,8 @@ def rango_atributos(ataque, defensa,speed,special_defense,vida):
 
     return ataque,defensa,speed,special_defense,vida
 
-def Ronda(pokemon1, pokemon2, eventos_random):
+#falta agregar el special attack
+def ronda(pokemon1, pokemon2, eventos_random, puntos_cpu=0, puntos_usuario=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
     Parámetros:
     pokemon1 (objeto): Un objeto que representa al primer pokemon, con sus atributos.
@@ -49,6 +50,8 @@ def Ronda(pokemon1, pokemon2, eventos_random):
     Retorna:
     pokemon1 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
     pokemon2 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
+    puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
+    puntos_usuario (int): Puntos acumulados por el usuario durante la ronda.
     """
     accion1= input("¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
     
@@ -68,10 +71,14 @@ def Ronda(pokemon1, pokemon2, eventos_random):
         if pokemon1.vida < 0:
             pokemon1.vida = 0
         print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+        puntos_cpu+=1
+
         pokemon2.vida-=pokemon1.ataque
         if pokemon2.vida < 0:
             pokemon2.vida = 0
         print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
+        puntos_usuario+=1
+
         if pokemon1.vida == 0 and pokemon2.vida == 0:
             print("Ambos pokemones murieron")
         elif pokemon1.vida == 0:
@@ -89,6 +96,7 @@ def Ronda(pokemon1, pokemon2, eventos_random):
             print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
         else:
             print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
+            puntos_usuario+=1
 
     elif accion1=="atacar" and accion2=="esquivar":
         esquiva_sino = [True, False]
@@ -103,6 +111,7 @@ def Ronda(pokemon1, pokemon2, eventos_random):
                 print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
             else:
                 print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
+                puntos_usuario+=1
 
     elif accion1=="defender" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque*pokemon1.defensa
@@ -111,6 +120,7 @@ def Ronda(pokemon1, pokemon2, eventos_random):
             print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
         else:
             print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+            puntos_cpu+=1
 
     elif accion1=="esquivar" and accion2=="atacar":
         esquiva_sino = [True, False]
@@ -125,8 +135,6 @@ def Ronda(pokemon1, pokemon2, eventos_random):
                 print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
             else:    
                 print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+                puntos_cpu+=1
 
-
-
-
-    return pokemon1, pokemon2
+    return pokemon1, pokemon2, puntos_cpu, puntos_usuario
