@@ -1,4 +1,6 @@
 import requests
+import random
+
 
 def poke_api (pokemon):
     '''
@@ -34,9 +36,6 @@ def poke_api (pokemon):
 
     return fila
 
-
-
-import random
 def rango_atributos(diccio):
     '''
     Convierte los valores de los datos del pokemon sacados de la API a rangos entre 0 y 2. Esto es con el objetivo de diferenciar pokemones de niveles bajos, medios y altos.
@@ -89,10 +88,6 @@ def rango_atributos(diccio):
         diccio["adaptabilidad"]=0.5
     else:
         diccio["adaptabilidad"]=1
-
-    
-        
-    vida=5
 
     return diccio
 
