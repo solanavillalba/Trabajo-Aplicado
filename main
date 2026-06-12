@@ -27,17 +27,30 @@ print("Pokemones: ")
 pok_usuario = []
 pok_cpu = []
 # ELECCION POKEMON USUARIO
+# el jugador elige un pokemon de cada tipo (agua, fuego, tierra, electricidad)
 
-for categoria, lista_pokemones in pokemones.items():
-    print(categoria)
+for tipo, lista_pokemones in pokemones.items():
+    print(tipo)
     for pokemon in lista_pokemones:
-        print(f"\n Pokemon: {pokemon}\n Tipo: {pokemon.tipo} ")
-        print(f"Stats: Ataque: {pokemon.ataque} \n Defensa: {pokemon.defensa} \n Velocidad: {pokemon.velocidad} \n Adaptabilidad: {pokemon.adaptabilidad}\n ")
+        pokemon.mostrar_atributos() #sale de la calse pokemon 
+    nombres_disponibles = [] # armamos una lista de nombres (strings) para validar y el jugador ingresa un nombre, lo comparamos contra esa lista de strings
+    for p in lista_pokemones:
+        nombres_disponibles.append(p.nombre)  #  ej:["vaporeon", "gyarados", "greninja"]
 
-    poke = input("Seleccione pokemon: ").lower().strip()
-    while poke not in lista_pokemones:
-            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ")
-    print(f"{poke} seleccionado correctamente!")
+    poke_nombre = input(f"Selecciona tu pokemon de tipo {tipo}: ").lower().strip()
+    while poke_nombre not in nombres_disponibles:
+        poke_nombre = input(f"Pokemon invalido. eligr entre {nombres_disponibles}: ").lower().strip()
+
+        #una vez validado el nombre buscamos el objeto Pokemon que le corresponde
+    # recorremos lista_pokemones hasta encontrar el que tiene ese nombre
+
+    poke = None
+    for p in lista_pokemones:
+        if p.nombre == poke_nombre:
+            poke = p  # poke ahora es un objeto Pokemon con .tipo, .ataque, .defensa y asiii
+            break
+    
+    print(f"{poke.nombre} seleccionado correctamente")
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
     atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
