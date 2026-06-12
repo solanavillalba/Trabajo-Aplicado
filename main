@@ -3,7 +3,7 @@ import random
 print("¡Bienvenido al juego de Pokemon!")
 
 #TIENEN QUE SER CAMBIADOS A LOS OBJETOS POKEMONES, NO DEJAR COMO STR
-pokemones = {
+pokemones_equipo1 = {
     "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
@@ -34,8 +34,15 @@ for categoria, lista_pokemones in pokemones.items():
             
     print("¡Atributo modificado exitosamente! {atri_u} boosteada, {poke.m} disminuido")
     pok_usuario.append(poke)
-    
+
+#HICE ESTO PARA QUE SEAN DIFERENTES OBJETOS
+
+pokemones_equipo2 = {
+    "Novatos": ["dragonite_cpu","tyranitar_cpu","metagross_cpu","arcanine_cpu"],
+    "Medios": ["vaporeon_cpu","jolteon_cpu","pikachu_cpu","eevee_cpu"],
+    "Altos": ["psyduck_cpu","charmander_cpu","charizard_cpu","rattata_cpu"] } 
 # ELECCION CPU
+for categoria, lista_pokemones in pokemones_equipo2.items():
     num_cpu = random.randint(0, (len(lista_pokemones) -1))
     poke_cpu =  lista_pokemones[num_cpu]
 
@@ -45,8 +52,6 @@ for categoria, lista_pokemones in pokemones.items():
     
     pok_cpu.append(poke_cpu)
     
-
-
 # ELECCION AMBIENTE
 
 lista_ambientes = ["playa", "bosque", "volcan", "tormenta"]
@@ -66,3 +71,4 @@ for pokemon in pok_usuario:
 for pokemon in pok_cpu:
     #funcion_ambiente(pokemon)
     pass
+
