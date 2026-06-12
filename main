@@ -27,7 +27,10 @@ for categoria, lista_pokemones in pokemones.items():
     print(f"{poke} seleccionado correctamente!")
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
+    lista_atributos = ["Ataque", "Defensa", "Velocidad", "Adaptabilidad"]
     atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
+    #FUNCION VALIDACIÓN
+    elecc_atri = atri_u - 1
     #FUNCION VALIDACIÓN
     
     #funcion_cambio_atributo(poke, atri_u)
