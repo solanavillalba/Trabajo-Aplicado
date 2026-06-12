@@ -2,7 +2,7 @@ import random
 
 print("¡Bienvenido al juego de Pokemon!")
 
-
+#TIENEN QUE SER CAMBIADOS A LOS OBJETOS POKEMONES, NO DEJAR COMO STR
 pokemones = {
     "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
@@ -21,9 +21,9 @@ for categoria, lista_pokemones in pokemones.items():
         print(f"\n Pokemon: {pokemon}\n Tipo: {pokemon.tipo} ")
         print(f"Stats: Ataque: {pokemon.ataque} \n Defensa: {pokemon.defensa} \n Velocidad: {pokemon.velocidad} \n Adaptabilidad: {pokemon.adaptabilidad}\n ")
 
-    poke = input("Seleccione pokemon: ")
+    poke = input("Seleccione pokemon: ").lower().strip()
     while poke not in lista_pokemones:
-            poke = input("Pokemon invalido. Recuerde escribirlo todo en minuscula. \n Seleccione Pokemon de la lista: ")
+            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ")
     print(f"{poke} seleccionado correctamente!")
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
