@@ -1,10 +1,14 @@
 class Ambiente:
     '''
     Inicializa la clase de ambiente, la cual segun sus caracteristicas puede afectar al ataque, defensa y velocidad del pokemon o no.
+    Tenes que ingresar, el nombre del ambiente (str), el tipo de ambiente (str), la fuerza que se va a modificar, la defensa que se va a modificar y la velocidad que se va a modificar (float negativo)."
     '''
-    def __init__(self,nombre,tipo_ambiente):
+    def __init__(self,nombre,tipo_ambiente, ataque, defensa, velocidad):
         self.nombre=nombre
         self.tipo_ambiente=tipo_ambiente
+        self.ataque=ataque
+        self.defensa=defensa
+        self.velocidad=velocidad
 
 
     def modifica_atributo(self,pokemon):
@@ -14,44 +18,27 @@ class Ambiente:
         pokemon: pokemon
         Objeto de tipo pokemon, el cual se va a utilizar para ver el tipo y modificar los atributos segun corresponda.
 
-        Return: no devuelve ningún valor
+        Return:
+        pokemon: devuelve objeto pokemon con sus atributos modificados segun el ambiente.
         '''
 
-        if self.tipo_ambiente=='agua' and pokemon.tipo!='agua':
-            pokemon.ataque= pokemon.ataque-0.20
-            pokemon.defensa= pokemon.defensa - 0.05
-            pokemon.speed= pokemon.speed - 0.25
+        if self.tipo_ambiente==pokemon.tipo:
+            print(f"{pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
+        elif pokemon.adaptabilidad==1:
+            print(f"{pokemon.nombre} es adaptable, no se modifican sus atributos")
+        elif pokemon.adaptabilidad==0.5:
+            pokemon.ataque+= self.ataque/2
+            pokemon.defensa+= self.defensa/2
+            pokemon.speed+= self.velocidad/2
+            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
         else:
-            pokemon.ataque= pokemon.ataque+0.20
-            pokemon.defensa= pokemon.defensa + 0.05
-            pokemon.speed= pokemon.speed + 0.25
+            pokemon.ataque+= self.ataque
+            pokemon.defensa+= self.defensa
+            pokemon.speed+= self.velocidad 
+            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
+        
+        return pokemon
 
-        if self.tipo_ambiente=='tierra' and pokemon.tipo!='tierra':
-            pokemon.ataque= pokemon.ataque-0.20
-            pokemon.defensa= pokemon.defensa - 0.15
-            pokemon.speed= pokemon.speed - 0.15
-        else:
-            pokemon.ataque= pokemon.ataque + 0.20
-            pokemon.defensa= pokemon.defensa + 0.15
-            pokemon.speed= pokemon.speed + 0.15
-        
-        if self.tipo_ambiente=='rayos' and pokemon.tipo!='electrico':
-            pokemon.ataque= pokemon.ataque-0.15
-            pokemon.defensa= pokemon.defensa - 0.2
-            pokemon.speed= pokemon.speed - 0.05
-        else:
-            pokemon.ataque= pokemon.ataque+0.15
-            pokemon.defensa= pokemon.defensa + 0.2
-            pokemon.speed= pokemon.speed + 0.05
-        
-        if self.tipo_ambiente=='fuego' and pokemon.tipo!='fuego':
-            pokemon.ataque= pokemon.ataque-0.5
-            pokemon.defensa= pokemon.defensa - 0.15
-            pokemon.speed= pokemon.speed - 0.1
-        else:
-            pokemon.ataque= pokemon.ataque + 0.5
-            pokemon.defensa= pokemon.defensa + 0.15
-            pokemon.speed= pokemon.speed + 0.1
 
 
 

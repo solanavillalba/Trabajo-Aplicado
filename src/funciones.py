@@ -124,7 +124,7 @@ def Ronda(pokemon1, pokemon2, eventos_random):
                 pokemon1.vida = 0
                 print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
             else:    
-            print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+                print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
 
 
 
