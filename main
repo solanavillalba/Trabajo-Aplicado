@@ -1,1 +1,67 @@
-hola=input("hola")
+import random
+
+print("¡Bienvenido al juego de Pokemon!")
+
+
+pokemones = {
+    "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
+    "Medios": ["vaporeon","jolteon","pikachu","eevee"],
+    "Altos": ["psyduck","charmander","charizard","rattata"] }
+
+print("Pokemones: ")
+
+pok_usuario = []
+pok_cpu = []
+
+# ELECCION POKEMON USUARIO
+
+for categoria, lista_pokemones in pokemones.items():
+    print(categoria)
+    for pokemon in lista_pokemones:
+        print(f"\n Pokemon: {pokemon}\n Tipo: {pokemon.tipo} ")
+        print(f"Stats: Ataque: {pokemon.ataque} \n Defensa: {pokemon.defensa} \n Velocidad: {pokemon.velocidad} \n Adaptabilidad: {pokemon.adaptabilidad}\n ")
+
+    poke = input("Seleccione pokemon: ")
+    while poke not in lista_pokemones:
+            poke = input("Pokemon invalido. Recuerde escribirlo todo en minuscula. \n Seleccione Pokemon de la lista: ")
+    print(f"{poke} seleccionado correctamente!")
+            
+# USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
+    atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
+    #FUNCION VALIDACIÓN
+    
+    #funcion_cambio_atributo(poke, atri_u)
+            
+    print("¡Atributo modificado exitosamente! {atri_u} boosteada, {poke.m} disminuido")
+    pok_usuario.append(poke)
+    
+# ELECCION CPU
+    num_cpu = random.randint(0, (len(lista_pokemones) -1))
+    poke_cpu =  lista_pokemones[num_cpu]
+
+# CPU SELECCIONAR ATRIBUTO A CAMBIAR   
+    num_att = random.randint(1, (len(lista_pokemones)))
+    #funcion_cambio_atributo(poke_cpu, num_att)
+    
+    pok_cpu.append(poke_cpu)
+    
+
+
+# ELECCION AMBIENTE
+
+lista_ambientes = ["playa", "bosque", "volcan", "tormenta"]
+
+num_amb = random.randint(0, (len(lista_ambientes)-1))
+ambiente = lista_ambientes[num_amb]
+
+print(f"Ambiente seleccionado al azar: {ambiente}")
+
+# CAMBIO DE ATRIBUTO POR AMBIENTE
+
+for pokemon in pok_usuario:
+    #funcion_ambiente(pokemon)
+    pass
+
+for pokemon in pok_cpu:
+    #funcion_ambiente(pokemon)
+    pass
