@@ -1,0 +1,38 @@
+
+import requests
+def poke_api (pokemon):
+    '''
+    Recibe el nombre de un pokemon, hace la consulta a la API y devuelve un diccionario con los datos crudos del pokemon.
+    Parametros:
+    pokemon: str.El nombre del pokemon que se quiere consultar. Debe ser el nombre en ingles y en minuscula.
+   
+   Return:
+    dict: un diccionario con los datos crudos del pokemon. Ejemplo:
+    {"pokemon": "pikachu", "hp": 35, "ataque": 55, "defensa": 40, "special_attack": 50, "adaptabilidad": 50, "speed": 90, "tipo": "electric"} 
+    '''
+    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon.lower()}"
+    respuesta = requests.get(url)
+
+    if respuesta.status_code != 200:
+        raise ValueError(f"Error con {pokemon}")
+
+    datos = respuesta.json()
+    stats = {stat["stat"]["name"]: stat["base_stat"]
+        for stat in datos["stats"]}
+    tipos_lista = [t["type"]["name"] for t in datos["types"]]
+    
+    fila = {
+        "pokemon": pokemon,
+        "hp": stats["hp"],
+        "ataque": stats["attack"],
+        "defensa": stats["defense"],
+        "special_attack": stats["special-attack"],
+        "adaptabilidad": stats["special-defense"],
+        "speed": stats["speed"],
+        "tipo": "/".join(tipos_lista)
+    }
+
+    return fila
+
+picachu=poke_api("pikachu")
+print(picachu)
