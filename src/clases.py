@@ -75,14 +75,8 @@ class Evento_aleatorio:
         Return: no devuelve ningún valor 
         '''
         pokemon.vida+=self.vida
-        if self.vida==1:
-            print("{pokemon.nombre} recibió una manzana dorada")
-        elif self.vida==0.5:
-            print("{pokemon.nombre} recibió ...")
-        elif self.vida==-0.5:
-            print("{pokemon.nombre} recibió ...")
-        else:
-            print("{pokemon.nombre} recibió ...")
+        print(f"{pokemon.nombre} recibió un evento aleatorio: {self.nombre} y su vida se modificó a {pokemon.vida}")
+
 
 
   
