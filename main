@@ -71,4 +71,3 @@ for pokemon in pok_usuario:
 for pokemon in pok_cpu:
     #funcion_ambiente(pokemon)
     pass
-
