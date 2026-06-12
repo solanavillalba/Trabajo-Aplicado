@@ -1,4 +1,7 @@
 import requests
+import random
+from clases import Pokemon
+
 
 def poke_api (pokemon):
     '''
@@ -34,49 +37,74 @@ def poke_api (pokemon):
 
     return fila
 
-
-
-import random
-def rango_atributos(ataque, defensa,speed,special_defense,vida):
+def rango_atributos(diccio):
     '''
-    Convierte los valores de los atributos del pokemon a rangos entre 0 y 2 para diferenciar atributos de nivel bajo, medio o alto.
-
+    Convierte los valores de los datos del pokemon sacados de la API a rangos entre 0 y 2. Esto es con el objetivo de diferenciar pokemones de niveles bajos, medios y altos.
     Parámetros:
+    diccio: dict
+        Diccionario con los datos de la API del pokemon elegido. 
+        Tiene la siguiente forma: {"pokemon":str,"hp":int,"ataque":int,"defensa":int,"special_attack":int,"adaptabilidad":int,"speed":int,"tipo":str}
 
+    Retorna: dict
+    Retorna el mismo diccionario con los valores modificados al rango de 0 y 2.
     '''
-    if ataque < 80:
-        ataque=1
-    elif 80<=ataque<=110:
-        ataque=1.5
-    else:
-        ataque=2
-    
-    if defensa < 80:
-        defensa=0.75
-    elif 80<=defensa<=110:
-        defensa=0.5
-    else:
-        defensa=0.25
-    
-    if speed< 80:
-        speed=0.25
-    elif 80<=speed<=110:
-        speed=0.5
-    else:
-        speed=0.75
-    
-    if special_defense < 60:
-        special_defense=0
+    diccio["hp"]=5
 
-    elif 60<=special_defense<=80:
-        special_defense=0.5
+    if diccio['ataque'] < 80:
+        diccio['ataque']=1
+    elif 80<=diccio['ataque']<=110:
+        diccio['ataque']=1.5
+    else:
+        diccio['ataque']=2
+    
+
+    if diccio['defensa'] < 80:
+        diccio['defensa']=0.75
+    elif 80<=diccio['defensa']<=110:
+        diccio['defensa']=0.5
+    else:
+        diccio['defensa']=0.25
+
+
+    if diccio["special_attack"] < 60:
+        diccio["special_attack"]=0.25
+
+    elif 60<=diccio["special_attack"]<=80:
+        diccio["special_attack"]=0.5
 
     else:
-        special_defense=1
-        
-    vida=5
+        diccio["special_attack"]=1
+    
+    
+    if diccio['speed']< 80:
+        diccio['speed']=0.25
+    elif 80<=diccio['speed']<=110:
+        diccio['speed']=0.5
+    else:
+        diccio['speed']=0.75
+    
+    if diccio["adaptabilidad"] < 60:
+        diccio["adaptabilidad"]=0
+    elif 60<=diccio["adaptabilidad"]<=80:
+        diccio["adaptabilidad"]=0.5
+    else:
+        diccio["adaptabilidad"]=1
+    return diccio
 
-    return ataque,defensa,speed,special_defense,vida
+def crear_pokemon(pokemon):
+    '''
+    Recibe el nombre de un pokemon, hace la consulta a la API, convierte los datos a rangos y devuelve un objeto Pokemon con los atributos correspondientes.
+    Parámetros:
+    pokemon: str. El nombre del pokemon que se quiere consultar. Debe ser el nombre en ingles y en minuscula.
+
+    Retorna:
+    Pokemon: Un objeto Pokemon con los atributos correspondientes al pokemon consultado.
+    '''
+    datos_crudos=poke_api(pokemon)
+    datos_casteados=rango_atributos(datos_crudos)
+    poke_creado=Pokemon(datos_casteados)
+
+    return poke_creado
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_cpu=0, puntos_usuario=0):
