@@ -4,19 +4,28 @@ import src.clases as c
 
 print("¡Bienvenido al juego de Pokemon!")
 
-#HABRIA QUE EXPLICAR TOD LO DE ATAQUE, DEFENSA, VELOCIDAD, ADAPTABILIDAD, AMBIENTES Y EVENTOS. Y DE LA BANCA, SI TU POKEMON ESTA HERIDO SE RESERVA.
+# aqui llamamos a la API y convertimos cada dato crudo a objeto Pokemon
+# asi cada pokemon tiene .tipo, .ataque, .defensa, .speed, .adaptabilidad 
+datos_crudos = f.obtener_datos_api()
 
-#TIENEN QUE SER CAMBIADOS A LOS OBJETOS POKEMONES, NO DEJAR COMO STR
-pokemones_equipo1 = {
-    "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
-    "Medios": ["vaporeon","jolteon","pikachu","eevee"],
-    "Altos": ["psyduck","charmander","charizard","rattata"] }
+# aqui organizamos los objetos Pokemon por tipo (agua, fuego, tierra, electricidad)
+# y asi el jugador va a elegir un pokemon de cada tipo
+pokemones = {"agua": [], "fuego": [], "tierra": [], "electricidad": []}
+for dato in datos_crudos:
+    pokemon_obj = f.crear_pokemon(dato)              # convierte dato crudo a objeto Pokemon
+    pokemones[pokemon_obj.tipo].append(pokemon_obj)  # lo mete en su categoria por tipo
+
+# llamamos a la API de nuevo para tener objetos independientes para la cpu
+datos_crudos_cpu = f.obtener_datos_api()
+pokemones_cpu = {"agua": [], "fuego": [], "tierra": [], "electricidad": []}
+for dato in datos_crudos_cpu:
+    pokemon_obj_cpu = f.crear_pokemon(dato)
+    pokemones_cpu[pokemon_obj_cpu.tipo].append(pokemon_obj_cpu)
 
 print("Pokemones: ")
 
 pok_usuario = []
 pok_cpu = []
-
 # ELECCION POKEMON USUARIO
 
 for categoria, lista_pokemones in pokemones.items():
