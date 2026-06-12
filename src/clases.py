@@ -106,65 +106,31 @@ class Pokemon:
         self.defensa_crudo = defensa_crudo     
         self.speed_crudo = speed_crudo        
 
-    def cambiar_atributo(self, atributo, nuevo_valor):
-        '''
-        Se llama una sola vez al inicio del juego, antes de que empiece la batalla.
-        El jugador elige un atributo y le asigna un numero del 1 al 10.
-        Ese numero se multiplica por 15 para pasarlo a escala 0-150 que entiende rango_atributos().
-        rango_atributos() lo convierte al valor real que despues usa Ronda() en el combate.
-        Parametros:
-        atributo: str
-        Nombre del atributo a modificar. Puede ser 'ataque', 'defensa' o 'speed'.
-        nuevo_valor: int
-        Numero del 1 al 10 elegido por el jugador.
+def cambiar_atributo(self, atributo, numero_boost):
+    
+   if atributo == "ataque":
+        self.ataque += numero_boost
+        self.speed  -= numero_boost
+    
+    elif atributo == "defensa":
+        self.defensa       += numero_boost
+        self.adaptabilidad -= numero_boost
+    
+    elif atributo == "special_defense":
+        self.adaptabilidad += numero_boost
+        self.defensa       -= numero_boost
 
-        Return:
-        No retorna nada.
-        '''
-        atributos_validos = ["ataque", "defensa", "speed"]
-        if atributo not in atributos_validos:
-            print(f"'{atributo}' no es modificable. Elegí entre: {atributos_validos}")
-            return
+    elif atributo == "speed":
+        self.speed += numero_boost
+        self.ataque -= numero_boost
 
-        # 1) multiplicamos el valor del jugador (1-10) por 15 para pasarlo a escala 0-150,se necesita pq rango_atributos() fue diseñada para trabajar con valores de la API (0-150) (ej: jugador ingresa 3 () 3*15=45) aca rango_atributos() da  Bajo  (< 60)
-        valor_convertido = nuevo_valor * 15
+    else:
+        print(f"'{atributo}' no es válido.")
+        return
 
-        if atributo == "ataque":
-            # 2): llamamos a rango_atributos() con el valor convertido en ataque
-            # los otros atributos van con sus valores crudos originales para que no cambien
-            ataque_conv, defensa_conv, speed_conv, adaptabilidad_conv, vida_conv = rango_atributos(
-                valor_convertido,    # este es el que el jugador quiere cambiar
-                self.defensa_crudo,  # este no cambia, usamos el crudo original de la API
-                self.speed_crudo,    # este no cambia, usamos el crudo original de la API
-                self.adaptabilidad,
-                self.vida
-            )
-            # 3): actualizamos el atributo con el valor que devolvio rango_atributos()
-            # a partir de aca Ronda() va a usar este nuevo valor para calcular el daño
-            self.ataque = ataque_conv
-            print(f"{self.nombre}: ataque cambió a {self.ataque} y en Ronda() le va a sacar {self.ataque} puntos de vida al rival")
+    print(f"{self.nombre}: subiste '{atributo}'")
+    print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
 
-        elif atributo == "defensa":
-            ataque_conv, defensa_conv, speed_conv, adaptabilidad_conv, vida_conv = rango_atributos(
-                self.ataque_crudo,   # este no cambia, usamos el crudo original de la API
-                valor_convertido,    # este es el que el jugador quiere cambiar
-                self.speed_crudo,    # este no cambia, usamos el crudo original de la API
-                self.adaptabilidad,
-                self.vida
-            )
-            self.defensa = defensa_conv
-            print(f"{self.nombre}: defensa cambió a {self.defensa} y en Ronda() el daño recibido se multiplica por {self.defensa}")
-
-        elif atributo == "speed":
-            ataque_conv, defensa_conv, speed_conv, adaptabilidad_conv, vida_conv = rango_atributos(
-                self.ataque_crudo,   # este no cambia, usamos el crudo original de la API
-                self.defensa_crudo,  # este no cambia, usamos el crudo original de la API
-                valor_convertido,    # este es el que el jugador quiere cambiar
-                self.adaptabilidad,
-                self.vida
-            )
-            self.speed = speed_conv
-            print(f"{self.nombre}: speed cambió a {self.speed} y en Ronda() tiene {self.speed*100}% de chances de esquivar")
 
     def mostrar_atributos(self):
         '''
