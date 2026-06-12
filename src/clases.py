@@ -72,39 +72,15 @@ class Pokemon:
     Cada pokemon que se crea a partir de este molde va a tener su propio nombre, tipo, vida, ataque, defensa, speed y adaptabilidad.
     Los atributos llegan ya convertidos a rangos desde crear_pokemon() que los paso por rango_atributos().
     '''
-    def __init__(self, nombre, tipo, vida, ataque, defensa, speed, adaptabilidad, ataque_crudo, defensa_crudo, speed_crudo):
-
-        # informacion basica del pokemon, viene de la API via obtener_datos_api() y crear_pokemon()
-        self.nombre = nombre 
-        self.tipo = tipo           # 'agua', 'tierra', 'fuego' o 'electricidad' aca Ambiente.modifica_atributo() lo compara con el tipo del ambiente. 
-                                    #si coinciden el pokemon no sufre penalizacion, que sino sus atributos bajan
-              
-        self.vida = vida     # este atributo se usan directamente en Ronda() para calcular como va yendo el combate, siempre vale 5 (lo fija rango_atributos())                
-                                               # en Ronda() se resta cada vez que el pokemon recibe un golpe ( ej: si recibe ataque=2, vida = 5-2 = 3) si llega a 0 el pokemon muere y sale del equipo
-      
-        self.ataque = ataque                   # puede ser 1 (Bajo), 1.5 (Medio) o 2 (Alto)
-                                               # en Ronda() es el daño que le hace al rival
-                                               # ej: ataque=2  pokemon2.vida -= 2
-
-        self.defensa = defensa                 # puede ser 0.75 (Bajo), 0.5 (Medio) o 0.25 (Alto)
-                                               # en Ronda() multiplica el daño recibido cuando el pokemon defiende
-                                               # ej: defensa=0.25,  recibe muy poco daño (pokemon1.vida -= ataque * 0.25)
-                                               # ej: defensa=0.75, recibe casi todo el daño (pokemon1.vida -= ataque * 0.75)
-
-        self.speed = speed                     # puede ser 0.25 (Bajo), 0.5 (Medio) o 0.75 (Alto)
-                                               # en Ronda() es la probabilidad de esquivar un ataque
-                                               # ej: speed=0.75 → 75% de chances de esquivar, speed=0.25 → 25% de chances
-
-        self.adaptabilidad = adaptabilidad     # puede ser 0 (Bajo), 0.5 (Medio) o 1 (Alto)
-                                               # Ambiente.modifica_atributo() lo usa para decidir cuanto penalizar al pokemon
-                                               # adaptabilidad=1  no se penaliza nada en ambiente desfavorable
-                                               # adaptabilidad=0.5  se penaliza a la mitad
-                                               # adaptabilidad=0  se penaliza completo
-
-        # guardamos los valores crudos de la API porque cambiar_atributo() los necesita, sino  que aca el problema es que una vez que rango_atributos() convirtio ataque=95 a ataque=1.5. ya no podemos recuperar el 95 si no lo guardamos y rango_atributos() necesita valores en escala 0-150, no 1/1.5/2
-        self.ataque_crudo = ataque_crudo       
-        self.defensa_crudo = defensa_crudo     
-        self.speed_crudo = speed_crudo        
+    def __init__(self, dicc):
+            self.nombre = dicc['pokemon']
+            self.vida = dicc['hp']
+            self.ataque = dicc['ataque']                  
+            self.defensa = dicc['defensa']
+            self.special_attack= dicc['special_attack']
+            self.adaptabilidad = dicc['adaptabilidad']
+            self.speed = dicc['speed']
+            self.tipo = dicc['tipo']
 
 def cambiar_atributo(self, atributo, numero_boost):
     

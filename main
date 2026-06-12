@@ -2,25 +2,15 @@ import random
 import src.funciones as f
 import src.clases as c
 
+#(FUNCION API PARA CREAR DICCIONARIOS CON LISTAS PARA POKEMONES)
+
 print("¡Bienvenido al juego de Pokemon!")
 
-# aqui llamamos a la API y convertimos cada dato crudo a objeto Pokemon
-# asi cada pokemon tiene .tipo, .ataque, .defensa, .speed, .adaptabilidad 
-datos_crudos = f.obtener_datos_api()
 
-# aqui organizamos los objetos Pokemon por tipo (agua, fuego, tierra, electricidad)
-# y asi el jugador va a elegir un pokemon de cada tipo
-pokemones = {"agua": [], "fuego": [], "tierra": [], "electricidad": []}
-for dato in datos_crudos:
-    pokemon_obj = f.crear_pokemon(dato)              # convierte dato crudo a objeto Pokemon
-    pokemones[pokemon_obj.tipo].append(pokemon_obj)  # lo mete en su categoria por tipo
-
-# llamamos a la API de nuevo para tener objetos independientes para la cpu
-datos_crudos_cpu = f.obtener_datos_api()
-pokemones_cpu = {"agua": [], "fuego": [], "tierra": [], "electricidad": []}
-for dato in datos_crudos_cpu:
-    pokemon_obj_cpu = f.crear_pokemon(dato)
-    pokemones_cpu[pokemon_obj_cpu.tipo].append(pokemon_obj_cpu)
+pokemones = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
+    "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
+    "Medios": ["vaporeon","jolteon","pikachu","eevee"],
+    "Altos": ["psyduck","charmander","charizard","rattata"] }
 
 print("Pokemones: ")
 
@@ -32,34 +22,25 @@ pok_cpu = []
 for tipo, lista_pokemones in pokemones.items():
     print(tipo)
     for pokemon in lista_pokemones:
+        print(pokemon.nombre)
         pokemon.mostrar_atributos() #sale de la calse pokemon 
-    nombres_disponibles = [] # armamos una lista de nombres (strings) para validar y el jugador ingresa un nombre, lo comparamos contra esa lista de strings
-    for p in lista_pokemones:
-        nombres_disponibles.append(p.nombre)  #  ej:["vaporeon", "gyarados", "greninja"]
+    poke = input(f"Seleccione pokemon: ").lower.strip()
+    while poke not in lista_pokemones:
+            poke = input("Pokemon invalido. Recuerde escribirlo todo en minuscula. \n Seleccione Pokemon de la lista: ")
+    print(f"{poke} seleccionado correctamente!")
 
-    poke_nombre = input(f"Selecciona tu pokemon de tipo {tipo}: ").lower().strip()
-    while poke_nombre not in nombres_disponibles:
-        poke_nombre = input(f"Pokemon invalido. eligr entre {nombres_disponibles}: ").lower().strip()
-
-        #una vez validado el nombre buscamos el objeto Pokemon que le corresponde
-    # recorremos lista_pokemones hasta encontrar el que tiene ese nombre
-
-    poke = None
-    for p in lista_pokemones:
-        if p.nombre == poke_nombre:
-            poke = p  # poke ahora es un objeto Pokemon con .tipo, .ataque, .defensa y asiii
-            break
-    
-    print(f"{poke.nombre} seleccionado correctamente")
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
+    lista_atributos = ["Ataque", "Defensa", "Velocidad", "Adaptabilidad"]
+    print("Seleccione atributo a boostear, recuerda que aumentar un atributo disminuye otro.")
     atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
+    #FUNCION VALIDACIÓN
+    elecc_atri = atri_u - 1
     #FUNCION VALIDACIÓN
     
     #funcion_cambio_atributo(poke, atri_u)
             
-    print("¡Atributo modificado exitosamente! {atri_u} boosteada, {poke.m} disminuido")
-    pok_usuario.append(poke)
+    pok_usuario.append("pokemon.{poke}") #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
 #HICE ESTO PARA QUE SEAN DIFERENTES OBJETOS
 
