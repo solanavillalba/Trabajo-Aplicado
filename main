@@ -57,6 +57,7 @@ ambiente = lista_ambientes[num_amb]
 print(f"Ambiente seleccionado al azar: {ambiente}")
 
 # CAMBIO DE ATRIBUTO POR AMBIENTE
+#TIENEN QUE SER CAMBIADOS A LOS OBJETOS AMBIENTES, NO DEJAR COMO STR
 
 for pokemon in pok_usuario:
     #funcion_ambiente(pokemon)
