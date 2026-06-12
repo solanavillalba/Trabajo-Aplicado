@@ -1,5 +1,6 @@
 
 import requests
+
 def poke_api (pokemon):
     '''
     Recibe el nombre de un pokemon, hace la consulta a la API y devuelve un diccionario con los datos crudos del pokemon.
@@ -33,6 +34,3 @@ def poke_api (pokemon):
     }
 
     return fila
-
-picachu=poke_api("pikachu")
-print(picachu)
