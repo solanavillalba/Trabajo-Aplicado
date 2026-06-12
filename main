@@ -32,6 +32,7 @@ for tipo, lista_pokemones in pokemones.items():
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
     lista_atributos = ["Ataque", "Defensa", "Velocidad", "Adaptabilidad"]
+    print("Seleccione atributo a boostear, recuerda que aumentar un atributo disminuye otro.")
     atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
     #FUNCION VALIDACIÓN
     elecc_atri = atri_u - 1
@@ -39,7 +40,6 @@ for tipo, lista_pokemones in pokemones.items():
     
     #funcion_cambio_atributo(poke, atri_u)
             
-    print("¡Atributo modificado exitosamente! {atri_u} boosteada, {poke.m} disminuido") #FUNCION CAMBIO ATRIBUTO
     pok_usuario.append("pokemon.{poke}") #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
 #HICE ESTO PARA QUE SEAN DIFERENTES OBJETOS
