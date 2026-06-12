@@ -88,7 +88,6 @@ def rango_atributos(diccio):
         diccio["adaptabilidad"]=0.5
     else:
         diccio["adaptabilidad"]=1
-
     return diccio
 
 #falta agregar el special attack
