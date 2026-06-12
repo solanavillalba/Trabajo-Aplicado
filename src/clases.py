@@ -108,26 +108,4 @@ def cambiar_atributo(self, atributo, numero_boost):
     print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
 
 
-    def mostrar_atributos(self):
-        '''
-        Muestra por pantalla todos los atributos del pokemon con su nivel descriptivo (Bajo, Medio o Alto).
-        Util para que el jugador vea el estado de su pokemon antes y despues de modificarlo.
-        Parametros:
-        No recibe parametros.
-
-        Return:
-        No retorna nada.
-        '''
-        # diccionarios para traducir el valor numerico a palabras que entiende el jugador
-        # ej: ataque=1.5 = "Medio", defensa=0.25 = "Alto", speed=0.75 = "Alto"
-        niveles_adaptabilidad = {0: "Bajo", 0.5: "Medio", 1:    "Alto"}
-        niveles_ataque        = {1: "Bajo", 1.5: "Medio", 2:    "Alto"}
-        niveles_defensa       = {0.75: "Bajo", 0.5: "Medio", 0.25: "Alto"}
-        niveles_speed         = {0.25: "Bajo", 0.5: "Medio", 0.75: "Alto"}
-
-        print(f"{self.nombre} | Tipo: {self.tipo}")
-        print(f"Vida:      {self.vida}   si llega a 0 el pokemon muere y sale del equipo")
-        print(f"Ataque:    {self.ataque} ({niveles_ataque.get(self.ataque, '?')})   le saca {self.ataque} puntos de vida al rival en Ronda()")
-        print(f"Defensa:   {self.defensa} ({niveles_defensa.get(self.defensa, '?')})   el daño recibido se multiplica por {self.defensa} en Ronda()")
-        print(f"Velocidad: {self.speed} ({niveles_speed.get(self.speed, '?')})   {self.speed*100}% de chances de esquivar un ataque en Ronda()")
-        print(f"Adaptab.:  {self.adaptabilidad} ({niveles_adaptabilidad.get(self.adaptabilidad, '?')})   cuanto lo afecta un ambiente desfavorable en Ambiente.modifica_atributo()")
+    
