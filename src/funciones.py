@@ -251,16 +251,13 @@ def str_a_pokemones(lista):
     Return
     lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
     '''
-    
-<<<<<<< Updated upstream
+
     lista=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
         lista.append(pokemon)
     return lista
 
-=======
-<<<<<<< HEAD
 def empate(equipo_usu,equipo_compu):
     '''
     Si ocurre un empate (todos los pokemones de ambos equipos se encuentran sin vida), esta función se encarga de darle dos opciones al usuario. Si desea dejarlo como un
@@ -321,15 +318,13 @@ def empate(equipo_usu,equipo_compu):
         return [poke_usu,poke_compu]
 
 
-=======
     lista=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
         lista.append(pokemon)
     return lista
->>>>>>> 074f08137f5eeda49727e84609ffc40eb098869d
 
->>>>>>> Stashed changes
+
 def convertir_diccio(diccio):
     '''
     Recibe un diccionario con los values que son lista de pokemones
