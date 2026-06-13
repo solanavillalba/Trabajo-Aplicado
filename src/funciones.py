@@ -1,4 +1,5 @@
 import random
+from pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
@@ -234,24 +235,33 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
                     break
+
+def str_a_pokemones(lista):
+    '''
+    Recibe una lista con los nombres de los pokemones y los convierte a objetos
+    Parámetros:
+    lista: list. Lista con los nombres de los pokemones elegidos por el usuario
+    Return
+    lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
+    '''
     
+    lista=[]
+    for poke in lista:
+        pokemon=crear_pokemon(poke)
+        lista.append(pokemon)
+    return lista
 
-
-
-            
-
+def convertir_diccio(diccio):
+    '''
+    Recibe un diccionario con los values que son lista de pokemones
+    Parámetros:
+    diccio: dict. Diccionario con los datos de la API del pokemon elegido
+    Return
+    dicc: diccionario. diccionario con objetos Pokemon ordenados en las claves correspondientes.
+    '''
     
-            
-        
-
-
-
-
-
-
-
-
-
-
-        
-   
+    dicc={}
+    for clave, valor in diccio.items():
+        pokemon=str_a_pokemones(valor)
+        dicc[clave]=pokemon
+    return dicc

@@ -1,16 +1,18 @@
 import random
 import src.funciones as f
 import src.clases as c
-
+from funciones import convertir_diccio
 #(FUNCION API PARA CREAR DICCIONARIOS CON LISTAS PARA POKEMONES)
 
 print("¡Bienvenido al juego de Pokemon!")
 
 
-pokemones = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
+poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
+
+pokemones=convertir_diccio(poke)
 
 print("Pokemones: ")
 
