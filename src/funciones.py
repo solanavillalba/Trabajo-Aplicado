@@ -174,8 +174,8 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
 
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
-        cond_salida_usu= post_usu.vida==0 and len(pokemones_usu)==1
-        cond_salida_compu= post_compu.vida==0 and len(pokemones_compu)==1
+        cond_salida_usu= post_usu.vida==0 and len(pokemones_usu)==0
+        cond_salida_compu= post_compu.vida==0 and len(pokemones_compu)==0
 
         if cond_salida_usu ==True and cond_salida_compu==True:
             resultado=empate(equipo_usu,equipo_compu)
@@ -189,10 +189,10 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
 
             
         elif cond_salida_usu==True:
-            print("La batalla ha finalizado. La computadora se consagra como ganadora.")
+            print("La batalla ha finalizado. La computadora gano.")
             break
         elif cond_salida_compu==True:
-            print("La batalla ha finalizado. Te has consgrado como ganador. ¡Felicitaciones!")
+            print("La batalla ha finalizado. Ganaste. ¡Felicitaciones!")
             break
 
 
@@ -203,7 +203,7 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
     
         elif post_usu.vida==0 and post_compu.vida!=0:
             poke_usu=input(f"Como {post_usu.nombre} murió, elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
-            while poke_usu not in pokemones_usu[1:]:
+            while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
                 poke_usu=input("Elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
             
@@ -215,7 +215,7 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
 
         elif post_usu.vida!=0 and post_compu.vida==0:
             print(f"Como {post_compu.nombre} murió. Se elegirá el siguiente pokemon para batallar de nuevo")
-            poke_compu=random.choice(pokemones_compu[1:])
+            poke_compu=random.choice(pokemones_compu)
 
             pokemones_compu.remove(poke_compu)
             for pokemon in equipo_compu:
@@ -226,7 +226,7 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
         else:
             print("Se elegirán los siguientes pokemones a batallar")
             poke_usu=input("Ingrese su siguiente pokemon para batallar de nuevo: ").lower().strip()
-            while poke_usu not in pokemones_usu[1:]:
+            while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
                 poke_usu=input("Elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
             
@@ -236,13 +236,14 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
                     poke_usu=pokemon
                     break
 
-            poke_compu=random.choice(pokemones_compu[1:])
+            poke_compu=random.choice(pokemones_compu)
             pokemones_compu.remove(poke_compu)
 
             for pokemon in equipo_compu:
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
                     break
+
 
 def str_a_pokemones(lista):
     '''
