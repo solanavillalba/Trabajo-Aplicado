@@ -100,7 +100,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     return pokemon1, pokemon2, puntos_usuario, puntos_cpu
 
-def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
+def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
     '''
     Mantiene a los pokemons batallando (llama a la función ronda() hasta que uno muera. Cuando eso sucede, 
     el usuario o la computadora pueden elegir alguno de los otros pokemones previamente seleccionados para 
@@ -128,7 +128,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     '''
     #Consigo solo los nombres de los objetos pokemones
-    pokemones_usu=[None]
+    pokemones_usu=[]
     for pokemon in equipo_usu:
         pokemones_usu.append(pokemon.nombre.lower())
 
@@ -136,7 +136,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     poke_usu=input("Ingrese el nombre del pokemon con el que quiera empezar: ").lower().strip()
 
     #valido que esté bien ingresado el nombre
-    while poke_usu not in pokemones_usu[1:]:
+    while poke_usu not in pokemones_usu:
         print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
         poke_usu=input("Ingrese el nombre del pokemon con el que quiera empezar: ").lower().strip()
     
@@ -150,11 +150,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     
     #Hago lo mismo con los de la compu
-    pokemones_compu=[None]
+    pokemones_compu=[]
     for pokemon in equipo_compu:
         pokemones_compu.append(pokemon.nombre.lower())
 
-    poke_compu=random.choice(pokemones_compu[1:])
+    poke_compu=random.choice(pokemones_compu)
     pokemones_compu.remove(poke_compu)
 
     for pokemon in equipo_compu:
@@ -171,10 +171,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     while True:
         ambiente.modifica_atributo(poke_usu)
         ambiente.modifica_atributo(poke_compu)
+
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
-        cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==1
-        cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==1
+        cond_salida_usu= post_usu.vida==0 and len(pokemones_usu)==1
+        cond_salida_compu= post_compu.vida==0 and len(pokemones_compu)==1
 
         if cond_salida_usu ==True and cond_salida_compu==True:
             #FUNCION EMPATE
