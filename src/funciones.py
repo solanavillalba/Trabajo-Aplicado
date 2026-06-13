@@ -123,7 +123,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     Objeto del tipo Ambiente el cual modificará los atributos de los pokemones según sean del mismo tipo 
     (favoreciéndolos) o no (perjudicándolos).
 
-    Retorna: 
+    Retorna: no retorna nada
 
     '''
     #Consigo solo los nombres de los objetos pokemones
@@ -171,10 +171,26 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         ambiente.modifica_atributo(poke_usu)
         ambiente.modifica_atributo(poke_compu)
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
+
+        cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==1
+        cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==1
+
+        if cond_salida_usu ==True and cond_salida_compu==True:
+            #FUNCION EMPATE
+            print("aca va funcion de empate")
+            break
+        elif cond_salida_usu==True:
+            print("La batalla ha finalizado. La computadora se consagra como ganadora.")
+            break
+        elif cond_salida_compu==True:
+            print("La batalla ha finalizado. Te has consgrado como ganador. ¡Felicitaciones!")
+            break
+
+
         if post_usu.vida!=0 and post_compu.vida!=0:
             poke_usu=post_usu
             poke_compu=post_compu
-             continue
+            continue
     
         elif post_usu.vida==0 and post_compu.vida!=0:
             poke_usu=input(f"Como {post_usu.nombre} murió, elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
@@ -190,7 +206,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         elif post_usu.vida!=0 and post_compu.vida==0:
             print(f"Como {post_compu.nombre} murió. Se elegirá el siguiente pokemon para batallar de nuevo")
-            poke_compu=random.choice(pokemones_compu)
+            poke_compu=random.choice(pokemones_compu[1:])
 
             pokemones_compu.remove(poke_compu)
             for pokemon in equipo_compu:
@@ -211,20 +227,13 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     poke_usu=pokemon
                     break
 
-            poke_compu=random.choice(pokemones_compu)
+            poke_compu=random.choice(pokemones_compu[1:])
             pokemones_compu.remove(poke_compu)
 
             for pokemon in equipo_compu:
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
                     break
-        
-       #FALTA CONDICION DE SALIDA
-    if pokemones_usu==[]:
-        print("La batalla ha finalizado. Se consagra como ganadora la computadora")
-
-    else:
-        print("La batalla ha finalizado. Se consagra como ganador usted. ¡Felicitaciones!")
     
 
 
