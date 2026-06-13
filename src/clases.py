@@ -111,6 +111,3 @@ class Pokemon:
 
         print(f"{self.nombre}: subiste '{atributo}'")
         print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
-
-
-    

@@ -185,6 +185,8 @@ def partida(equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
             else:
                 poke_usu=resultado[0]
                 poke_compu=resultado[1]
+                poke_usu.vida=5
+                poke_compu.vida=5
                 continue
 
             
@@ -272,8 +274,8 @@ def empate(equipo_usu,equipo_compu):
     equipo_compu: list
     Lista de objetos con el equipo de pokemones de la computadora.
 
-    Retorna: no retorna nada o dos variables (objetos)
-    Si el usuario decide dejar el final de la partida como un empate, imprime un mensaje. Si no, devuelve los pokemones que van a usar la computadora y el usuario para
+    Retorna: str o dos objetos de tipo pokemon
+    Si el usuario decide dejar el final de la partida como un empate, devuelve un mensaje sobre el empate. Si no, devuelve los pokemones que van a usar la computadora y el usuario para
     batallar de nuevo.
 
     '''
