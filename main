@@ -26,7 +26,7 @@ for tipo, lista_pokemones in pokemones.items():
     for pokemon in lista_pokemones:
         print(pokemon.nombre)
         pokemon.mostrar_atributos() #sale de la calse pokemon 
-    poke = input(f"Seleccione pokemon: ").lower.strip()
+    poke = input(f"Seleccione pokemon: ").lower()
     while poke not in lista_pokemones:
             poke = input("Pokemon invalido. Recuerde escribirlo todo en minuscula. \n Seleccione Pokemon de la lista: ")
     print(f"{poke} seleccionado correctamente!")
@@ -34,14 +34,23 @@ for tipo, lista_pokemones in pokemones.items():
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
     lista_atributos = ["Ataque", "Defensa", "Velocidad", "Adaptabilidad"]
-    print("Seleccione atributo a boostear, recuerda que aumentar un atributo disminuye otro.")
-    atri_u = input("Seleccione atributo a boostear: 1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
-    #FUNCION VALIDACIÓN
+    while True:
+        print("Seleccione el numero del atributo a boostear, recuerda que aumentar un atributo disminuye otro.")
+        try:
+            atri_u = input("1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
+            validar_int(atri_u)
+            validar_rango(atri_u, 1, 4)
+        except ValueError as e
+            print(e)
+        else:
+            break
+
     elecc_atri = atri_u - 1
-    #FUNCION VALIDACIÓN
-    
-    #funcion_cambio_atributo(poke, atri_u)
-            
+    atributo = lista_atributos[elecc_atri]
+
+    poke.    
+        #funcion_cambio_atributo(poke, atri_u)
+                
     pok_usuario.append("pokemon.{poke}") #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
 #HICE ESTO PARA QUE SEAN DIFERENTES OBJETOS
@@ -86,7 +95,7 @@ for pokemon in pok_cpu:
 
 # CAMBIAR ATRIBUTOS 
 
-numero_boost=  # definir después, un solo lugar
+numero_boost="" # definir después, un solo lugar
 
 atributo = input("¿Qué atributo querés subir? (ataque / defensa / speed / adaptabilidad): ")
 
