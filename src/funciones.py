@@ -318,14 +318,6 @@ def empate(equipo_usu,equipo_compu):
                 break
         return [poke_usu,poke_compu]
 
-
-    lista=[]
-    for poke in lista:
-        pokemon=crear_pokemon(poke)
-        lista.append(pokemon)
-    return lista
-
-
 def convertir_diccio(diccio):
     '''
     Recibe un diccionario con los values que son lista de pokemones
