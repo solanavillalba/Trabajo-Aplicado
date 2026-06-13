@@ -23,7 +23,11 @@ class Ambiente:
         '''
 
         if self.tipo_ambiente==pokemon.tipo:
+            pokemon.ataque-= self.ataque
+            pokemon.defensa-= self.defensa
+            pokemon.speed-= self.velocidad
             print(f"{pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
+
             
         elif pokemon.adaptabilidad==1:
             print(f"{pokemon.nombre} es adaptable, no se modifican sus atributos")
