@@ -177,9 +177,16 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==1
 
         if cond_salida_usu ==True and cond_salida_compu==True:
-            #FUNCION EMPATE
-            print("aca va funcion de empate")
-            break
+            resultado=empate(equipo_usu,equipo_compu)
+            if type(resultado)==str:
+                print(resultado)
+                break
+            else:
+                poke_usu=resultado[0]
+                poke_compu=resultado[1]
+                continue
+
+            
         elif cond_salida_usu==True:
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
             break
@@ -245,12 +252,84 @@ def str_a_pokemones(lista):
     lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
     '''
     
+<<<<<<< Updated upstream
     lista=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
         lista.append(pokemon)
     return lista
 
+=======
+<<<<<<< HEAD
+def empate(equipo_usu,equipo_compu):
+    '''
+    Si ocurre un empate (todos los pokemones de ambos equipos se encuentran sin vida), esta función se encarga de darle dos opciones al usuario. Si desea dejarlo como un
+    empate, lo deja como un empate. Sino, da la opción de revivir a ambos equipos uno de los pokemones y volver a batallar.
+
+    Parámetros:
+    equipo_usu: list
+    Lista de objetos con el equipo de pokemones del usuario.
+
+    equipo_compu: list
+    Lista de objetos con el equipo de pokemones de la computadora.
+
+    Retorna: no retorna nada o dos variables (objetos)
+    Si el usuario decide dejar el final de la partida como un empate, imprime un mensaje. Si no, devuelve los pokemones que van a usar la computadora y el usuario para
+    batallar de nuevo.
+
+    '''
+    opcion=input("¡Ocurrió un empate! ¿Desea terminar la partida? (s/n): ").lower().strip()
+
+    while opcion not in ['s','n']:
+        print("Opción inválida")
+        opcion=input("Intente de nuevo").lower().strip
+
+    if opcion=='s':
+        return "El juego ha finalizado. Fue un empate."
+
+    else:
+        pokemons_usu=[None]
+        for pokemon in equipo_usu:
+            pokemons_usu.append(pokemon.nombre.lower())
+            
+        #Se elige el primer pokemon para empezar la batalla.
+        poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
+        
+        #valido que esté bien ingresado el nombre
+        while poke_usu not in pokemons_usu[1:]:
+            print("El pokemon ingresado no se encontraba en su equipo. Inténtelo de nuevo.")
+            poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
+        pokemons_usu.remove(poke_usu) #saco de la lista el nombre del pokemon, asi no lo repite
+        
+        #convierto el str primer_poke_usu a objeto
+        for pokemon in equipo_usu:
+            if pokemon.nombre.lower()==poke_usu:
+                poke_usu=pokemon
+                break
+        #Hago lo mismo con los de la compu
+        pokemons_compu=[None]
+        for pokemon in equipo_compu:
+            pokemons_compu.append(pokemon.nombre.lower())
+            
+        poke_compu=random.choice(pokemons_compu[1:])
+        pokemons_compu.remove(poke_compu)
+        
+        for pokemon in equipo_compu:
+            if pokemon.nombre.lower()==poke_compu:
+                poke_compu=pokemon
+                break
+        return [poke_usu,poke_compu]
+
+
+=======
+    lista=[]
+    for poke in lista:
+        pokemon=crear_pokemon(poke)
+        lista.append(pokemon)
+    return lista
+>>>>>>> 074f08137f5eeda49727e84609ffc40eb098869d
+
+>>>>>>> Stashed changes
 def convertir_diccio(diccio):
     '''
     Recibe un diccionario con los values que son lista de pokemones
