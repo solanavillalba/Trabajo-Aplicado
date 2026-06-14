@@ -6,69 +6,69 @@ from funciones import convertir_diccio
 
 print("¡Bienvenido al juego de Pokemon!")
 
-
-poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
+lista_totales = []
+list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
+for lista in list_poke.values():
+    for p in lista:
+        lista_totales.append(p)
 
-pokemones=convertir_diccio(poke)
+pares = {
+    "ataque": "velocidad",
+    "velocidad": "ataque",
+    "defensa": "adaptabilidad",
+    "adaptabilidad": "defensa"
+}
+pokemones=convertir_diccio(list_poke)
 
 print("Pokemones: ")
-
 pok_usuario = []
 pok_cpu = []
 # ELECCION POKEMON USUARIO
-# el jugador elige un pokemon de cada tipo (agua, fuego, tierra, electricidad)
-
 for tipo, lista_pokemones in pokemones.items():
     print(tipo)
     for pokemon in lista_pokemones:
         print(pokemon.nombre)
         pokemon.mostrar_atributos() #sale de la calse pokemon 
     poke = input(f"Seleccione pokemon: ").lower()
-    while poke not in lista_pokemones:
-            poke = input("Pokemon invalido. Recuerde escribirlo todo en minuscula. \n Seleccione Pokemon de la lista: ")
+    while poke not in lista_totales:
+            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ")
     print(f"{poke} seleccionado correctamente!")
 
+    pokemon_elegido = None
+    for pokemon in lista_pokemones:
+        if pokemon.nombre == poke:
+            pokemon_elegido = pokemon
+            break
             
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
-    lista_atributos = ["Ataque", "Defensa", "Velocidad", "Adaptabilidad"]
-    while True:
-        print("Seleccione el numero del atributo a boostear, recuerda que aumentar un atributo disminuye otro.")
-        try:
-            atri_u = input("1.Ataque \n 2.Defensa \n 3.Velocidad \n 4.Adaptabilidad")
-            validar_int(atri_u)
-            validar_rango(atri_u, 1, 4)
-        except ValueError as e
-            print(e)
-        else:
-            break
+    lista_atributos = ["ataque","velocidad","defensa","adaptabilidad" ]
+    
+    print("Ingrese el atributo a boostear, recuerda que aumentar un atributo disminuye otro.")  
+    atributo = input("Ataque \n Adaptabilidad \n Defensa \n Velocidad").lower()
+    
+    while atributo not in lista_atributos:
+        atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ")
+    
+    atributo2 = pares[atributo]
+    pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
+    pok_usuario.append(pokemon_elegido) #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
-    elecc_atri = atri_u - 1
-    atributo = lista_atributos[elecc_atri]
-
-    poke.    
-        #funcion_cambio_atributo(poke, atri_u)
-                
-    pok_usuario.append("pokemon.{poke}") #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
-
-#HICE ESTO PARA QUE SEAN DIFERENTES OBJETOS
-
-pokemones_equipo2 = {
-    "Novatos": ["dragonite_cpu","tyranitar_cpu","metagross_cpu","arcanine_cpu"],
-    "Medios": ["vaporeon_cpu","jolteon_cpu","pikachu_cpu","eevee_cpu"],
-    "Altos": ["psyduck_cpu","charmander_cpu","charizard_cpu","rattata_cpu"] } 
 # ELECCION CPU
-for categoria, lista_pokemones in pokemones_equipo2.items():
+for categoria, lista_pokemones in pokemones.items():
     num_cpu = random.randint(0, (len(lista_pokemones) -1))
-    poke_cpu =  lista_pokemones[num_cpu]
+    pokemon_elegido_cpu = lista_pokemones[num_cpu]
 
 # CPU SELECCIONAR ATRIBUTO A CAMBIAR   
-    num_att = random.randint(1, (len(lista_pokemones)))
+    num_att = random.randint(0, (len(lista_atributos)-1))
     #funcion_cambio_atributo(poke_cpu, num_att)
-    
-    pok_cpu.append(poke_cpu)
+    atributo_cpu = lista_atributos[num_att]
+    atributo_cpu2 = pares[atributo_cpu]
+
+    pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15))
+    pok_cpu.append(pokemon_elegido_cpu)
     
 # ELECCION AMBIENTE
 
@@ -92,11 +92,3 @@ for pokemon in pok_usuario:
 for pokemon in pok_cpu:
     #funcion_ambiente(pokemon)
     pass
-
-# CAMBIAR ATRIBUTOS 
-
-numero_boost="" # definir después, un solo lugar
-
-atributo = input("¿Qué atributo querés subir? (ataque / defensa / speed / adaptabilidad): ")
-
-pokemon.cambiar_atributo(atributo, numero_boost)
