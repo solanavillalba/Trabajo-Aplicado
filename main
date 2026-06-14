@@ -2,9 +2,10 @@ import random
 import src.funciones as f
 import src.clases as c
 from funciones import convertir_diccio
-#(FUNCION API PARA CREAR DICCIONARIOS CON LISTAS PARA POKEMONES)
 
 print("¡Bienvenido al juego de Pokemon!")
+#----------------------------------------------------
+# CREACION LISTA POKEMONES
 
 lista_totales = []
 list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
@@ -15,18 +16,49 @@ for lista in list_poke.values():
     for p in lista:
         lista_totales.append(p)
 
+pokemones=convertir_diccio(list_poke)
+
+#----------------------------------------------------
+#PARES ANALOGOS DE HABILIDADES
 pares = {
     "ataque": "velocidad",
     "velocidad": "ataque",
     "defensa": "adaptabilidad",
     "adaptabilidad": "defensa"
 }
-pokemones=convertir_diccio(list_poke)
 
+#----------------------------------------------------
+#CREACION LISTA DE AMBIENTES
+lista_ambientes = []
+playa = c.Ambiente("playa", "agua", float(0.20), float(0.05), float(0.25))
+lista_ambientes.append(playa)
+bosque = c.Ambiente("bosque", "tierra", float(0.2), float(0.15), float(0.15))
+lista_ambientes.append(bosque)
+tormenta = c.Ambiente("tormenta de rayos", "electrico", float(0.15), float(0.2), float(0.05))
+lista_ambientes.append(tormenta)
+volcan = c.Ambiente("volcan", "fuego", float(0.5), float(0.15), float(0.1))
+lista_ambientes.append(volcan)
+
+#----------------------------------------------------
+#CREACION LISTA EVENTOS ALEATORIOS
+lista_eventos_aleatorios = []
+aumentar_1vida = c.Evento_aleatorio("Aumento de 1hp", float(1))
+lista_eventos_aleatorios.append(aumentar_1vida)
+aumentar_05vida = c.Evento_aleatorio("Aumento de 0,5hp", float(0.5))
+lista_eventos_aleatorios.append(aumentar_05vida)
+bajar_05vida = c.Evento_aleatorio("Disminuir 0.5hp", float(-0.5))
+lista_eventos_aleatorios.append(bajar_05vida)
+bajar_1vida = c.Evento_aleatorio("Disminir 1hp", float(-1))
+lista_eventos_aleatorios.append(bajar_1vida)
+
+#----------------------------------------------------
+#CREACION LISTA DE USUARIO Y CPU DE POKEMONES
 print("Pokemones: ")
 pok_usuario = []
 pok_cpu = []
-# ELECCION POKEMON USUARIO
+
+#----------------------------------------------------
+#ELECCION POKEMON USUARIO
 for tipo, lista_pokemones in pokemones.items():
     print(tipo)
     for pokemon in lista_pokemones:
@@ -48,7 +80,7 @@ for tipo, lista_pokemones in pokemones.items():
     
     print("Ingrese el atributo a boostear, recuerda que aumentar un atributo disminuye otro.")  
     atributo = input("Ataque \n Adaptabilidad \n Defensa \n Velocidad").lower()
-    
+
     while atributo not in lista_atributos:
         atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ")
     
@@ -72,23 +104,11 @@ for categoria, lista_pokemones in pokemones.items():
     
 # ELECCION AMBIENTE
 
-lista_ambientes = ["playa", "bosque", "volcan", "tormenta"]
-
 num_amb = random.randint(0, (len(lista_ambientes)-1))
 ambiente = lista_ambientes[num_amb]
 
+
 #TIENEN QUE SER CAMBIADOS A LOS OBJETOS AMBIENTES, NO DEJAR COMO STR
-print(f"Ambiente seleccionado al azar: {ambiente}")
+print(f"Ambiente seleccionado al azar: {ambiente.nombre}")
 
-#TIENEN QUE SER CAMBIADOS A LOS OBJETOS EVENTOS, NO DEJAR COMO STR
-eventos_random = ["lluvia", "nieve", "granizo", "sol"]
-
-# CAMBIO DE ATRIBUTO POR AMBIENTE
-
-for pokemon in pok_usuario:
-    #funcion_ambiente(pokemon)
-    pass
-
-for pokemon in pok_cpu:
-    #funcion_ambiente(pokemon)
-    pass
+f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
