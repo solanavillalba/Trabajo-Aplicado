@@ -64,9 +64,9 @@ for tipo, lista_pokemones in pokemones.items():
     for pokemon in lista_pokemones:
         print(pokemon.nombre)
         pokemon.mostrar_atributos() #sale de la calse pokemon 
-    poke = input(f"Seleccione pokemon: ").lower()
+    poke = input(f"Seleccione pokemon: ").lower().strip()
     while poke not in lista_totales:
-            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ")
+            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ").lower().strip()
     print(f"{poke} seleccionado correctamente!")
 
     pokemon_elegido = None
@@ -79,10 +79,10 @@ for tipo, lista_pokemones in pokemones.items():
     lista_atributos = ["ataque","velocidad","defensa","adaptabilidad" ]
     
     print("Ingrese el atributo a boostear, recuerda que aumentar un atributo disminuye otro.")  
-    atributo = input("Ataque \n Adaptabilidad \n Defensa \n Velocidad").lower()
+    atributo = input("Ataque \n Adaptabilidad \n Defensa \n Velocidad").lower().strip()
 
     while atributo not in lista_atributos:
-        atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ")
+        atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ").lower().strip()
     
     atributo2 = pares[atributo]
     pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
