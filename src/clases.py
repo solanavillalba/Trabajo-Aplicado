@@ -23,11 +23,7 @@ class Ambiente:
         '''
 
         if self.tipo_ambiente==pokemon.tipo:
-            pokemon.ataque-= self.ataque
-            pokemon.defensa-= self.defensa
-            pokemon.speed-= self.velocidad
             print(f"{pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
-
             
         elif pokemon.adaptabilidad==1:
             print(f"{pokemon.nombre} es adaptable, no se modifican sus atributos")
@@ -84,30 +80,21 @@ class Pokemon:
             self.defensa = dicc['defensa']
             self.special_attack= dicc['special_attack']
             self.adaptabilidad = dicc['adaptabilidad']
-            self.speed = dicc['speed']
+            self.velocidad = dicc['speed']
             self.tipo = dicc['tipo']
 
-    def cambiar_atributo(self, atributo, numero_boost):
+    def cambiar_atributo(self, atributo1, atributo2, num):
     
-        if atributo == "ataque":
-            self.ataque += numero_boost
-            self.speed  -= numero_boost
-    
-        elif atributo == "defensa":
-            self.defensa       += numero_boost
-            self.adaptabilidad -= numero_boost
-    
-        elif atributo == "special_defense":
-            self.adaptabilidad += numero_boost
-            self.defensa       -= numero_boost
+        setattr(self, atributo1, getattr(self, atributo1) + num)
+        setattr(self, atributo2, getattr(self, atributo2) - num)
 
-        elif atributo == "speed":
-            self.speed += numero_boost
-            self.ataque -= numero_boost
-
-        else:
-            print(f"'{atributo}' no es válido.")
-            return
-
-        print(f"{self.nombre}: subiste '{atributo}'")
+        print(f"{self.nombre}: subiste '{atributo1}'")
+        print(f"A cambio se reducio el atributo {atributo2}")
         print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
+
+    def mostrar_atributos(self):
+        print(f"Ataque: {self.ataque}")
+        print(f"Defensa: {self.defensa}")
+        print(f"Velocidad: {self.velocidad}")
+        print(f"Adaptabilidad: {self.adaptabilidad}")
+    
