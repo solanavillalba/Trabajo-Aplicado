@@ -1,6 +1,7 @@
 import random
 import src.funciones as f
 import src.clases as c
+import src.pokemones as p
 from funciones import convertir_diccio
 
 print("¡Bienvenido al juego de Pokemon!")
