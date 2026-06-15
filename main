@@ -1,20 +1,17 @@
 import random
-import src.funciones as f
-import src.clases as c
+import funciones as f
+import clases as c
+from clases import Pokemon
 from funciones import convertir_diccio
 
 print("¡Bienvenido al juego de Pokemon!")
 #----------------------------------------------------
 # CREACION LISTA POKEMONES
 
-lista_totales = []
 list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
-for lista in list_poke.values():
-    for p in lista:
-        lista_totales.append(p)
 
 pokemones=convertir_diccio(list_poke)
 
@@ -24,19 +21,18 @@ pares = {
     "ataque": "velocidad",
     "velocidad": "ataque",
     "defensa": "adaptabilidad",
-    "adaptabilidad": "defensa"
-}
+    "adaptabilidad": "defensa"}
 
 #----------------------------------------------------
 #CREACION LISTA DE AMBIENTES
 lista_ambientes = []
-playa = c.Ambiente("playa", "agua", float(0.20), float(0.05), float(0.25))
+playa = c.Ambiente("playa", "water", float(0.20), float(0.05), float(0.25))
 lista_ambientes.append(playa)
-bosque = c.Ambiente("bosque", "tierra", float(0.2), float(0.15), float(0.15))
+bosque = c.Ambiente("bosque", "ground", float(0.2), float(0.15), float(0.15))
 lista_ambientes.append(bosque)
-tormenta = c.Ambiente("tormenta de rayos", "electrico", float(0.15), float(0.2), float(0.05))
+tormenta = c.Ambiente("tormenta de rayos", "electric", float(0.15), float(0.2), float(0.05))
 lista_ambientes.append(tormenta)
-volcan = c.Ambiente("volcan", "fuego", float(0.5), float(0.15), float(0.1))
+volcan = c.Ambiente("volcan", "fire", float(0.5), float(0.15), float(0.1))
 lista_ambientes.append(volcan)
 
 #----------------------------------------------------
@@ -64,9 +60,10 @@ for tipo, lista_pokemones in pokemones.items():
     for pokemon in lista_pokemones:
         print(pokemon.nombre)
         pokemon.mostrar_atributos() #sale de la calse pokemon 
-    poke = input(f"Seleccione pokemon: ").lower().strip()
-    while poke not in lista_totales:
-            poke = input("Pokemon invalido. \n Seleccione Pokemon de la lista: ").lower().strip()
+    poke = input("Seleccione pokemon: ").lower().strip()
+    
+    while poke not in list_poke[tipo]:
+            poke = input("Pokemon invalido. \nSeleccione Pokemon de la lista: ").lower().strip()
     print(f"{poke} seleccionado correctamente!")
 
     pokemon_elegido = None
@@ -79,7 +76,7 @@ for tipo, lista_pokemones in pokemones.items():
     lista_atributos = ["ataque","velocidad","defensa","adaptabilidad" ]
     
     print("Ingrese el atributo a boostear, recuerda que aumentar un atributo disminuye otro.")  
-    atributo = input("Ataque \n Adaptabilidad \n Defensa \n Velocidad").lower().strip()
+    atributo = input("Ataque, Adaptabilidad, Defensa o Velocidad \n").lower().strip()
 
     while atributo not in lista_atributos:
         atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ").lower().strip()
@@ -88,8 +85,15 @@ for tipo, lista_pokemones in pokemones.items():
     pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
     pok_usuario.append(pokemon_elegido) #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
+list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
+    "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
+    "Medios": ["vaporeon","jolteon","pikachu","eevee"],
+    "Altos": ["psyduck","charmander","charizard","rattata"] }
+
+pokemones_cpu=convertir_diccio(list_cpu)
+
 # ELECCION CPU
-for categoria, lista_pokemones in pokemones.items():
+for categoria, lista_pokemones in pokemones_cpu.items():
     num_cpu = random.randint(0, (len(lista_pokemones) -1))
     pokemon_elegido_cpu = lista_pokemones[num_cpu]
 
@@ -99,16 +103,10 @@ for categoria, lista_pokemones in pokemones.items():
     atributo_cpu = lista_atributos[num_att]
     atributo_cpu2 = pares[atributo_cpu]
 
-    pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15))
+    pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15), False)
     pok_cpu.append(pokemon_elegido_cpu)
     
-# ELECCION AMBIENTE
+print('Las cpu eligio correctamente')
 
-num_amb = random.randint(0, (len(lista_ambientes)-1))
-ambiente = lista_ambientes[num_amb]
-
-
-#TIENEN QUE SER CAMBIADOS A LOS OBJETOS AMBIENTES, NO DEJAR COMO STR
-print(f"Ambiente seleccionado al azar: {ambiente.nombre}")
 
 f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)

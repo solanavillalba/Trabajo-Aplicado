@@ -11,7 +11,7 @@ class Ambiente:
         self.velocidad=velocidad
 
 
-    def modifica_atributo(self,pokemon):
+    def modifica_atributo(self,pokemon, cpu=False):
         '''
         Modifica los atributos de los pokemones del equipo segun el ambiente en el que estén y el tipo que sea el pokemon. Si el tipo de ambiente y pokemon cooincide, se le suma los stats; sino, se le restan.
         Parámetros:
@@ -23,20 +23,36 @@ class Ambiente:
         '''
 
         if self.tipo_ambiente==pokemon.tipo:
-            print(f"{pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en su ambiente favorable: {self.nombre}")
+
+            else:
+                print(f"Tu {pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
             
         elif pokemon.adaptabilidad==1:
-            print(f"{pokemon.nombre} es adaptable, no se modifican sus atributos")
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, es adaptable, no se modifican sus atributos")
+
+            else:
+                print(f"Tu {pokemon.nombre} es adaptable, no se modifican sus atributos")
         elif pokemon.adaptabilidad==0.5:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
             pokemon.speed+= self.velocidad/2
-            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
+
+                
+            else:
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
-            pokemon.speed+= self.velocidad 
-            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
+            pokemon.velocidad+= self.velocidad 
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}")
+            else:
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
         
         return pokemon
 
@@ -83,18 +99,18 @@ class Pokemon:
             self.velocidad = dicc['speed']
             self.tipo = dicc['tipo']
 
-    def cambiar_atributo(self, atributo1, atributo2, num):
+    def cambiar_atributo(self, atributo1, atributo2, num, print_cambios=True):
     
         setattr(self, atributo1, getattr(self, atributo1) + num)
         setattr(self, atributo2, getattr(self, atributo2) - num)
-
-        print(f"{self.nombre}: subiste '{atributo1}'")
-        print(f"A cambio se reducio el atributo {atributo2}")
-        print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
+        
+        if print_cambios:
+            print(f"{self.nombre}: subiste '{atributo1}'")
+            print(f"A cambio se reducio el atributo {atributo2}")
+            print(f"Los atributos modificados quedaron asi: \nataque: {self.ataque} | defensa: {self.defensa} | velocidad: {self.velocidad} | adaptabilidad: {self.adaptabilidad}")
 
     def mostrar_atributos(self):
         print(f"Ataque: {self.ataque}")
         print(f"Defensa: {self.defensa}")
         print(f"Velocidad: {self.velocidad}")
         print(f"Adaptabilidad: {self.adaptabilidad}")
-    

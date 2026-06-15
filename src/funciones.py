@@ -61,7 +61,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="atacar" and accion2=="esquivar":
         esquiva_sino = [True, False]
-        pesos = [pokemon2.speed, 1-pokemon2.speed]
+        pesos = [pokemon2.velocidad, 1-pokemon2.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
             print(f"{pokemon2.nombre} esquivó el ataque de {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
@@ -85,7 +85,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="esquivar" and accion2=="atacar":
         esquiva_sino = [True, False]
-        pesos = [pokemon1.speed, 1-pokemon1.speed]
+        pesos = [pokemon1.velocidad, 1-pokemon1.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
             print(f"{pokemon1.nombre} esquivó el ataque de {pokemon2.nombre} y su vida se mantuvo en {pokemon1.vida}")   
@@ -167,10 +167,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     #Se elige aleatoriamente el ambiente en el que ocurrirá la batalla.
     ambiente=random.choice(lista_ambientes)
-
+    print(f"Ambiente seleccionado al azar: {ambiente.nombre}")
+    ambiente.modifica_atributo(poke_usu)
+    ambiente.modifica_atributo(poke_compu, True)
+    
     while True:
-        ambiente.modifica_atributo(poke_usu)
-        ambiente.modifica_atributo(poke_compu)
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==1
@@ -311,11 +312,11 @@ def str_a_pokemones(lista):
     lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
     '''
     
-    lista=[]
+    lis=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
-        lista.append(pokemon)
-    return lista
+        lis.append(pokemon)
+    return lis
 
 def convertir_diccio(diccio):
     '''
@@ -328,7 +329,7 @@ def convertir_diccio(diccio):
     
     dicc={}
     for clave, valor in diccio.items():
-        pokemon=str_a_pokemones(valor)
+        pokemon= str_a_pokemones(valor)
         dicc[clave]=pokemon
     return dicc
 

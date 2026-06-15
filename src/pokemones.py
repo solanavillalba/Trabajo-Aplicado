@@ -105,3 +105,33 @@ def crear_pokemon(pokemon):
 
     return poke_creado
 
+
+def str_a_pokemones(lista):
+    '''
+    Recibe una lista con los nombres de los pokemones y los convierte a objetos
+    Parámetros:
+    lista: list. Lista con los nombres de los pokemones elegidos por el usuario
+    Return
+    lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
+    '''
+    
+    lis=[]
+    for poke in lista:
+        pokemon=crear_pokemon(poke)
+        lis.append(pokemon)
+    return lis
+
+def convertir_diccio(diccio):
+    '''
+    Recibe un diccionario con los values que son lista de pokemones
+    Parámetros:
+    diccio: dict. Diccionario con los datos de la API del pokemon elegido
+    Return
+    dicc: diccionario. diccionario con objetos Pokemon ordenados en las claves correspondientes.
+    '''
+    
+    dicc={}
+    for clave, valor in diccio.items():
+        pokemon= str_a_pokemones(valor)
+        dicc[clave]=pokemon
+    return dicc
