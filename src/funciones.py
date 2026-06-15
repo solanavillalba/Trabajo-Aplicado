@@ -26,6 +26,10 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         evento_quepasa= random.choice(eventos_random)
         poke_afectado= random.choice([pokemon1, pokemon2])
         evento_quepasa.evento(poke_afectado)
+        if poke_afectado.vida<=0:
+            print(f"{poke_afectado.nombre} murió.")
+            return pokemon1, pokemon2, puntos_usuario, puntos_cpu
+
     
     if accion1=="atacar" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque
@@ -137,7 +141,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     '''
     #Consigo solo los nombres de los objetos pokemones
-    pokemones_usu=[None]
+    pokemones_usu=[]
     for pokemon in equipo_usu:
         pokemones_usu.append(pokemon.nombre.lower())
 
@@ -145,7 +149,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     poke_usu=input("Ingrese el nombre del pokemon con el que quiera empezar: ").lower().strip()
 
     #valido que esté bien ingresado el nombre
-    while poke_usu not in pokemones_usu[1:]:
+    while poke_usu not in pokemones_usu:
         print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
         poke_usu=input("Ingrese el nombre del pokemon con el que quiera empezar: ").lower().strip()
     
@@ -159,11 +163,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     
     #Hago lo mismo con los de la compu
-    pokemones_compu=[None]
+    pokemones_compu=[]
     for pokemon in equipo_compu:
         pokemones_compu.append(pokemon.nombre.lower())
 
-    poke_compu=random.choice(pokemones_compu[1:])
+    poke_compu=random.choice(pokemones_compu)
     pokemones_compu.remove(poke_compu)
 
     for pokemon in equipo_compu:
@@ -212,7 +216,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     
         elif post_usu.vida==0 and post_compu.vida!=0:
             poke_usu=input(f"Como {post_usu.nombre} murió, elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
-            while poke_usu not in pokemones_usu[1:]:
+            while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
                 poke_usu=input("Elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
             
@@ -224,7 +228,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         elif post_usu.vida!=0 and post_compu.vida==0:
             print(f"Como {post_compu.nombre} murió. Se elegirá el siguiente pokemon para batallar de nuevo")
-            poke_compu=random.choice(pokemones_compu[1:])
+            poke_compu=random.choice(pokemones_compu)
 
             pokemones_compu.remove(poke_compu)
             for pokemon in equipo_compu:
@@ -235,7 +239,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         else:
             print("Se elegirán los siguientes pokemones a batallar")
             poke_usu=input("Ingrese su siguiente pokemon para batallar de nuevo: ").lower().strip()
-            while poke_usu not in pokemones_usu[1:]:
+            while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
                 poke_usu=input("Elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
             
@@ -245,7 +249,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     poke_usu=pokemon
                     break
 
-            poke_compu=random.choice(pokemones_compu[1:])
+            poke_compu=random.choice(pokemones_compu)
             pokemones_compu.remove(poke_compu)
 
             for pokemon in equipo_compu:
@@ -280,7 +284,7 @@ def empate(equipo_usu,equipo_compu):
         return "El juego ha finalizado. Fue un empate."
 
     else:
-        pokemons_usu=[None]
+        pokemons_usu=[]
         for pokemon in equipo_usu:
             pokemons_usu.append(pokemon.nombre.lower())
             
@@ -288,7 +292,7 @@ def empate(equipo_usu,equipo_compu):
         poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
         
         #valido que esté bien ingresado el nombre
-        while poke_usu not in pokemons_usu[1:]:
+        while poke_usu not in pokemons_usu:
             print("El pokemon ingresado no se encontraba en su equipo. Inténtelo de nuevo.")
             poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
         pokemons_usu.remove(poke_usu) #saco de la lista el nombre del pokemon, asi no lo repite
@@ -299,11 +303,11 @@ def empate(equipo_usu,equipo_compu):
                 poke_usu=pokemon
                 break
         #Hago lo mismo con los de la compu
-        pokemons_compu=[None]
+        pokemons_compu=[]
         for pokemon in equipo_compu:
             pokemons_compu.append(pokemon.nombre.lower())
             
-        poke_compu=random.choice(pokemons_compu[1:])
+        poke_compu=random.choice(pokemons_compu)
         pokemons_compu.remove(poke_compu)
         
         for pokemon in equipo_compu:
