@@ -100,7 +100,7 @@ class Pokemon:
         if print_cambios:
             print(f"{self.nombre}: subiste '{atributo1}'")
             print(f"A cambio se reducio el atributo {atributo2}")
-            print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
+            print(f"ataque: {self.ataque} | defensa: {self.defensa} | velocidad: {self.velocidad} | adaptabilidad: {self.adaptabilidad}")
 
     def mostrar_atributos(self):
         print(f"Ataque: {self.ataque}")

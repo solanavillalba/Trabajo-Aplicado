@@ -88,7 +88,7 @@ list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
 
-pokemones_cpu=convertir_diccio(list_cpu)
+pokemones_cpu=p.convertir_diccio(list_cpu)
 
 # ELECCION CPU
 for categoria, lista_pokemones in pokemones_cpu.items():
