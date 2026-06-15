@@ -12,7 +12,7 @@ list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
 
-pokemones=f.convertir_diccio(list_poke)
+pokemones= p.convertir_diccio(list_poke)
 #----------------------------------------------------
 #PARES ANALOGOS DE HABILIDADES
 pares = {
@@ -36,13 +36,13 @@ lista_ambientes.append(volcan)
 #----------------------------------------------------
 #CREACION LISTA EVENTOS ALEATORIOS
 lista_eventos_aleatorios = []
-aumentar_1vida = c.Evento_aleatorio("Aumento de 1hp", float(1))
+aumentar_1vida = c.Evento_aleatorio("un Kit medico", float(1))
 lista_eventos_aleatorios.append(aumentar_1vida)
-aumentar_05vida = c.Evento_aleatorio("Aumento de 0,5hp", float(0.5))
+aumentar_05vida = c.Evento_aleatorio("un Ibuprofeno", float(0.5))
 lista_eventos_aleatorios.append(aumentar_05vida)
-bajar_05vida = c.Evento_aleatorio("Disminuir 0.5hp", float(-0.5))
+bajar_05vida = c.Evento_aleatorio("una Gripe", float(-0.5))
 lista_eventos_aleatorios.append(bajar_05vida)
-bajar_1vida = c.Evento_aleatorio("Disminir 1hp", float(-1))
+bajar_1vida = c.Evento_aleatorio("Asma", float(-1))
 lista_eventos_aleatorios.append(bajar_1vida)
 
 #----------------------------------------------------

@@ -39,12 +39,18 @@ class Ambiente:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
             pokemon.velocidad+= self.velocidad/2
-            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que no se modifica tanto sus atributos.")
+            else:
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que no se modifica tanto sus atributos.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
             pokemon.velocidad+= self.velocidad 
-            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
+            if cpu:
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}")
+            else:
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
         
         return pokemon
 
@@ -72,7 +78,7 @@ class Evento_aleatorio:
         '''
         pokemon.vida+=self.vida
         pokemon.vida=round(pokemon.vida,1)
-        print(f"{pokemon.nombre} recibió un evento aleatorio: {self.nombre} y su vida se modificó a {pokemon.vida}")
+        print(f"{pokemon.nombre} recibió un evento aleatorio: Ahora tiene {self.nombre} y su vida se modificó a {pokemon.vida}")
 
 
 class Pokemon:
