@@ -78,6 +78,8 @@ class Evento_aleatorio:
         '''
         pokemon.vida+=self.vida
         pokemon.vida=round(pokemon.vida,1)
+        if pokemon.vida<=0:
+            pokemon.vida==0
         print(f"{pokemon.nombre} recibió un evento aleatorio: Ahora tiene {self.nombre} y su vida se modificó a {pokemon.vida}")
 
 
