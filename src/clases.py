@@ -39,20 +39,12 @@ class Ambiente:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
             pokemon.speed+= self.velocidad/2
-            if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
-
-                
-            else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
+            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
-            pokemon.velocidad+= self.velocidad 
-            if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}")
-            else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
+            pokemon.speed+= self.velocidad 
+            print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
         
         return pokemon
 
@@ -103,11 +95,10 @@ class Pokemon:
     
         setattr(self, atributo1, getattr(self, atributo1) + num)
         setattr(self, atributo2, getattr(self, atributo2) - num)
-        
-        if print_cambios:
-            print(f"{self.nombre}: subiste '{atributo1}'")
-            print(f"A cambio se reducio el atributo {atributo2}")
-            print(f"Los atributos modificados quedaron asi: \nataque: {self.ataque} | defensa: {self.defensa} | velocidad: {self.velocidad} | adaptabilidad: {self.adaptabilidad}")
+
+        print(f"{self.nombre}: subiste '{atributo1}'")
+        print(f"A cambio se reducio el atributo {atributo2}")
+        print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
 
     def mostrar_atributos(self):
         print(f"Ataque: {self.ataque}")

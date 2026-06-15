@@ -1,7 +1,13 @@
 import random
+<<<<<<< HEAD
 import funciones as f
 import clases as c
 from clases import Pokemon
+=======
+import src.funciones as f
+import src.clases as c
+import src.pokemones as p
+>>>>>>> 5d9911917c9eabe0204a88b389d05c6877ff012d
 from funciones import convertir_diccio
 
 print("¡Bienvenido al juego de Pokemon!")
