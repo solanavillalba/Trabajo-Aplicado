@@ -311,11 +311,11 @@ def str_a_pokemones(lista):
     lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
     '''
     
-    lista=[]
+    lista_objetos=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
-        lista.append(pokemon)
-    return lista
+        lista_objetos.append(pokemon)
+    return lista_objetos
 
 def convertir_diccio(diccio):
     '''

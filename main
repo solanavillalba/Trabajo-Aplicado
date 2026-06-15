@@ -2,7 +2,6 @@ import random
 import src.funciones as f
 import src.clases as c
 import src.pokemones as p
-from funciones import convertir_diccio
 
 print("¡Bienvenido al juego de Pokemon!")
 #----------------------------------------------------
@@ -17,8 +16,7 @@ for lista in list_poke.values():
     for p in lista:
         lista_totales.append(p)
 
-pokemones=convertir_diccio(list_poke)
-
+pokemones=f.convertir_diccio(list_poke)
 #----------------------------------------------------
 #PARES ANALOGOS DE HABILIDADES
 pares = {
