@@ -26,7 +26,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         evento_quepasa= random.choice(eventos_random)
         poke_afectado= random.choice([pokemon1, pokemon2])
         evento_quepasa.evento(poke_afectado)
-        if poke_afectado.vida<=0:
+        if poke_afectado.vida==0:
             print(f"{poke_afectado.nombre} murió.")
             return pokemon1, pokemon2, puntos_usuario, puntos_cpu
 
@@ -193,7 +193,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     puntos_compu=0
 
  
-    
+    print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n¡Comienza la pelea!.\n¡Suerte!\n")
     while True:
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
