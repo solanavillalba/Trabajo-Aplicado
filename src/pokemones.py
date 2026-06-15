@@ -1,5 +1,5 @@
 import requests
-from clases import Pokemon
+from src.clases import Pokemon
 
 
 def poke_api (pokemon):

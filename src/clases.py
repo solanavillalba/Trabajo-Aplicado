@@ -30,12 +30,12 @@ class Ambiente:
         elif pokemon.adaptabilidad==0.5:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
-            pokemon.speed+= self.velocidad/2
+            pokemon.velocidad+= self.velocidad/2
             print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que sus atributos.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
-            pokemon.speed+= self.velocidad 
+            pokemon.velocidad+= self.velocidad 
             print(f"{pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
         
         return pokemon
@@ -90,7 +90,7 @@ class Pokemon:
 
         print(f"{self.nombre}: subiste '{atributo1}'")
         print(f"A cambio se reducio el atributo {atributo2}")
-        print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.speed} | adaptabilidad: {self.adaptabilidad}")
+        print(f"ataque: {self.ataque} | defensa: {self.defensa} | speed: {self.velocidad} | adaptabilidad: {self.adaptabilidad}")
 
     def mostrar_atributos(self):
         print(f"Ataque: {self.ataque}")

@@ -1,5 +1,5 @@
 import random
-from pokemones import crear_pokemon
+from src.pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
@@ -61,7 +61,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="atacar" and accion2=="esquivar":
         esquiva_sino = [True, False]
-        pesos = [pokemon2.speed, 1-pokemon2.speed]
+        pesos = [pokemon2.velocidad, 1-pokemon2.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
             print(f"{pokemon2.nombre} esquivó el ataque de {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
@@ -85,7 +85,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="esquivar" and accion2=="atacar":
         esquiva_sino = [True, False]
-        pesos = [pokemon1.speed, 1-pokemon1.speed]
+        pesos = [pokemon1.velocidad, 1-pokemon1.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
             print(f"{pokemon1.nombre} esquivó el ataque de {pokemon2.nombre} y su vida se mantuvo en {pokemon1.vida}")   
