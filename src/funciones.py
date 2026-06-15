@@ -1,5 +1,5 @@
 import random
-from src.pokemones import crear_pokemon
+from pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
@@ -29,12 +29,15 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     
     if accion1=="atacar" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque
+        pokemon1.vida=round(pokemon1.vida, 1)
         if pokemon1.vida < 0:
             pokemon1.vida = 0
         print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
         puntos_cpu+=1
 
         pokemon2.vida-=pokemon1.ataque
+        pokemon2.vida=round(pokemon2.vida, 1)
+        
         if pokemon2.vida < 0:
             pokemon2.vida = 0
         print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y su vida se bajó a {pokemon2.vida}")
@@ -52,6 +55,8 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="atacar" and accion2=="defender":
         pokemon2.vida-=pokemon1.ataque*pokemon2.defensa
+        pokemon2.vida=round(pokemon2.vida, 1)
+
         if pokemon2.vida < 0:
             pokemon2.vida = 0
             print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
@@ -67,6 +72,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
             print(f"{pokemon2.nombre} esquivó el ataque de {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
         else:
             pokemon2.vida-=pokemon1.ataque
+            pokemon2.vida=round(pokemon2.vida, 1)
             if pokemon2.vida < 0:
                 pokemon2.vida = 0
                 print(f"{pokemon1.nombre} atacó a {pokemon2.nombre} y murió")
@@ -76,6 +82,8 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     elif accion1=="defender" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque*pokemon1.defensa
+        pokemon1.vida=round(pokemon1.vida, 1)
+
         if pokemon1.vida < 0:
             pokemon1.vida = 0
             print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
@@ -91,6 +99,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
             print(f"{pokemon1.nombre} esquivó el ataque de {pokemon2.nombre} y su vida se mantuvo en {pokemon1.vida}")   
         else:
             pokemon1.vida-=pokemon2.ataque
+            pokemon1.vida=round(pokemon1.vida, 1)
             if pokemon1.vida < 0:
                 pokemon1.vida = 0
                 print(f"{pokemon2.nombre} atacó a {pokemon1.nombre} y murió")
@@ -167,10 +176,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     #Se elige aleatoriamente el ambiente en el que ocurrirá la batalla.
     ambiente=random.choice(lista_ambientes)
-
+    print(f"Ambiente seleccionado al azar: {ambiente.nombre}")
+    ambiente.modifica_atributo(poke_usu)
+    ambiente.modifica_atributo(poke_compu, True)
+    
     while True:
-        ambiente.modifica_atributo(poke_usu)
-        ambiente.modifica_atributo(poke_compu)
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==1
@@ -311,11 +321,11 @@ def str_a_pokemones(lista):
     lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
     '''
     
-    lista_objetos=[]
+    lis=[]
     for poke in lista:
         pokemon=crear_pokemon(poke)
-        lista_objetos.append(pokemon)
-    return lista_objetos
+        lis.append(pokemon)
+    return lis
 
 def convertir_diccio(diccio):
     '''
@@ -328,7 +338,7 @@ def convertir_diccio(diccio):
     
     dicc={}
     for clave, valor in diccio.items():
-        pokemon=str_a_pokemones(valor)
+        pokemon= str_a_pokemones(valor)
         dicc[clave]=pokemon
     return dicc
 
@@ -352,5 +362,3 @@ def validar_texto_en_lista(texto, lista):
     if texto not in lista:
         raise ValueError("Debe ingresar uno de los elementos de la lista.")
     
-
-
