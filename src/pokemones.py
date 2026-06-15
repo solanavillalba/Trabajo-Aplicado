@@ -135,4 +135,3 @@ def convertir_diccio(diccio):
         pokemon= str_a_pokemones(valor)
         dicc[clave]=pokemon
     return dicc
-

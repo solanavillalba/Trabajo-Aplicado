@@ -124,5 +124,3 @@ class Pokemon:
             print(f"Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
 
         
-        
-        

@@ -1,6 +1,5 @@
 import random
 from pokemones import crear_pokemon
-
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
@@ -17,8 +16,8 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     accion1= input("¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
     
     while accion1 not in ["atacar", "defender", "esquivar"]:
-        print("\n Acción no válida. Por favor, elige entre atacar, defender o esquivar.")
-        accion1= input("¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+        print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
+        accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
 
     accion2= random.choice(["atacar", "defender", "esquivar"])
     evento_si_no= random.choice([True, False])
@@ -36,7 +35,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         pokemon1.vida=round(pokemon1.vida, 1)
         if pokemon1.vida < 0:
             pokemon1.vida = 0
-        print(f"\n El {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+        print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
         puntos_cpu+=1
 
         pokemon2.vida-=pokemon1.ataque
@@ -48,14 +47,14 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         puntos_usuario+=1
 
         if pokemon1.vida == 0 and pokemon2.vida == 0:
-            print("\n Ambos pokemones murieron")
+            print("\nAmbos pokemones murieron")
         elif pokemon1.vida == 0:
-            print(f"\n {pokemon1.nombre} murió")
+            print(f"\n{pokemon1.nombre} murió")
         elif pokemon2.vida == 0:
-            print(f"\n {pokemon2.nombre} murió")
+            print(f"\n{pokemon2.nombre} murió")
 
     elif (accion1=="esquivar" or accion1=="defender") and (accion2=="esquivar" or accion2=="defender"):
-        print("\n Ningun pokemon ataco, no se modificó la vida de ninguno")
+        print("\nNingun pokemon ataco, no se modificó la vida de ninguno")
 
     elif accion1=="atacar" and accion2=="defender":
         pokemon2.vida-=pokemon1.ataque*pokemon2.defensa
@@ -63,9 +62,9 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
         if pokemon2.vida < 0:
             pokemon2.vida = 0
-            print(f"\n Tu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
+            print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
         else:
-            print(f"\n Tu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
+            print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
             puntos_usuario+=1
 
     elif accion1=="atacar" and accion2=="esquivar":
@@ -73,15 +72,15 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         pesos = [pokemon2.velocidad, 1-pokemon2.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
-            print(f"\n El {pokemon2.nombre} de la cpu esquivó el ataque de tu {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
+            print(f"\nEl {pokemon2.nombre} de la cpu esquivó el ataque de tu {pokemon1.nombre} y su vida se mantuvo en {pokemon2.vida}")   
         else:
             pokemon2.vida-=pokemon1.ataque
             pokemon2.vida=round(pokemon2.vida, 1)
             if pokemon2.vida < 0:
                 pokemon2.vida = 0
-                print(f"\n Tu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
+                print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
             else:
-                print(f"\n Tu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
+                print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
                 puntos_usuario+=1
 
     elif accion1=="defender" and accion2=="atacar":
@@ -90,9 +89,9 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
         if pokemon1.vida < 0:
             pokemon1.vida = 0
-            print(f"\n El {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
+            print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
         else:
-            print(f"\n El {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+            print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
             puntos_cpu+=1
 
     elif accion1=="esquivar" and accion2=="atacar":
@@ -100,15 +99,15 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         pesos = [pokemon1.velocidad, 1-pokemon1.velocidad]
         seleccion = random.choices(esquiva_sino, weights=pesos, k=1)[0]
         if seleccion:
-            print(f"\n Tu {pokemon1.nombre} esquivó el ataque del {pokemon2.nombre} de la cpu y su vida se mantuvo en {pokemon1.vida}")   
+            print(f"\nTu {pokemon1.nombre} esquivó el ataque del {pokemon2.nombre} de la cpu y su vida se mantuvo en {pokemon1.vida}")   
         else:
             pokemon1.vida-=pokemon2.ataque
             pokemon1.vida=round(pokemon1.vida, 1)
             if pokemon1.vida < 0:
                 pokemon1.vida = 0
-                print(f"\n El {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
+                print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
             else:    
-                print(f"\n El {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+                print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
                 puntos_cpu+=1
 
     return pokemon1, pokemon2, puntos_usuario, puntos_cpu
@@ -158,8 +157,8 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         ambiente.modifica_atributo(po, True)
     
      #Se elige el primer pokemon para empezar la batalla.
-    print("\n Empieza la pelea. \nRecuerde que tu equipo esta conformado por", pokemones_usu)
-    poke_usu=input("\nIngrese el nombre del pokemon con el que quiera pelear:").lower().strip()
+    print("\nEmpieza la pelea.\n\nTu equipo esta conformado por", pokemones_usu)
+    poke_usu=input("Ingrese el nombre del pokemon con el que quiera pelear:").lower().strip()
 
     #valido que esté bien ingresado el nombre
     while poke_usu not in pokemones_usu:
@@ -186,6 +185,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     for pokemon in equipo_compu:
         if pokemon.nombre.lower()==poke_compu:
             poke_compu=pokemon
+            print(f"La cpu elegio a {poke_compu.nombre}")
             break
 
     puntos_usu=0
@@ -234,17 +234,18 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             for pokemon in equipo_usu:
                 if pokemon.nombre.lower()==poke_usu:
                     poke_usu=pokemon
+                    print(f"La cpu elegio a {poke_compu.nombre}")
                     break
 
         elif post_usu.vida!=0 and post_compu.vida==0:
-            print(f"Como el pokemon de la cpu, {post_compu.nombre}, murió. Se elegirá el siguiente pokemon para pelear de nuevo...")
+            print("Se elegirá el siguiente pokemon para pelear de nuevo...")
             poke_compu=random.choice(pokemones_compu)
-            print(f"La cpu elegio a {poke_compu.nombre}")
 
             pokemones_compu.remove(poke_compu)
             for pokemon in equipo_compu:
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
+                    print(f"La cpu elegio a {poke_compu.nombre}")
                     break
     
         else:
