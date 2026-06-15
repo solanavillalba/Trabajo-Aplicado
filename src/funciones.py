@@ -109,65 +109,6 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
     return pokemon1, pokemon2, puntos_usuario, puntos_cpu
 
-def empate(equipo_usu,equipo_compu):
-    '''
-    Si ocurre un empate (todos los pokemones de ambos equipos se encuentran sin vida), esta función se encarga de darle dos opciones al usuario. Si desea dejarlo como un
-    empate, lo deja como un empate. Sino, da la opción de revivir a ambos equipos uno de los pokemones y volver a batallar.
-
-    Parámetros:
-    equipo_usu: list
-    Lista de objetos con el equipo de pokemones del usuario.
-
-    equipo_compu: list
-    Lista de objetos con el equipo de pokemones de la computadora.
-
-    Retorna: str o dos objetos de tipo pokemon
-    Si el usuario decide dejar el final de la partida como un empate, devuelve un mensaje sobre el empate. Si no, devuelve los pokemones que van a usar la computadora y el usuario para
-    batallar de nuevo.
-
-    '''
-    opcion=input("¡Ocurrió un empate! ¿Desea terminar la partida? (s/n): ").lower().strip()
-
-    while opcion not in ['s','n']:
-        print("Opción inválida")
-        opcion=input("Intente de nuevo").lower().strip
-
-    if opcion=='s':
-        return "El juego ha finalizado. Fue un empate."
-
-    else:
-        pokemons_usu=[None]
-        for pokemon in equipo_usu:
-            pokemons_usu.append(pokemon.nombre.lower())
-            
-        #Se elige el primer pokemon para empezar la batalla.
-        poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
-        
-        #valido que esté bien ingresado el nombre
-        while poke_usu not in pokemons_usu[1:]:
-            print("El pokemon ingresado no se encontraba en su equipo. Inténtelo de nuevo.")
-            poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
-        pokemons_usu.remove(poke_usu) #saco de la lista el nombre del pokemon, asi no lo repite
-        
-        #convierto el str primer_poke_usu a objeto
-        for pokemon in equipo_usu:
-            if pokemon.nombre.lower()==poke_usu:
-                poke_usu=pokemon
-                break
-        #Hago lo mismo con los de la compu
-        pokemons_compu=[None]
-        for pokemon in equipo_compu:
-            pokemons_compu.append(pokemon.nombre.lower())
-            
-        poke_compu=random.choice(pokemons_compu[1:])
-        pokemons_compu.remove(poke_compu)
-        
-        for pokemon in equipo_compu:
-            if pokemon.nombre.lower()==poke_compu:
-                poke_compu=pokemon
-                break
-        return [poke_usu,poke_compu]
-
 def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     '''
     Mantiene a los pokemons batallando (llama a la función ronda() hasta que uno muera. Cuando eso sucede, 
@@ -312,6 +253,95 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     poke_compu=pokemon
                     break
 
+def empate(equipo_usu,equipo_compu):
+    '''
+    Si ocurre un empate (todos los pokemones de ambos equipos se encuentran sin vida), esta función se encarga de darle dos opciones al usuario. Si desea dejarlo como un
+    empate, lo deja como un empate. Sino, da la opción de revivir a ambos equipos uno de los pokemones y volver a batallar.
+
+    Parámetros:
+    equipo_usu: list
+    Lista de objetos con el equipo de pokemones del usuario.
+
+    equipo_compu: list
+    Lista de objetos con el equipo de pokemones de la computadora.
+
+    Retorna: str o dos objetos de tipo pokemon
+    Si el usuario decide dejar el final de la partida como un empate, devuelve un mensaje sobre el empate. Si no, devuelve los pokemones que van a usar la computadora y el usuario para
+    batallar de nuevo.
+
+    '''
+    opcion=input("¡Ocurrió un empate! ¿Desea terminar la partida? (s/n): ").lower().strip()
+
+    while opcion not in ['s','n']:
+        print("Opción inválida")
+        opcion=input("Intente de nuevo").lower().strip
+
+    if opcion=='s':
+        return "El juego ha finalizado. Fue un empate."
+
+    else:
+        pokemons_usu=[None]
+        for pokemon in equipo_usu:
+            pokemons_usu.append(pokemon.nombre.lower())
+            
+        #Se elige el primer pokemon para empezar la batalla.
+        poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
+        
+        #valido que esté bien ingresado el nombre
+        while poke_usu not in pokemons_usu[1:]:
+            print("El pokemon ingresado no se encontraba en su equipo. Inténtelo de nuevo.")
+            poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
+        pokemons_usu.remove(poke_usu) #saco de la lista el nombre del pokemon, asi no lo repite
+        
+        #convierto el str primer_poke_usu a objeto
+        for pokemon in equipo_usu:
+            if pokemon.nombre.lower()==poke_usu:
+                poke_usu=pokemon
+                break
+        #Hago lo mismo con los de la compu
+        pokemons_compu=[None]
+        for pokemon in equipo_compu:
+            pokemons_compu.append(pokemon.nombre.lower())
+            
+        poke_compu=random.choice(pokemons_compu[1:])
+        pokemons_compu.remove(poke_compu)
+        
+        for pokemon in equipo_compu:
+            if pokemon.nombre.lower()==poke_compu:
+                poke_compu=pokemon
+                break
+        return [poke_usu,poke_compu]
+
+def str_a_pokemones(lista):
+    '''
+    Recibe una lista con los nombres de los pokemones y los convierte a objetos
+    Parámetros:
+    lista: list. Lista con los nombres de los pokemones elegidos por el usuario
+    Return
+    lista: list. Lista con objetos Pokemon con los atributos correspondientes a los pokemones elegidos por el usuario.
+    '''
+    
+    lis=[]
+    for poke in lista:
+        pokemon=crear_pokemon(poke)
+        lis.append(pokemon)
+    return lis
+
+def convertir_diccio(diccio):
+    '''
+    Recibe un diccionario con los values que son lista de pokemones
+    Parámetros:
+    diccio: dict. Diccionario con los datos de la API del pokemon elegido
+    Return
+    dicc: diccionario. diccionario con objetos Pokemon ordenados en las claves correspondientes.
+    '''
+    
+    dicc={}
+    for clave, valor in diccio.items():
+        pokemon= str_a_pokemones(valor)
+        dicc[clave]=pokemon
+    return dicc
+
 def validar_rango(numero, mini, maxi):
     if (numero > maxi) or (numero < mini):
         raise ValueError("El numero no esta en el rango solicitado.")
@@ -331,3 +361,4 @@ def validar_str(texto):
 def validar_texto_en_lista(texto, lista):
     if texto not in lista:
         raise ValueError("Debe ingresar uno de los elementos de la lista.")
+    
