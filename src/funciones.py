@@ -1,5 +1,6 @@
 import random
 from pokemones import crear_pokemon
+
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
@@ -13,7 +14,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
     puntos_usuario (int): Puntos acumulados por el usuario durante la ronda.
     """
-    accion1= input("¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+    accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
     
     while accion1 not in ["atacar", "defender", "esquivar"]:
         print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
@@ -348,3 +349,4 @@ def validar_str(texto):
 def validar_texto_en_lista(texto, lista):
     if texto not in lista:
         raise ValueError("Debe ingresar uno de los elementos de la lista.")
+    
