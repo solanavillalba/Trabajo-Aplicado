@@ -1,6 +1,7 @@
 import requests
 from clases import Pokemon
 
+
 def poke_api (pokemon):
     '''
     Recibe el nombre de un pokemon, hace la consulta a la API y devuelve un diccionario con los datos crudos del pokemon.
@@ -134,3 +135,4 @@ def convertir_diccio(diccio):
         pokemon= str_a_pokemones(valor)
         dicc[clave]=pokemon
     return dicc
+

@@ -24,33 +24,33 @@ class Ambiente:
 
         if self.tipo_ambiente==pokemon.tipo:
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en su ambiente favorable: {self.nombre}")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en su ambiente favorable. Juega con ventaja")
 
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en su ambiente favorable: {self.nombre}")
+                print(f"Tu {pokemon.nombre} se encuentra en su ambiente favorable. Juega con ventaja")
             
         elif pokemon.adaptabilidad==1:
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, es adaptable, no se modifican sus atributos")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se adapto bien. Juega con ventaja")
 
             else:
-                print(f"Tu {pokemon.nombre} es adaptable, no se modifican sus atributos")
+                print(f"Tu {pokemon.nombre} se adapto bien. Juega con ventaja")
         elif pokemon.adaptabilidad==0.5:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
             pokemon.velocidad+= self.velocidad/2
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que no se modifica tanto sus atributos.")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Pero se medio adapto asi. Juega normal.")
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}. Pero tiene adaptabilidad media asi que no se modifica tanto sus atributos.")
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Pero se medio adapto. Juega normal.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
             pokemon.velocidad+= self.velocidad 
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable: {self.nombre}")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Juega en desventaja")
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable: {self.nombre}")
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Juega en desventaja")
         
         return pokemon
 
@@ -99,17 +99,30 @@ class Pokemon:
             self.tipo = dicc['tipo']
 
     def cambiar_atributo(self, atributo1, atributo2, num, print_cambios=True):
-    
+        
+        if print_cambios== False:
+            if getattr(self, atributo2) != 0:
+                setattr(self, atributo2, getattr(self, atributo2) - num)
+                
         setattr(self, atributo1, getattr(self, atributo1) + num)
-        setattr(self, atributo2, getattr(self, atributo2) - num)
 
         if print_cambios:
-            print(f"{self.nombre}: subiste '{atributo1}'")
-            print(f"A cambio se reducio el atributo {atributo2}")
-            print(f"ataque: {self.ataque} | defensa: {self.defensa} | velocidad: {self.velocidad} | adaptabilidad: {self.adaptabilidad}")
+            if getattr(self, atributo2) == 0:
+                if print_cambios:
+                    print(f"Subiste {atributo1} pero no se realizan cambios en {atributo2} porque ya es 0.")
+                else:
+                    setattr(self, atributo2, getattr(self, atributo2) - num)
+                    print(f"Subiste {atributo1} y se redujo el atributo {atributo2} \n")
 
-    def mostrar_atributos(self):
-        print(f"Ataque: {self.ataque}")
-        print(f"Defensa: {self.defensa}")
-        print(f"Velocidad: {self.velocidad}")
-        print(f"Adaptabilidad: {self.adaptabilidad}")
+            print(f"Tu {self.nombre} tiene: \nAtaque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
+
+    def mostrar_atributos(self, nombre=False):
+        if nombre:
+            print(f"{self.nombre}: Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
+
+        else:    
+            print(f"Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
+
+        
+        
+        

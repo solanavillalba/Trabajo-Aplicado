@@ -47,18 +47,17 @@ lista_eventos_aleatorios.append(bajar_1vida)
 
 #----------------------------------------------------
 #CREACION LISTA DE USUARIO Y CPU DE POKEMONES
-print("Pokemones: ")
+print("Es hora de conformar tu equipo con tres pokemones personalizados")
 pok_usuario = []
 pok_cpu = []
 
 #----------------------------------------------------
 #ELECCION POKEMON USUARIO
 for tipo, lista_pokemones in pokemones.items():
-    print(tipo)
+    print("\nElegi un pokemon de la categoria:", tipo, "\n")
     for pokemon in lista_pokemones:
-        print(pokemon.nombre)
-        pokemon.mostrar_atributos() #sale de la calse pokemon 
-    poke = input("Seleccione pokemon: ").lower().strip()
+        pokemon.mostrar_atributos(True) #sale de la calse pokemon 
+    poke = input("\nSeleccione pokemon: ").lower().strip()
     
     while poke not in list_poke[tipo]:
             poke = input("Pokemon invalido. \nSeleccione Pokemon de la lista: ").lower().strip()
@@ -73,11 +72,11 @@ for tipo, lista_pokemones in pokemones.items():
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
     lista_atributos = ["ataque","velocidad","defensa","adaptabilidad" ]
     
-    print("Ingrese el atributo a boostear, recuerda que aumentar un atributo disminuye otro.")  
-    atributo = input("Ataque, Adaptabilidad, Defensa o Velocidad \n").lower().strip()
+    print("\nIngrese el atributo a mejorar, recuerda que aumentar un atributo disminuye otro.")  
+    atributo = input("Elegi entre Ataque, Adaptabilidad, Defensa o Velocidad: ").lower().strip()
 
     while atributo not in lista_atributos:
-        atributo = input("Atributo invalido. \n Seleccione un atributo de la lista: ").lower().strip()
+        atributo = input("Atributo invalido. \nSeleccione un atributo de la lista: ").lower().strip()
     
     atributo2 = pares[atributo]
     pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
@@ -104,7 +103,10 @@ for categoria, lista_pokemones in pokemones_cpu.items():
     pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15), False)
     pok_cpu.append(pokemon_elegido_cpu)
     
-print('Las cpu eligio correctamente')
+print('\nLa cpu eligio a:')
+for pokemon in pok_cpu:
+    print(pokemon.nombre)
 
-
+print("\nInicia la batalla")
+print("Seleccionando arena de juego...\n")
 f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
