@@ -1,5 +1,5 @@
 import random
-from pokemones import crear_pokemon
+from src.pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
@@ -215,7 +215,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
             break
         elif cond_salida_compu==True:
-            print("La batalla ha finalizado. Te has consgrado como ganador. ¡Felicitaciones!")
+            print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
             break
 
 
@@ -288,13 +288,13 @@ def empate(equipo_usu,equipo_compu):
     batallar de nuevo.
 
     '''
-    opcion=input("¡Ocurrió un empate! ¿Desea terminar la partida? (s/n): ").lower().strip()
+    opcion=input("¡Ocurrió un empate! ¿Desea desempatar? (s/n): ").lower().strip()
 
     while opcion not in ['s','n']:
         print("Opción inválida")
         opcion=input("Intente de nuevo").lower().strip
 
-    if opcion=='s':
+    if opcion=='n':
         return "El juego ha finalizado. Fue un empate."
 
     else:
@@ -303,6 +303,7 @@ def empate(equipo_usu,equipo_compu):
             pokemons_usu.append(pokemon.nombre.lower())
             
         #Se elige el primer pokemon para empezar la batalla.
+        print(f"Recuerde que su lista de pokemones es: {pokemons_usu}")
         poke_usu=input("Ingrese el nombre del pokemon que quiere revivir: ").lower().strip()
         
         #valido que esté bien ingresado el nombre
@@ -327,6 +328,7 @@ def empate(equipo_usu,equipo_compu):
         for pokemon in equipo_compu:
             if pokemon.nombre.lower()==poke_compu:
                 poke_compu=pokemon
+                print(f"\nLa CPU eligio: {poke_compu}")
                 break
         return [poke_usu,poke_compu]
 

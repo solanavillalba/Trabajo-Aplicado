@@ -110,11 +110,10 @@ class Pokemon:
 
         if print_cambios:
             if getattr(self, atributo2) == 0:
-                if print_cambios:
-                    print(f"Subiste {atributo1} pero no se realizan cambios en {atributo2} porque ya es 0.")
-                else:
-                    setattr(self, atributo2, getattr(self, atributo2) - num)
-                    print(f"Subiste {atributo1} y se redujo el atributo {atributo2} \n")
+                print(f"Subiste {atributo1} pero no se realizan cambios en {atributo2} porque ya es 0.")
+            else:
+                setattr(self, atributo2, getattr(self, atributo2) - num)
+                print(f"Subiste {atributo1} y se redujo el atributo {atributo2} \n")
 
             print(f"Tu {self.nombre} tiene: \nAtaque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
 
