@@ -2,17 +2,23 @@ import random
 from src.pokemones import crear_pokemon
 
 #falta agregar el special attack
-def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
+def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0, dict_usu, dict_cpu):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
     Parámetros:
     pokemon1 (objeto): Un objeto que representa al primer pokemon, con sus atributos.
     pokemon2 (objeto): Un objeto que representa al segundo pokemon, con sus atributos.
     eventos_random (list): Una lista de eventos aleatorios que pueden afectar el resultado de la batalla.
+    puntos_usuario (int): Puntos acumulados por el usuario durante la ronda.
+    puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
+    dict_usu (dict): Diccionario de registro de las acciones del usuario.
+    dict_cpu (dict): Diccionario de registro de las acciones de la CPU.
     Retorna:
     pokemon1 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
     pokemon2 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
     puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
     puntos_usuario (int): Puntos acumulados por el usuario durante la ronda.
+    dict_usu (dict): Diccionario de registro de las acciones del usuario actualizado con la acción realizada en esta ronda.
+    dict_cpu (dict): Diccionario de registro de las acciones de la CPU actualizado con la acción realizada en esta ronda.
     """
     if puntos_usuario>=3:
         if puntos_usuario >= 3:
@@ -29,10 +35,20 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
             print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
 
+    if accion1 not in dict_usu:
+        dict_usu[accion1]=1
+    else:
+        dict_usu[accion1]+=1
+
     if puntos_cpu>=3:
         accion2= random.choice(["atacar", "defender", "esquivar", "especial"])
     else:
         accion2= random.choice(["atacar", "defender", "esquivar"])
+    
+    if accion2 not in dict_cpu:
+        dict_cpu[accion2]=1
+    else:
+        dict_cpu[accion2]+=1
 
     if accion2!="especial" and accion1!="especial":    
         evento_si_no= random.choice([True, False])
@@ -42,7 +58,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
             evento_quepasa.evento(poke_afectado)
             if poke_afectado.vida==0:
                 print(f"{poke_afectado.nombre} murió.")
-                return pokemon1, pokemon2, puntos_usuario, puntos_cpu
+                return pokemon1, pokemon2, puntos_usuario, puntos_cpu, dict_usu, dict_cpu
 
     
     if accion1=="especial" and accion2!="especial":
@@ -164,7 +180,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
                 print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
                 puntos_cpu+=1
 
-    return pokemon1, pokemon2, puntos_usuario, puntos_cpu
+    return pokemon1, pokemon2, puntos_usuario, puntos_cpu, dict_usu, dict_cpu
 
 def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     '''
@@ -245,10 +261,12 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     puntos_usu=0
     puntos_compu=0
 
- 
+    dict_usu={}
+    dict_compu={}
+    info_rondas=[]
     print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n\n¡Comienza la pelea!\n¡Suerte!\n")
     while True:
-        post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
+        post_usu,post_compu,puntos_usu,puntos_compu,dict_usu,dict_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu,dict_usu,dict_compu)
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==0
         cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==0
@@ -257,19 +275,22 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             resultado=empate(equipo_usu,equipo_compu)
             if type(resultado)==str:
                 print(resultado)
-                break
+                return dict_usu, dict_usu, info_rondas
             else:
                 poke_usu=resultado[0]
                 poke_compu=resultado[1]
                 poke_usu.vida=5
                 poke_compu.vida=5
                 continue
+
         elif cond_salida_usu==True:
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
-            break
+            return dict_usu, dict_usu, info_rondas
+
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
-            break
+            return dict_usu, dict_usu, info_rondas
+
 
 
         if post_usu.vida!=0 and post_compu.vida!=0:
@@ -293,6 +314,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     print(f"La cpu eligió a {poke_compu.nombre}")
                     break
 
+            if 'ataque' in dict_usu:
+                info_rondas.append([dict_usu['ataque'], False])
+            else:
+                info_rondas.append([0, False])
+
         elif post_usu.vida!=0 and post_compu.vida==0:
             puntos_usu=0
             puntos_compu=0
@@ -305,6 +331,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     poke_compu=pokemon
                     print(f"La cpu eligió a {poke_compu.nombre}")
                     break
+
+            if 'ataque' in dict_usu:
+                info_rondas.append([dict_usu['ataque'], True])
+            else:
+                info_rondas.append([0, True])
     
         else:
             print("Se elegirán los siguientes pokemones a batallar")
@@ -329,6 +360,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
                     break
+
+            if 'ataque' in dict_usu:
+                info_rondas.append([dict_usu['ataque'], True])
+            else:
+                info_rondas.append([0, True])
 
 def empate(equipo_usu,equipo_compu):
     '''
@@ -389,29 +425,4 @@ def empate(equipo_usu,equipo_compu):
                 poke_compu=pokemon
                 print(f"\nLa CPU eligio: {poke_compu}")
                 break
-<<<<<<< HEAD
         return [poke_usu,poke_compu]
-=======
-        return [poke_usu,poke_compu]
-
-def validar_rango(numero, mini, maxi):
-    if (numero > maxi) or (numero < mini):
-        raise ValueError("El numero no está en el rango solicitado.")
-    
-def validar_int(numero):
-    try: 
-        numero = int(numero)
-    except:
-        raise ValueError("Debe ingresar un número.")
-    
-def validar_str(texto):
-    try:
-        str(texto)
-    except:
-        raise ValueError("Debe ingresar un texto.")
-
-def validar_texto_en_lista(texto, lista):
-    if texto not in lista:
-        raise ValueError("Debe ingresar uno de los elementos de la lista.")
-    
->>>>>>> 5748485f9d66837bdd46cb174d856794cdd93f20
