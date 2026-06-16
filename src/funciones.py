@@ -287,10 +287,13 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
                     info_rondas.append([sumar, False])
+                    print([sumar, False])
                 else:
                     info_rondas.append([dict_usu['atacar'], False])
+                    print([sumar, False])
             else:
                 info_rondas.append([0, False])
+                print([sumar, False])
 
         elif post_usu.vida!=0 and post_compu.vida==0:
 
@@ -298,21 +301,26 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
                     info_rondas.append([sumar, True])
+                    print([sumar, False])
                 else:
                     info_rondas.append([dict_usu['atacar'], True])
+                    print([sumar, False])
             else:
                 info_rondas.append([0, True])
+                print([sumar, False])
     
         elif post_usu.vida==0 and post_compu.vida==0:
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
                     info_rondas.append([sumar, True])
+                    print([sumar, False])
                 else:
                     info_rondas.append([dict_usu['atacar'], True])
+                    print([sumar, False])
             else:
                 info_rondas.append([0, True])
-  
+                print([sumar, False])
 
         if cond_salida_usu ==True and cond_salida_compu==True:
             resultado=empate(equipo_usu,equipo_compu)

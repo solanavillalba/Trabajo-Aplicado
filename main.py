@@ -1,9 +1,8 @@
 import random
+import src.funciones as f
 import src.clases as c
 import src.pokemones as p
 import src.analizar_datos as a
-import src.funciones as f
-
 
 print("¡Bienvenido al juego de Pokemon!")
 #----------------------------------------------------
