@@ -10,6 +10,7 @@ def promedio(lista):
 
     if len(lista)==0:
         return 0, 0
+    
     golpes_matar=[]
     acumulado=0
     poke_matados=0

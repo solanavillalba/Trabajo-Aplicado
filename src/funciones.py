@@ -303,7 +303,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             else:
                 info_rondas.append([0, True])
     
-        else:
+        elif post_usu.vida==0 and post_compu.vida==0:
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
