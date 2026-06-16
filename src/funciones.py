@@ -1,5 +1,5 @@
 import random
-from src.pokemones import crear_pokemon
+from pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
