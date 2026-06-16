@@ -318,7 +318,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append(sumar, True])
+                    info_rondas.append([sumar, True])
                 else:
                     info_rondas.append([dict_usu['atacar'], True])
             else:
@@ -340,7 +340,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append(sumar, True])
+                    info_rondas.append([sumar, True])
                 else:
                     info_rondas.append([dict_usu['atacar'], True])
             else:
@@ -373,7 +373,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append(sumar, True])
+                    info_rondas.append([sumar, True])
                 else:
                     info_rondas.append([dict_usu['atacar'], True])
             else:
