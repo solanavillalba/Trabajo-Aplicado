@@ -45,7 +45,46 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
                 return pokemon1, pokemon2, puntos_usuario, puntos_cpu
 
     
-    if accion1=="atacar" and accion2=="atacar":
+    if accion1=="especial" and accion2!="especial":
+        pokemon2.vida-= (pokemon1.ataque*(pokemon1.special_attack+1))
+        pokemon2.vida=round(pokemon2.vida, 1)
+        if pokemon2.vida < 0:
+            pokemon2.vida = 0
+            print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y murió")
+        else:
+            print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
+            puntos_usuario+=1
+    
+    elif accion2=="especial" and accion1!="especial":
+        pokemon1.vida-= (pokemon2.ataque*(pokemon2.special_attack+1))
+        pokemon1.vida=round(pokemon1.vida, 1)
+        if pokemon1.vida < 0:
+            pokemon1.vida = 0
+            print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y murió")
+        else:
+            print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+            puntos_cpu+=1
+    
+    elif accion1=="especial" and accion2=="especial":
+        pokemon1.vida-= (pokemon2.ataque*(pokemon2.special_attack+1))
+        pokemon1.vida=round(pokemon1.vida, 1)
+        pokemon2.vida-= (pokemon1.ataque*(pokemon1.special_attack+1))
+        pokemon2.vida=round(pokemon2.vida, 1)
+        if pokemon1.vida < 0:
+            pokemon1.vida = 0
+            print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y murió")
+        else:
+            print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
+            puntos_cpu+=1
+            
+        if pokemon2.vida < 0:
+            pokemon2.vida = 0
+            print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y murió")
+        else:
+            print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
+            puntos_usuario+=1
+
+    elif accion1=="atacar" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque
         pokemon1.vida=round(pokemon1.vida, 1)
         if pokemon1.vida < 0:
