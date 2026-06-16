@@ -44,7 +44,7 @@ def grafico_torta(diccionario):
     de acciones realizadas durante la batalla.
 
     Parámetro:
-    diccionario (dict): diccionario con las acciones
-    y la cantidad de veces que fueron utilizadas.
+    diccionario (dict): registro de acciones
+    titulo (str): título del gráfico
     """
 
