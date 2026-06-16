@@ -258,7 +258,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     for pokemon in equipo_compu:
         if pokemon.nombre.lower()==poke_compu:
             poke_compu=pokemon
-            print(f"La cpu eligió a {poke_compu.nombre}")
+            print(f"\nLa cpu eligió a {poke_compu.nombre}")
             break
 
     puntos_usu=0
