@@ -8,21 +8,32 @@ def promedio(lista):
     Ronda con menor golpes (list): Una lista con la info del minimo de golpes que se dio en la mejor ronda, y el numero de ronda. Ej [2, 4]
     """
 
-    if len(lista)==0:
-        return 0, 0
-    
-    golpes_matar=[]
-    acumulado=0
-    poke_matados=0
+    if len (lista)==0:
+        return 0, [0, 0]
 
-    for listita in lista:
-        if listita[1]:
-            golpes_matar.append(listita[0]-acumulado)
-            acumulado=listita[0]
-            poke_matados+=1
+    golpes_netos_victorias = []
+    acumulado_anterior = 0
+    conteo_muertos_cpu = 0
     
-    promedio=lista[-1][0]/poke_matados
-    minimo=min(golpes_matar)
-    posicion = golpes_matar.index(minimo)
-    ronda_menos_golpes=[minimo, posicion+1]
-    return promedio, ronda_menos_golpes
+    for registro in lista:
+        acumulado_actual = registro[0]
+        murio_rival = registro[1]
+        golpes_este_encuentro = acumulado_actual - acumulado_anterior
+        
+        if murio_rival and golpes_este_encuentro > 0:
+            conteo_muertos_cpu += 1
+            golpes_netos_victorias.append(golpes_este_encuentro)
+            
+        acumulado_anterior = acumulado_actual
+
+    if not golpes_netos_victorias:
+        return 0, [0, 0]
+
+    total_golpes_efectivos = sum(golpes_netos_victorias)
+    cantidad_victorias = conteo_muertos_cpu
+    promedio_final = total_golpes_efectivos / cantidad_victorias
+    minimo= min(golpes_netos_victorias)
+
+    mejor_encuentro = [minimo, golpes_netos_victorias.index(minimo)+1 ]
+
+    return round(promedio_final, 1), mejor_encuentro
