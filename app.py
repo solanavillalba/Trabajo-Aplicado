@@ -55,8 +55,7 @@ def barra_stat(sup, x, y, ancho, valor, maximo, color, fuente_p, etiqueta):
     pygame.draw.rect(sup, (50, 60, 90), bg, border_radius=5)
     if fill_w > 0:
         pygame.draw.rect(sup, color, (x + 40, y + 2, fill_w, 10), border_radius=5)
-    val_txt = fuente_p.render(f"{valor:.2f}", True, COLOR_TEXTO)
-    sup.blit(val_txt, (x + 40 + ancho + 4, y))
+    dibujar_texto(sup, f"{valor:.2f}", fuente_p, COLOR_TEXTO, x + 40 + ancho + 5, y)
 
 # ─────────────────────────────────────────────
 #  DESCARGA DE SPRITES
@@ -344,14 +343,14 @@ def pantalla_seleccion(pantalla, pokemones_obj):
                     break
 
         if poke_mostrar:
-            # Panel de info — altura aumentada para que no se solapen los stats
-            info_rect = pygame.Rect(ANCHO // 2 - 260, 275, 520, 160)
+            # Panel de info
+            info_rect = pygame.Rect(ANCHO // 2 - 220, 280, 440, 190)
             dibujar_panel(pantalla, info_rect, (20, 30, 55), radio=10,
                           borde=COLOR_BORDE_SEL if poke_mostrar == poke_sel_actual else COLOR_BORDE)
 
             # Sprite
             spr = sprites_cache.get(poke_mostrar.nombre.lower())
-            sprite_x = info_rect.x + 14
+            sprite_x = info_rect.x + 20
             sprite_cy = info_rect.centery
             if spr:
                 pantalla.blit(spr, (sprite_x, sprite_cy - 48))
@@ -359,25 +358,20 @@ def pantalla_seleccion(pantalla, pokemones_obj):
                 placeholder_sprite(pantalla, sprite_x + 48, sprite_cy)
 
             # Nombre y tipo
-            tx = sprite_x + 106
-            dibujar_texto(pantalla, poke_mostrar.nombre.capitalize(), fuente_cat, COLOR_TEXTO, tx, info_rect.y + 10)
-            dibujar_texto(pantalla, f"Tipo: {poke_mostrar.tipo}", fuente_pequeña, color_cat, tx, info_rect.y + 34)
+            tx = sprite_x + 110
+            dibujar_texto(pantalla, poke_mostrar.nombre.capitalize(), fuente_cat, COLOR_TEXTO, tx, info_rect.y + 12)
+            dibujar_texto(pantalla, f"Tipo: {poke_mostrar.tipo}", fuente_pequeña, color_cat, tx, info_rect.y + 38)
 
-            # Barras de stats — dos columnas con ancho reducido (110px) para que el valor no invada la columna vecina
-            # Columna izquierda: ATK y DEF  |  Columna derecha: SPD y ADP
-            # Separación vertical entre filas: 28px (antes 25) para evitar solapamiento
+            # Barras de stats
             max_val = 2.0
-            BAR_W   = 110
-            COL2_X  = tx + 185   # inicio de la segunda columna
-
-            barra_stat(pantalla, tx,     info_rect.y + 62,  BAR_W, poke_mostrar.ataque,       max_val, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, tx,     info_rect.y + 92,  BAR_W, poke_mostrar.defensa,       max_val, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, COL2_X, info_rect.y + 62,  BAR_W, poke_mostrar.velocidad,     max_val, COLOR_SPD, fuente_pequeña, "SPD")
-            barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, max_val, COLOR_ADP, fuente_pequeña, "ADP")
+            barra_stat(pantalla, tx,       info_rect.y + 65,  140, poke_mostrar.ataque,       max_val, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, tx,       info_rect.y + 90,  140, poke_mostrar.defensa,       max_val, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, tx + 190, info_rect.y + 65,  140, poke_mostrar.velocidad,     max_val, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, tx + 190, info_rect.y + 90,  140, poke_mostrar.adaptabilidad, max_val, COLOR_ADP, fuente_pequeña, "ADP")
 
             # Vida
             dibujar_texto(pantalla, f"HP: {poke_mostrar.vida}  |  Sp.Atk: {poke_mostrar.special_attack}",
-                          fuente_pequeña, COLOR_SUBTEXTO, tx, info_rect.y + 128)
+                          fuente_pequeña, COLOR_SUBTEXTO, tx, info_rect.y + 120)
 
         else:
             # Placeholder "pasá el mouse"
@@ -386,7 +380,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
 
         # ── Sección de atributo ──
         if poke_sel_actual is not None:
-            atrib_y = 455
+            atrib_y = 475
             dibujar_texto(pantalla, "Mejorá un atributo  (el par opuesto bajará un poco):",
                           fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, atrib_y, centrado=True)
             for bot in botones_atributos:
