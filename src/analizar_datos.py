@@ -47,4 +47,37 @@ def grafico_torta(diccionario):
     diccionario (dict): registro de acciones
     titulo (str): título del gráfico
     """
+acciones = []
 
+for accion in diccionario.keys():
+    acciones.append(accion)
+
+cantidades = []
+
+    
+for cantidad in diccionario.values():
+        cantidades.append(cantidad)
+
+    colores = []
+
+for accion in acciones:
+
+     if accion == "atacar":
+        colores.append("red")
+
+     elif accion == "defender":
+         colores.append("blue")
+
+     elif accion == "esquivar":
+         colores.append("orange")
+
+     elif accion == "especial":
+         colores.append("purple")
+
+plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
+
+# el autopct es funcion de matplotlib para que se muestren los porcentajess
+
+plt.title(titulo)
+
+plt.show()
