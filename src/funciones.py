@@ -269,7 +269,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     info_rondas=[]
     print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n\n¡Comienza la pelea!\n¡Suerte!\n")
     while True:
-        post_usu,post_compu,puntos_usu,puntos_compu,dict_usu,dict_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu,dict_usu,dict_compu)
+        post_usu,post_compu,puntos_usu,puntos_compu,dict_usu,dict_compu=ronda(poke_usu,poke_compu,lista_eventos,dict_usu,dict_compu, puntos_usu,puntos_compu)
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==0
         cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==0
