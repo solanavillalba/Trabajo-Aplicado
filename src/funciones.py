@@ -1,5 +1,5 @@
 import random
-from pokemones import crear_pokemon
+from src.pokemones import crear_pokemon
 
 #falta agregar el special attack
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
@@ -212,7 +212,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     
      #Se elige el primer pokemon para empezar la batalla.
     print("\nEmpieza la pelea.\n\nTu equipo esta conformado por", pokemones_usu)
-    poke_usu=input("Ingrese el nombre del pokemon con el que quiera pelear:").lower().strip()
+    poke_usu=input("Ingrese el nombre del pokemon con el que quiera pelear: ").lower().strip()
 
     #valido que esté bien ingresado el nombre
     while poke_usu not in pokemones_usu:
@@ -246,7 +246,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     puntos_compu=0
 
  
-    print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n¡Comienza la pelea!.\n¡Suerte!\n")
+    print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n\n¡Comienza la pelea!\n¡Suerte!\n")
     while True:
         post_usu,post_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,puntos_usu,puntos_compu)
 
@@ -351,7 +351,7 @@ def empate(equipo_usu,equipo_compu):
 
     while opcion not in ['s','n']:
         print("Opción inválida")
-        opcion=input("Intente de nuevo").lower().strip
+        opcion=input("Intente de nuevo ").lower().strip
 
     if opcion=='n':
         return "El juego ha finalizado. Fue un empate."
