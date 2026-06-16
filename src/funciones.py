@@ -76,7 +76,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
         else:
             print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
             puntos_cpu+=1
-            
+
         if pokemon2.vida < 0:
             pokemon2.vida = 0
             print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y murió")
@@ -390,24 +390,3 @@ def empate(equipo_usu,equipo_compu):
                 print(f"\nLa CPU eligio: {poke_compu}")
                 break
         return [poke_usu,poke_compu]
-
-def validar_rango(numero, mini, maxi):
-    if (numero > maxi) or (numero < mini):
-        raise ValueError("El numero no esta en el rango solicitado.")
-    
-def validar_int(numero):
-    try: 
-        numero = int(numero)
-    except:
-        raise ValueError("Debe ingresar un número.")
-    
-def validar_str(texto):
-    try:
-        str(texto)
-    except:
-        raise ValueError("Debe ingresar un texto.")
-
-def validar_texto_en_lista(texto, lista):
-    if texto not in lista:
-        raise ValueError("Debe ingresar uno de los elementos de la lista.")
-    
