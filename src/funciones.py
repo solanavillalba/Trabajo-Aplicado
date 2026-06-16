@@ -168,7 +168,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
 
 def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     '''
-    Mantiene a los pokemons batallando (llama a la función ronda() hasta que uno muera. Cuando eso sucede, 
+    Mantiene a los pokemons batallando (llama a la función ronda()) hasta que uno muera. Cuando eso sucede, 
     el usuario o la computadora pueden elegir alguno de los otros pokemones previamente seleccionados para 
     seguir batallando, aquel que mantuvo su pokemon con vida lo va a seguir utilizando hasta que muera. 
     Esto continuará hasta que uno de los dos equipos se quede sin pokemones con vida.
@@ -202,17 +202,17 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     ambiente=random.choice(lista_ambientes)
     print(f"Ambiente seleccionado: {ambiente.nombre}\n")
     
-    print("Tus pokemones se estan adaptando al ambiente...\n")
+    print("Tus pokemones se están adaptando al ambiente...\n")
     for pok in equipo_usu: 
         ambiente.modifica_atributo(pok)
     
-    print("\nLos pokemones de la cpu se estan adaptando al ambiente...\n")
+    print("\nLos pokemones de la cpu se están adaptando al ambiente...\n")
     for po in equipo_compu:
         ambiente.modifica_atributo(po, True)
     
      #Se elige el primer pokemon para empezar la batalla.
-    print("\nEmpieza la pelea.\n\nTu equipo esta conformado por", pokemones_usu)
-    poke_usu=input("Ingrese el nombre del pokemon con el que quiera pelear: ").lower().strip()
+    print("\nEmpieza la pelea.\n\nTu equipo está conformado por: ", pokemones_usu)
+    poke_usu=input("Ingrese el nombre del pokemon con el que quiera empezar a pelear: ").lower().strip()
 
     #valido que esté bien ingresado el nombre
     while poke_usu not in pokemones_usu:
@@ -239,7 +239,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     for pokemon in equipo_compu:
         if pokemon.nombre.lower()==poke_compu:
             poke_compu=pokemon
-            print(f"La cpu elegio a {poke_compu.nombre}")
+            print(f"La cpu eligió a {poke_compu.nombre}")
             break
 
     puntos_usu=0
@@ -280,7 +280,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         elif post_usu.vida==0 and post_compu.vida!=0:
             puntos_usu=0
             puntos_compu=0
-            print("Tu pokemon murio. Tu equipo esta conformado por", pokemones_usu)
+            print("Tu pokemon murió. Tu equipo está conformado por: ", pokemones_usu)
             poke_usu=input("Elija su siguiente pokemon para pelear de nuevo: ").lower().strip()
             while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
@@ -290,7 +290,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             for pokemon in equipo_usu:
                 if pokemon.nombre.lower()==poke_usu:
                     poke_usu=pokemon
-                    print(f"La cpu elegio a {poke_compu.nombre}")
+                    print(f"La cpu eligió a {poke_compu.nombre}")
                     break
 
         elif post_usu.vida!=0 and post_compu.vida==0:
@@ -303,14 +303,14 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             for pokemon in equipo_compu:
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
-                    print(f"La cpu elegio a {poke_compu.nombre}")
+                    print(f"La cpu eligió a {poke_compu.nombre}")
                     break
     
         else:
             print("Se elegirán los siguientes pokemones a batallar")
             puntos_usu=0
             puntos_compu=0
-            poke_usu=input("Tu equipo esta conformado por", pokemones_usu, "\nIngrese su siguiente pokemon para batallar de nuevo: ").lower().strip()
+            poke_usu=input("Tu equipo está conformado por: ", pokemones_usu, "\nIngrese su siguiente pokemon para batallar de nuevo: ").lower().strip()
             while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
                 poke_usu=input("Elija su siguiente pokemon para batallar de nuevo: ").lower().strip()
@@ -322,7 +322,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     break
 
             poke_compu=random.choice(pokemones_compu)
-            print(f"La cpu elegio a {poke_compu.nombre}")
+            print(f"La cpu eligió a {poke_compu.nombre}")
             pokemones_compu.remove(poke_compu)
 
             for pokemon in equipo_compu:
@@ -393,7 +393,7 @@ def empate(equipo_usu,equipo_compu):
 
 def validar_rango(numero, mini, maxi):
     if (numero > maxi) or (numero < mini):
-        raise ValueError("El numero no esta en el rango solicitado.")
+        raise ValueError("El numero no está en el rango solicitado.")
     
 def validar_int(numero):
     try: 
