@@ -30,19 +30,19 @@ bosque = c.Ambiente("bosque", "ground", float(0.2), float(0.15), float(0.15))
 lista_ambientes.append(bosque)
 tormenta = c.Ambiente("tormenta de rayos", "electric", float(0.15), float(0.2), float(0.05))
 lista_ambientes.append(tormenta)
-volcan = c.Ambiente("volcan", "fire", float(0.5), float(0.15), float(0.1))
+volcan = c.Ambiente("volcán", "fire", float(0.5), float(0.15), float(0.1))
 lista_ambientes.append(volcan)
 
 #----------------------------------------------------
 #CREACION LISTA EVENTOS ALEATORIOS
 lista_eventos_aleatorios = []
-aumentar_1vida = c.Evento_aleatorio("un Kit medico", float(1))
+aumentar_1vida = c.Evento_aleatorio("un kit médico", float(1))
 lista_eventos_aleatorios.append(aumentar_1vida)
-aumentar_05vida = c.Evento_aleatorio("un Ibuprofeno", float(0.5))
+aumentar_05vida = c.Evento_aleatorio("un ibuprofeno", float(0.5))
 lista_eventos_aleatorios.append(aumentar_05vida)
-bajar_05vida = c.Evento_aleatorio("una Gripe", float(-0.5))
+bajar_05vida = c.Evento_aleatorio("una gripe", float(-0.5))
 lista_eventos_aleatorios.append(bajar_05vida)
-bajar_1vida = c.Evento_aleatorio("Asma", float(-1))
+bajar_1vida = c.Evento_aleatorio("asma", float(-1))
 lista_eventos_aleatorios.append(bajar_1vida)
 
 #----------------------------------------------------
@@ -54,14 +54,14 @@ pok_cpu = []
 #----------------------------------------------------
 #ELECCION POKEMON USUARIO
 for tipo, lista_pokemones in pokemones.items():
-    print("\nElegi un pokemon de la categoria:", tipo, "\n")
+    print("\nElegí un pokemon de la categoría:", tipo, "\n")
     for pokemon in lista_pokemones:
-        pokemon.mostrar_atributos(True) #sale de la calse pokemon 
+        pokemon.mostrar_atributos(True) #sale de la clase pokemon 
     poke = input("\nSeleccione pokemon: ").lower().strip()
     
     while poke not in list_poke[tipo]:
-            poke = input("Pokemon invalido. \nSeleccione Pokemon de la lista: ").lower().strip()
-    print(f"{poke} seleccionado correctamente!")
+            poke = input("Pokemon inválido. \nSeleccione Pokemon de la lista: ").lower().strip()
+    print(f"¡Se ha seleccionado a {poke} de forma correcta!")
 
     pokemon_elegido = None
     for pokemon in lista_pokemones:
@@ -72,11 +72,11 @@ for tipo, lista_pokemones in pokemones.items():
 # USUARIO SELECCIONAR ATRIBUTO A CAMBIAR
     lista_atributos = ["ataque","velocidad","defensa","adaptabilidad" ]
     
-    print("\nIngrese el atributo a mejorar, recuerda que aumentar un atributo disminuye otro.")  
-    atributo = input("Elegi entre Ataque, Adaptabilidad, Defensa o Velocidad: ").lower().strip()
+    print("\nIngrese el atributo a mejorar, recuerde que aumentar un atributo disminuye otro.")  
+    atributo = input("Elegí entre Ataque, Adaptabilidad, Defensa o Velocidad: ").lower().strip()
 
     while atributo not in lista_atributos:
-        atributo = input("Atributo invalido. \nSeleccione un atributo de la lista: ").lower().strip()
+        atributo = input("Atributo inválido. \nSeleccione un atributo de la lista: ").lower().strip()
     
     atributo2 = pares[atributo]
     pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
@@ -103,7 +103,7 @@ for categoria, lista_pokemones in pokemones_cpu.items():
     pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15), False)
     pok_cpu.append(pokemon_elegido_cpu)
     
-print('\nLa cpu eligio a:')
+print('\nLa cpu eligió a:')
 for pokemon in pok_cpu:
     print(pokemon.nombre)
 

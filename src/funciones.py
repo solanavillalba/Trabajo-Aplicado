@@ -1,8 +1,7 @@
 import random
 from src.pokemones import crear_pokemon
 
-#falta agregar el special attack
-def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0, dict_usu, dict_cpu):
+def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario=0, puntos_cpu=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
     Parámetros:
     pokemon1 (objeto): Un objeto que representa al primer pokemon, con sus atributos.
@@ -124,7 +123,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0, di
             print(f"\n{pokemon2.nombre} murió")
 
     elif (accion1=="esquivar" or accion1=="defender") and (accion2=="esquivar" or accion2=="defender"):
-        print("\nNingun pokemon ataco, no se modificó la vida de ninguno")
+        print("\nNingún pokemon atacó, no se modificó la vida de ninguno")
 
     elif accion1=="atacar" and accion2=="defender":
         pokemon2.vida-=pokemon1.ataque*pokemon2.defensa
@@ -221,10 +220,12 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     print("Tus pokemones se están adaptando al ambiente...\n")
     for pok in equipo_usu: 
         ambiente.modifica_atributo(pok)
+        pok.mostrar_atributos(False)
     
     print("\nLos pokemones de la cpu se están adaptando al ambiente...\n")
     for po in equipo_compu:
         ambiente.modifica_atributo(po, True)
+        po.mostrar_atributos(False)
     
      #Se elige el primer pokemon para empezar la batalla.
     print("\nEmpieza la pelea.\n\nTu equipo está conformado por: ", pokemones_usu)

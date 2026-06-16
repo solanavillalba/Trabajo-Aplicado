@@ -24,33 +24,33 @@ class Ambiente:
 
         if self.tipo_ambiente==pokemon.tipo:
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en su ambiente favorable. Juega con ventaja")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en su ambiente favorable. Juega con ventaja.")
 
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en su ambiente favorable. Juega con ventaja")
+                print(f"Tu {pokemon.nombre} se encuentra en su ambiente favorable. Juega con ventaja.")
             
         elif pokemon.adaptabilidad==1:
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se adapto bien. Juega con ventaja")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se adaptó bien. Juega con ventaj.")
 
             else:
-                print(f"Tu {pokemon.nombre} se adapto bien. Juega con ventaja")
+                print(f"Tu {pokemon.nombre} se adaptó bien. Juega con ventaja.")
         elif pokemon.adaptabilidad==0.5:
             pokemon.ataque+= self.ataque/2
             pokemon.defensa+= self.defensa/2
             pokemon.velocidad+= self.velocidad/2
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Pero se medio adapto asi. Juega normal.")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Pero se medio adaptó. Juega en condiciones normales.")
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Pero se medio adapto. Juega normal.")
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Pero se medio adaptó. Juega en condiciones normales.")
         else:
             pokemon.ataque+= self.ataque
             pokemon.defensa+= self.defensa
             pokemon.velocidad+= self.velocidad 
             if cpu:
-                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Juega en desventaja")
+                print(f"El pokemon de la cpu, {pokemon.nombre}, se encuentra en un ambiente desfavorable. Juega en desventaja.")
             else:
-                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Juega en desventaja")
+                print(f"Tu {pokemon.nombre} se encuentra en un ambiente desfavorable. Juega en desventaja.")
         
         return pokemon
 
@@ -126,7 +126,7 @@ class Pokemon:
         Retorna: no retorna nada
         '''
         if nombre:
-            print(f"{self.nombre}: Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
+            print(f"{self.nombre}: {self.tipo} | Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
 
         else:    
             print(f"Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
