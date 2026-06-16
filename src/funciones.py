@@ -5,6 +5,7 @@ from src.pokemones import crear_pokemon
 def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0, dict_usu, dict_cpu):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
     Parámetros:
+    
     pokemon1 (objeto): Un objeto que representa al primer pokemon, con sus atributos.
     pokemon2 (objeto): Un objeto que representa al segundo pokemon, con sus atributos.
     eventos_random (list): Una lista de eventos aleatorios que pueden afectar el resultado de la batalla.
@@ -12,6 +13,7 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0, di
     puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
     dict_usu (dict): Diccionario de registro de las acciones del usuario.
     dict_cpu (dict): Diccionario de registro de las acciones de la CPU.
+    
     Retorna:
     pokemon1 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
     pokemon2 (objeto): Luego de pasar por la ronda, con sus atributos actualizados.
@@ -290,9 +292,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
             return dict_usu, dict_usu, info_rondas
-
-
-
+        
         if post_usu.vida!=0 and post_compu.vida!=0:
             poke_usu=post_usu
             poke_compu=post_compu

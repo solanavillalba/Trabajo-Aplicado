@@ -109,6 +109,7 @@ for pokemon in pok_cpu:
 
 print("\nInicia la batalla")
 print("Seleccionando arena de juego...\n")
-f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
+
+dict_usuario, dict_cpu, info_partida = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
 
 
