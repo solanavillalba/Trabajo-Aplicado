@@ -14,21 +14,35 @@ def ronda(pokemon1, pokemon2, eventos_random, puntos_usuario=0, puntos_cpu=0):
     puntos_cpu (int): Puntos acumulados por la CPU durante la ronda.
     puntos_usuario (int): Puntos acumulados por el usuario durante la ronda.
     """
-    accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
-    
-    while accion1 not in ["atacar", "defender", "esquivar"]:
-        print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
+    if puntos_usuario>=3:
+        if puntos_usuario >= 3:
+            print("\n¡ATAQUE ESPECIAL DISPONIBLE! Tuviste una racha de 3 ataques exitosos. Desbloqueaste el ataque especial")
+            accion1= input("\n¿Qué acción quieres realizar? (atacar, defender, esquivar o especial) ").lower().strip()
+        
+        while accion1 not in ["atacar", "defender", "esquivar", "especial"]:
+            print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
+            accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+    else:
         accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+        
+        while accion1 not in ["atacar", "defender", "esquivar"]:
+            print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
+            accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
 
-    accion2= random.choice(["atacar", "defender", "esquivar"])
-    evento_si_no= random.choice([True, False])
-    if evento_si_no:
-        evento_quepasa= random.choice(eventos_random)
-        poke_afectado= random.choice([pokemon1, pokemon2])
-        evento_quepasa.evento(poke_afectado)
-        if poke_afectado.vida==0:
-            print(f"{poke_afectado.nombre} murió.")
-            return pokemon1, pokemon2, puntos_usuario, puntos_cpu
+    if puntos_cpu>=3:
+        accion2= random.choice(["atacar", "defender", "esquivar", "especial"])
+    else:
+        accion2= random.choice(["atacar", "defender", "esquivar"])
+
+    if accion2!="especial" and accion1!="especial":    
+        evento_si_no= random.choice([True, False])
+        if evento_si_no:
+            evento_quepasa= random.choice(eventos_random)
+            poke_afectado= random.choice([pokemon1, pokemon2])
+            evento_quepasa.evento(poke_afectado)
+            if poke_afectado.vida==0:
+                print(f"{poke_afectado.nombre} murió.")
+                return pokemon1, pokemon2, puntos_usuario, puntos_cpu
 
     
     if accion1=="atacar" and accion2=="atacar":
@@ -225,6 +239,8 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             continue
     
         elif post_usu.vida==0 and post_compu.vida!=0:
+            puntos_usu=0
+            puntos_compu=0
             print("Tu pokemon murio. Tu equipo esta conformado por", pokemones_usu)
             poke_usu=input("Elija su siguiente pokemon para pelear de nuevo: ").lower().strip()
             while poke_usu not in pokemones_usu:
@@ -239,6 +255,8 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     break
 
         elif post_usu.vida!=0 and post_compu.vida==0:
+            puntos_usu=0
+            puntos_compu=0
             print("Se elegirá el siguiente pokemon para pelear de nuevo...")
             poke_compu=random.choice(pokemones_compu)
 
@@ -251,6 +269,8 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     
         else:
             print("Se elegirán los siguientes pokemones a batallar")
+            puntos_usu=0
+            puntos_compu=0
             poke_usu=input("Tu equipo esta conformado por", pokemones_usu, "\nIngrese su siguiente pokemon para batallar de nuevo: ").lower().strip()
             while poke_usu not in pokemones_usu:
                 print("El pokemon ingresado no se encuentra en su equipo. Inténtelo de nuevo.")
