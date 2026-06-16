@@ -278,6 +278,38 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==0
         cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==0
+    
+        if post_usu.vida==0 and post_compu.vida!=0:
+
+            if 'atacar' in dict_usu:
+                if "especial" in dict_usu:
+                    sumar= dict_usu["atacar"] + dict_usu["especial"]
+                    info_rondas.append([sumar, False])
+                else:
+                    info_rondas.append([dict_usu['atacar'], False])
+            else:
+                info_rondas.append([0, False])
+
+        elif post_usu.vida!=0 and post_compu.vida==0:
+
+            if 'atacar' in dict_usu:
+                if "especial" in dict_usu:
+                    sumar= dict_usu["atacar"] + dict_usu["especial"]
+                    info_rondas.append([sumar, True])
+                else:
+                    info_rondas.append([dict_usu['atacar'], True])
+            else:
+                info_rondas.append([0, True])
+    
+        else:
+            if 'atacar' in dict_usu:
+                if "especial" in dict_usu:
+                    sumar= dict_usu["atacar"] + dict_usu["especial"]
+                    info_rondas.append([sumar, True])
+                else:
+                    info_rondas.append([dict_usu['atacar'], True])
+            else:
+                info_rondas.append([0, True])
 
         if cond_salida_usu ==True and cond_salida_compu==True:
             resultado=empate(equipo_usu,equipo_compu)
