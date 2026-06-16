@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def promedio(lista):
     """
     Esta funcion analiza los datos de los golpes dados en las rondas.
@@ -35,3 +37,14 @@ def promedio(lista):
     mejor_encuentro = [minimo, golpes_netos_victorias.index(minimo)+1 ]
 
     return round(promedio_final, 1), mejor_encuentro
+
+def grafico_torta(diccionario):
+    """
+    Esta función genera un gráfico de torta a partir del registro
+    de acciones realizadas durante la batalla.
+
+    Parámetro:
+    diccionario (dict): diccionario con las acciones
+    y la cantidad de veces que fueron utilizadas.
+    """
+
