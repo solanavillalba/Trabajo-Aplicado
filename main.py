@@ -25,25 +25,25 @@ pares = {
 #----------------------------------------------------
 #CREACION LISTA DE AMBIENTES
 lista_ambientes = []
-playa = c.Ambiente("playa", "water", float(0.20), float(0.05), float(0.25))
+playa = c.Ambiente("playa", "water", -0.20, -0.05, -0.25)
 lista_ambientes.append(playa)
-bosque = c.Ambiente("bosque", "ground", float(0.2), float(0.15), float(0.15))
+bosque = c.Ambiente("bosque", "ground", -0.2, -0.15, -0.15)
 lista_ambientes.append(bosque)
-tormenta = c.Ambiente("tormenta de rayos", "electric", float(0.15), float(0.2), float(0.05))
+tormenta = c.Ambiente("tormenta de rayos", "electric", -0.15, -0.2, -0.05)
 lista_ambientes.append(tormenta)
-volcan = c.Ambiente("volcán", "fire", float(0.5), float(0.15), float(0.1))
+volcan = c.Ambiente("volcán", "fire", -0.5, -0.15, -0.1)
 lista_ambientes.append(volcan)
 
 #----------------------------------------------------
 #CREACION LISTA EVENTOS ALEATORIOS
 lista_eventos_aleatorios = []
-aumentar_1vida = c.Evento_aleatorio("un kit médico", float(1))
+aumentar_1vida = c.Evento_aleatorio("un kit médico", 1)
 lista_eventos_aleatorios.append(aumentar_1vida)
-aumentar_05vida = c.Evento_aleatorio("un ibuprofeno", float(0.5))
+aumentar_05vida = c.Evento_aleatorio("un ibuprofeno", 0.5)
 lista_eventos_aleatorios.append(aumentar_05vida)
-bajar_05vida = c.Evento_aleatorio("una gripe", float(-0.5))
+bajar_05vida = c.Evento_aleatorio("una gripe", -0.5)
 lista_eventos_aleatorios.append(bajar_05vida)
-bajar_1vida = c.Evento_aleatorio("asma", float(-1))
+bajar_1vida = c.Evento_aleatorio("asma", -1)
 lista_eventos_aleatorios.append(bajar_1vida)
 
 #----------------------------------------------------
@@ -80,7 +80,7 @@ for tipo, lista_pokemones in pokemones.items():
         atributo = input("Atributo inválido. \nSeleccione un atributo de la lista: ").lower().strip()
     
     atributo2 = pares[atributo]
-    pokemon_elegido.cambiar_atributo(atributo, atributo2, float(0.15))
+    pokemon_elegido.cambiar_atributo(atributo, atributo2, 0.15)
     pok_usuario.append(pokemon_elegido) #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
 list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
@@ -101,7 +101,7 @@ for categoria, lista_pokemones in pokemones_cpu.items():
     atributo_cpu = lista_atributos[num_att]
     atributo_cpu2 = pares[atributo_cpu]
 
-    pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, float(0.15), False)
+    pokemon_elegido_cpu.cambiar_atributo(atributo_cpu, atributo_cpu2, 0.15, False)
     pok_cpu.append(pokemon_elegido_cpu)
     
 print('\nLa cpu eligió a:')
