@@ -118,6 +118,13 @@ class Pokemon:
             print(f"Tu {self.nombre} tiene: \nAtaque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
 
     def mostrar_atributos(self, nombre=False):
+        '''
+        Muesta los atributos del pokemon.
+        Parámetros:
+        nombre: bool
+
+        Retorna: no retorna nada
+        '''
         if nombre:
             print(f"{self.nombre}: Ataque: {self.ataque} | Defensa: {self.defensa} | Velocidad: {self.velocidad} | Adaptabilidad: {self.adaptabilidad}")
 
