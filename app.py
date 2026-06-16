@@ -366,14 +366,13 @@ def pantalla_seleccion(pantalla, pokemones_obj):
             # Barras de stats — dos columnas con ancho reducido (110px) para que el valor no invada la columna vecina
             # Columna izquierda: ATK y DEF  |  Columna derecha: SPD y ADP
             # Separación vertical entre filas: 28px (antes 25) para evitar solapamiento
-            max_val = 2.0
             BAR_W   = 110
             COL2_X  = tx + 185   # inicio de la segunda columna
 
-            barra_stat(pantalla, tx,     info_rect.y + 62,  BAR_W, poke_mostrar.ataque,       max_val, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, tx,     info_rect.y + 92,  BAR_W, poke_mostrar.defensa,       max_val, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, COL2_X, info_rect.y + 62,  BAR_W, poke_mostrar.velocidad,     max_val, COLOR_SPD, fuente_pequeña, "SPD")
-            barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, max_val, COLOR_ADP, fuente_pequeña, "ADP")
+            barra_stat(pantalla, tx,     info_rect.y + 62,  BAR_W, poke_mostrar.ataque,       2.15, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, tx,     info_rect.y + 92,  BAR_W, poke_mostrar.defensa,       0.90, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, COL2_X, info_rect.y + 62,  BAR_W, poke_mostrar.velocidad,     0.90, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, 1.00, COLOR_ADP, fuente_pequeña, "ADP")
 
             # Vida
             dibujar_texto(pantalla, f"HP: {poke_mostrar.vida}  |  Sp.Atk: {poke_mostrar.special_attack}",
@@ -580,7 +579,7 @@ def _barra_vida(sup, x, y, ancho, vida_actual, vida_max, fuente_p, nombre, inver
 
 
 def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
-                     eventos_random, puntos_usu, puntos_compu):
+                     eventos_random, puntos_usu, puntos_compu, log_global=None):
     """
     Corre UNA ronda completa de batalla (hasta que el jugador elige acción y se resuelve).
     También gestiona la espera cuando un pokémon cae y hay que elegir el siguiente.
@@ -627,34 +626,42 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
         botones_accion.append(b)
 
     log_batalla = []    # mensajes de esta ronda
+    if log_global is None:
+        log_global = []
     accion_elegida = None
     resultado = None    # se completa cuando el jugador confirma acción
+    resultado_timer = None   # momento en que se resolvió la acción
 
-    while resultado is None:
+    while True:
         mouse_pos = pygame.mouse.get_pos()
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return {"cerrado": True}
 
-            for b in botones_accion:
-                b.actualizar_hover(mouse_pos)
-                if b.fue_clickeado(evento):
-                    # Resolver la ronda con la acción elegida
-                    accion_elegida = b.tag
-                    log_batalla, nuevo_usu, nuevo_compu, ptu, ptc = \
-                        _resolver_ronda(poke_usu, poke_compu, accion_elegida,
-                                        eventos_random, puntos_usu, puntos_compu)
-                    resultado = {
-                        "poke_usu":    nuevo_usu,
-                        "poke_compu":  nuevo_compu,
-                        "puntos_usu":  ptu,
-                        "puntos_compu": ptc,
-                        "log":         log_batalla,
-                        "usu_murio":   nuevo_usu.vida <= 0,
-                        "compu_murio": nuevo_compu.vida <= 0,
-                        "cerrado":     False,
-                    }
+            if resultado is None:
+                for b in botones_accion:
+                    b.actualizar_hover(mouse_pos)
+                    if b.fue_clickeado(evento):
+                        # Resolver la ronda con la acción elegida
+                        accion_elegida = b.tag
+                        log_batalla, nuevo_usu, nuevo_compu, ptu, ptc = \
+                            _resolver_ronda(poke_usu, poke_compu, accion_elegida,
+                                            eventos_random, puntos_usu, puntos_compu)
+                        resultado = {
+                            "poke_usu":    nuevo_usu,
+                            "poke_compu":  nuevo_compu,
+                            "puntos_usu":  ptu,
+                            "puntos_compu": ptc,
+                            "log":         log_batalla,
+                            "usu_murio":   nuevo_usu.vida <= 0,
+                            "compu_murio": nuevo_compu.vida <= 0,
+                            "cerrado":     False,
+                        }
+                        # Agregar mensajes al log persistente y arrancar el timer
+                        log_global.extend(log_batalla)
+                        resultado["log_global"] = log_global
+                        resultado_timer = pygame.time.get_ticks()
 
         # ── DIBUJO ──
         pantalla.fill(COLOR_FONDO)
