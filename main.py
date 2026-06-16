@@ -25,13 +25,13 @@ pares = {
 #----------------------------------------------------
 #CREACION LISTA DE AMBIENTES
 lista_ambientes = []
-playa = c.Ambiente("playa", "water", -0.20, -0.05, -0.25)
+playa = c.Ambiente("playa", "water", float(-0.20), float(-0.05), float(-0.25))
 lista_ambientes.append(playa)
-bosque = c.Ambiente("bosque", "ground", -0.2, -0.15, -0.15)
+bosque = c.Ambiente("bosque", "ground", float(-0.2), float(-0.15), float(-0.1))
 lista_ambientes.append(bosque)
-tormenta = c.Ambiente("tormenta de rayos", "electric", -0.15, -0.2, -0.05)
+tormenta = c.Ambiente("tormenta de rayos", "electric", float(-0.15), float(-0.2), float(-0.3))
 lista_ambientes.append(tormenta)
-volcan = c.Ambiente("volcán", "fire", -0.5, -0.15, -0.1)
+volcan = c.Ambiente("volcán", "fire", float(-0.5), float(-0.15), float(-0.1))
 lista_ambientes.append(volcan)
 
 #----------------------------------------------------

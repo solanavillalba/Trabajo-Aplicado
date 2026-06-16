@@ -35,6 +35,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         while accion1 not in ["atacar", "defender", "esquivar"]:
             print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+    if accion1=="especial":
+        puntos_usuario=0
 
     if accion1 not in dict_usu:
         dict_usu[accion1]=1
@@ -46,6 +48,9 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
     else:
         accion2= random.choice(["atacar", "defender", "esquivar"])
     
+    if accion2=="especial":
+        puntos_cpu=0
+
     if accion2 not in dict_cpu:
         dict_cpu[accion2]=1
     else:
@@ -181,7 +186,7 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
                 print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
                 puntos_cpu+=1
 
-    return pokemon1, pokemon2, puntos_usuario, puntos_cpu, dict_usu, dict_cpu
+    return pokemon1, pokemon2, dict_usu, dict_cpu, puntos_usuario, puntos_cpu
 
 def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     '''
@@ -269,7 +274,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     info_rondas=[]
     print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n\n¡Comienza la pelea!\n¡Suerte!\n")
     while True:
-        post_usu,post_compu,puntos_usu,puntos_compu,dict_usu,dict_compu=ronda(poke_usu,poke_compu,lista_eventos,dict_usu,dict_compu, puntos_usu,puntos_compu)
+        post_usu,post_compu,dict_usu,dict_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,dict_usu,dict_compu, puntos_usu,puntos_compu)
 
         cond_salida_usu=post_usu.vida==0 and len(pokemones_usu)==0
         cond_salida_compu=post_compu.vida==0 and len(pokemones_compu)==0
@@ -318,9 +323,9 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             if 'atacar' in dict_usu:
                 if "especial" in dict_usu:
                     sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append([sumar, True])
+                    info_rondas.append([sumar, False])
                 else:
-                    info_rondas.append([dict_usu['atacar'], True])
+                    info_rondas.append([dict_usu['atacar'], False])
             else:
                 info_rondas.append([0, False])
 
