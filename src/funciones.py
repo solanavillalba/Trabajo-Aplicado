@@ -1,5 +1,5 @@
 import random
-from pokemones import crear_pokemon
+from src.pokemones import crear_pokemon
 
 def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario=0, puntos_cpu=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
