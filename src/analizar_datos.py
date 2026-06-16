@@ -7,6 +7,9 @@ def promedio(lista):
     Promedio (int): con cuantos golpes mato al pokemon adversario en promedio
     Ronda con menor golpes (list): Una lista con la info del minimo de golpes que se dio en la mejor ronda, y el numero de ronda. Ej [2, 4]
     """
+
+    if len(lista)==0:
+        return 0, 0
     golpes_matar=[]
     acumulado=0
     poke_matados=0
