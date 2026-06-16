@@ -1,0 +1,14 @@
+def promedio(lista):
+    cantidad_partidas=len(lista)
+    golpes_matar=[]
+    acumulado=0
+    poke_matados=0
+
+    for listita in lista:
+        if listita[1]:
+            golpes_matar.append(listita[0]-acumulado)
+            acumulado=listita[0]
+            poke_matados+=1
+    
+    promedio=lista[-1][0]/poke_matados
+    minimo=min(listita)
