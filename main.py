@@ -116,5 +116,5 @@ promedio, mejor_ronda=a.promedio(info_partida)
 
 print("\nAnalizando rendimientos de la batalla...")
 
-print(f"En promedio matar al pokemon oponente te costo {promedio} golpes. Y tu mejor ronda es de {mejor_ronda[0]} golpes en el pokemon número {mejor_ronda[1]}")
+print(f"En promedio matar al pokemon oponente te costo {promedio} golpes. Y tu mejor pelea es de {mejor_ronda[0]} golpes en el pokemon número {mejor_ronda[1]}")
 
