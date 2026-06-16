@@ -27,14 +27,15 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender, esquivar o especial) ").lower().strip()
         
         while accion1 not in ["atacar", "defender", "esquivar", "especial"]:
-            print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
-            accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+            print("\nAcción no válida. Por favor, elige entre atacar, defender, esquivar o especial.")
+            accion1= input("\n¿Qué acción quieres realizar? (atacar, defender, esquivar o especial) ").lower().strip()
     else:
         accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
         
         while accion1 not in ["atacar", "defender", "esquivar"]:
             print("\nAcción no válida. Por favor, elige entre atacar, defender o esquivar.")
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
+    
     if accion1=="especial":
         puntos_usuario=0
 
@@ -273,6 +274,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     dict_compu={}
     info_rondas=[]
     print("\nTus pokemones pueden hacer 3 acciones:\nAtacar: El pokemon ataca al otro pokemon y le baja vida según su ataque. Si ambos pokemones atacan, se bajan vida mutuamente.\nDefender: El pokemon se defiende del ataque del otro pokemon, y le baja menos vida según su defensa. Si ambos pokemones se defienden, no se baja vida a ninguno.\nEsquivar: El pokemon intenta esquivar el ataque del otro pokemon. La probabilidad de esquivar es mayor cuanto mayor sea la velocidad del pokemon. Si ambos pokemones intentan esquivar, no se baja vida a ninguno.\n\n¡Comienza la pelea!\n¡Suerte!\n")
+    
     while True:
         post_usu,post_compu,dict_usu,dict_compu,puntos_usu,puntos_compu=ronda(poke_usu,poke_compu,lista_eventos,dict_usu,dict_compu, puntos_usu,puntos_compu)
 
@@ -352,15 +354,6 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     print(f"La cpu eligió a {poke_compu.nombre}")
                     break
 
-            if 'atacar' in dict_usu:
-                if "especial" in dict_usu:
-                    sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append([sumar, False])
-                else:
-                    info_rondas.append([dict_usu['atacar'], False])
-            else:
-                info_rondas.append([0, False])
-
         elif post_usu.vida!=0 and post_compu.vida==0:
             puntos_usu=0
             puntos_compu=0
@@ -373,15 +366,6 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                     poke_compu=pokemon
                     print(f"La cpu eligió a {poke_compu.nombre}")
                     break
-
-            if 'atacar' in dict_usu:
-                if "especial" in dict_usu:
-                    sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append([sumar, True])
-                else:
-                    info_rondas.append([dict_usu['atacar'], True])
-            else:
-                info_rondas.append([0, True])
     
         else:
             print("Se elegirán los siguientes pokemones a batallar")
@@ -406,15 +390,6 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
                 if pokemon.nombre.lower()==poke_compu:
                     poke_compu=pokemon
                     break
-
-            if 'atacar' in dict_usu:
-                if "especial" in dict_usu:
-                    sumar= dict_usu["atacar"] + dict_usu["especial"]
-                    info_rondas.append([sumar, True])
-                else:
-                    info_rondas.append([dict_usu['atacar'], True])
-            else:
-                info_rondas.append([0, True])
 
 def empate(equipo_usu,equipo_compu):
     '''
