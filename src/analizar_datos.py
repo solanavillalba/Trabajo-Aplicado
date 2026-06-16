@@ -58,7 +58,7 @@ cantidades = []
 for cantidad in diccionario.values():
         cantidades.append(cantidad)
 
-    colores = []
+colores = []
 
 for accion in acciones:
 
