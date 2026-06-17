@@ -26,8 +26,6 @@ while True:
     else:
         break
         
-
-
 #----------------------------------------------------
 #PARES ANALOGOS DE HABILIDADES
 pares = {
