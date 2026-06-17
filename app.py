@@ -306,7 +306,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
         pantalla.fill(COLOR_FONDO)
 
         # Título principal
-        dibujar_texto(pantalla, "⚔  Armá tu equipo", fuente_titulo, COLOR_TEXTO, ANCHO // 2, 18, centrado=True)
+        dibujar_texto(pantalla, "Armá tu equipo", fuente_titulo, COLOR_TEXTO, ANCHO // 2, 18, centrado=True)
 
         # Indicador de pasos
         for i, c in enumerate(CATEGORIAS):
@@ -544,62 +544,55 @@ COLOR_ACCION = {
 }
 
 ETIQUETA_ACCION = {
-    "atacar":   "⚔ Atacar",
-    "defender": "🛡 Defender",
-    "esquivar": "💨 Esquivar",
-    "especial": "✨ Especial",
+    "atacar":   "Atacar",
+    "defender": "Defender",
+    "esquivar": "Esquivar",
+    "especial": "Especial",
 }
 
-MAX_LOG = 7   # líneas visibles en el log de batalla
+MAX_LOG = 7   # (legacy, ya no se usa — _dibujar_log calcula el espacio dinámicamente)
 
 
-def _barra_vida(sup, x, y, ancho, vida_actual, vida_max, fuente_p, nombre, invertido=False):
-    """Dibuja la barra de vida de un pokémon con nombre y valores."""
-    ratio = max(0.0, vida_actual / vida_max)
-    if ratio > 0.5:
-        col = (80, 220, 80)
-    elif ratio > 0.25:
-        col = (255, 200, 40)
-    else:
-        col = (255, 60, 60)
-
-    # Si está invertido (CPU) el nombre va a la derecha
-    if invertido:
-        txt = fuente_p.render(f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", True, COLOR_TEXTO)
-        sup.blit(txt, (x + ancho - txt.get_width(), y - 18))
-    else:
-        dibujar_texto(sup, f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", fuente_p, COLOR_TEXTO, x, y - 18)
-
-    bg = pygame.Rect(x, y, ancho, 14)
-    pygame.draw.rect(sup, (50, 60, 90), bg, border_radius=7)
-    fill_w = int(ratio * ancho)
-    if fill_w > 0:
-        pygame.draw.rect(sup, col, (x, y, fill_w, 14), border_radius=7)
-    pygame.draw.rect(sup, COLOR_BORDE, bg, 1, border_radius=7)
-
-
-def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
-                     eventos_random, puntos_usu, puntos_compu, log_global=None):
+def _dibujar_log(sup, log_global, log_rect, fuente_log, fuente_pequeña):
     """
-    Corre UNA ronda completa de batalla (hasta que el jugador elige acción y se resuelve).
-    También gestiona la espera cuando un pokémon cae y hay que elegir el siguiente.
+    Dibuja el panel del log de batalla mostrando TODO el historial acumulado.
+    Las líneas más nuevas quedan abajo; cuando no entran todas, se recortan
+    las más viejas (scroll automático hacia arriba), nunca las nuevas.
+    """
+    dibujar_panel(sup, log_rect, (15, 22, 45), radio=8, borde=(50, 70, 120))
+    dibujar_texto(sup, "Log de batalla", fuente_pequeña, COLOR_SUBTEXTO,
+                  log_rect.x + 8, log_rect.y + 4)
 
-    Retorna un dict con el estado actualizado:
+    LINE_H    = 16
+    top_y     = log_rect.y + 22
+    max_lines = max(1, (log_rect.height - 24) // LINE_H)
+
+    lineas_vis = log_global[-max_lines:]   # las últimas N líneas (recorta las viejas)
+
+    # Recortamos para que nada se dibuje fuera del panel
+    clip_prev = sup.get_clip()
+    sup.set_clip(log_rect.inflate(-4, -4))
+    for j, (texto, color) in enumerate(lineas_vis):
+        dibujar_texto(sup, texto, fuente_log, color, log_rect.x + 8, top_y + j * LINE_H)
+    sup.set_clip(clip_prev)
+
+
+def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
+                     puntos_usu, puntos_compu, log_global):
+    """
+    Muestra la pantalla de batalla y espera que el jugador elija una acción.
+    Una vez elegida, resuelve la ronda, agrega los mensajes nuevos a log_global
+    (que persiste durante TODA la partida) y muestra el resultado antes de salir.
+
+    log_global : list de tuplas (texto:str, color:tuple). Se modifica in-place
+                 y también se usa para pintar el log en cada frame.
+
+    Retorna un dict:
     {
-      "poke_usu": obj,
-      "poke_compu": obj,
-      "puntos_usu": int,
-      "puntos_compu": int,
-      "dict_usu": dict,
-      "dict_cpu": dict,
-      "log": [str, ...],           ← mensajes nuevos de esta ronda
-      "usu_murio": bool,
-      "compu_murio": bool,
-      "cerrado": bool,             ← True si el jugador cerró la ventana
+      "poke_usu", "poke_compu", "puntos_usu", "puntos_compu",
+      "usu_murio", "compu_murio", "cerrado"
     }
     """
-    import random
-
     clock = pygame.time.Clock()
     fuente_titulo  = pygame.font.SysFont("Arial", 24, bold=True)
     fuente_cat     = pygame.font.SysFont("Arial", 18, bold=True)
@@ -621,86 +614,70 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
     bx0 = (ANCHO - total_btns_w) // 2
     botones_accion = []
     for i, acc in enumerate(acciones):
-        b = Boton((bx0 + i * (BTN_W + BTN_GAP), 570, BTN_W, BTN_H),
+        b = Boton((bx0 + i * (BTN_W + BTN_GAP), 600, BTN_W, BTN_H),
                   ETIQUETA_ACCION[acc], fuente_boton, tag=acc)
         botones_accion.append(b)
 
-    log_batalla = []    # mensajes de esta ronda
-    if log_global is None:
-        log_global = []
-    accion_elegida = None
-    resultado = None    # se completa cuando el jugador confirma acción
-    resultado_timer = None   # momento en que se resolvió la acción
+    log_rect = pygame.Rect(220, 430, ANCHO - 440, 130)
 
-    while True:
-        mouse_pos = pygame.mouse.get_pos()
+    def _barra_vida(sup, x, y, ancho, vida_actual, vida_max, fuente_p, nombre, invertido=False):
+        """
+        Dibuja la barra de vida de un pokémon con nombre y valores.
+        """
+        ratio = max(0.0, vida_actual / vida_max)
+        if ratio > 0.5:
+            col = (80, 220, 80)
+        elif ratio > 0.25:
+            col = (255, 200, 40)
+        else:
+            col = (255, 60, 60)
 
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                return {"cerrado": True}
+        # Si está invertido (CPU) el nombre va a la derecha
+        if invertido:
+            txt = fuente_p.render(f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", True, COLOR_TEXTO)
+            sup.blit(txt, (x + ancho - txt.get_width(), y - 18))
+        else:
+            dibujar_texto(sup, f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", fuente_p, COLOR_TEXTO, x, y - 18)
 
-            if resultado is None:
-                for b in botones_accion:
-                    b.actualizar_hover(mouse_pos)
-                    if b.fue_clickeado(evento):
-                        # Resolver la ronda con la acción elegida
-                        accion_elegida = b.tag
-                        log_batalla, nuevo_usu, nuevo_compu, ptu, ptc = \
-                            _resolver_ronda(poke_usu, poke_compu, accion_elegida,
-                                            eventos_random, puntos_usu, puntos_compu)
-                        resultado = {
-                            "poke_usu":    nuevo_usu,
-                            "poke_compu":  nuevo_compu,
-                            "puntos_usu":  ptu,
-                            "puntos_compu": ptc,
-                            "log":         log_batalla,
-                            "usu_murio":   nuevo_usu.vida <= 0,
-                            "compu_murio": nuevo_compu.vida <= 0,
-                            "cerrado":     False,
-                        }
-                        # Agregar mensajes al log persistente y arrancar el timer
-                        log_global.extend(log_batalla)
-                        resultado["log_global"] = log_global
-                        resultado_timer = pygame.time.get_ticks()
+        bg = pygame.Rect(x, y, ancho, 14)
+        pygame.draw.rect(sup, (50, 60, 90), bg, border_radius=7)
+        fill_w = int(ratio * ancho)
+        if fill_w > 0:
+            pygame.draw.rect(sup, col, (x, y, fill_w, 14), border_radius=7)
+        pygame.draw.rect(sup, COLOR_BORDE, bg, 1, border_radius=7)
 
-        # ── DIBUJO ──
+    def _dibujar_escena(mostrar_botones):
+        """Dibuja todo el frame de batalla. Se reusa en ambas fases (elegir / resultado)."""
         pantalla.fill(COLOR_FONDO)
-
-        # Título de la batalla
-        dibujar_texto(pantalla, "⚔  Batalla Pokémon", fuente_titulo, COLOR_TEXTO,
+        dibujar_texto(pantalla, "Batalla Pokémon", fuente_titulo, COLOR_TEXTO,
                       ANCHO // 2, 14, centrado=True)
 
-        # Área de combate
         area_rect = pygame.Rect(20, 45, ANCHO - 40, 380)
         dibujar_panel(pantalla, area_rect, (18, 26, 50), radio=12, borde=COLOR_BORDE, grosor_borde=1)
 
-        # ── Sprite y vida del JUGADOR (izquierda) ──
+        # Jugador (izquierda)
         spr_usu = sprites_cache.get(poke_usu.nombre.lower())
         if spr_usu:
-            spr_big = pygame.transform.scale(spr_usu, (128, 128))
-            pantalla.blit(spr_big, (50, 130))
+            pantalla.blit(pygame.transform.scale(spr_usu, (128, 128)), (50, 130))
         else:
             placeholder_sprite(pantalla, 114, 194)
 
         _barra_vida(pantalla, 40, 90, 260, poke_usu.vida, 5, fuente_normal,
                     poke_usu.nombre, invertido=False)
 
-        # Mini stats jugador
         barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.0, COLOR_ATK, fuente_pequeña, "ATK")
         barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     2.0, COLOR_DEF, fuente_pequeña, "DEF")
         barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   2.0, COLOR_SPD, fuente_pequeña, "SPD")
 
-        # Racha de puntos del jugador
         dibujar_texto(pantalla, f"Racha: {puntos_usu}/3", fuente_pequeña,
                       COLOR_BORDE_SEL if puntos_usu >= 3 else COLOR_SUBTEXTO, 40, 310)
         if puntos_usu >= 3:
             dibujar_texto(pantalla, "¡ESPECIAL DISPONIBLE!", fuente_pequeña, COLOR_BORDE_SEL, 40, 328)
 
-        # ── Sprite y vida de la CPU (derecha) ──
+        # CPU (derecha)
         spr_cpu = sprites_cache.get(poke_compu.nombre.lower())
         if spr_cpu:
-            spr_cpu_big = pygame.transform.scale(spr_cpu, (128, 128))
-            spr_cpu_flip = pygame.transform.flip(spr_cpu_big, True, False)
+            spr_cpu_flip = pygame.transform.flip(pygame.transform.scale(spr_cpu, (128, 128)), True, False)
             pantalla.blit(spr_cpu_flip, (ANCHO - 180, 130))
         else:
             placeholder_sprite(pantalla, ANCHO - 114, 194)
@@ -714,27 +691,15 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
         dibujar_texto(pantalla, f"Racha CPU: {puntos_compu}/3", fuente_pequeña, COLOR_SUBTEXTO,
                       ANCHO - 180, 310)
 
-        # ── VS central ──
         dibujar_texto(pantalla, "VS", fuente_titulo, COLOR_BORDE_SEL, ANCHO // 2, 185, centrado=True)
 
-        # ── Log de combate ──
-        log_rect = pygame.Rect(220, 430, ANCHO - 440, 130)
-        dibujar_panel(pantalla, log_rect, (15, 22, 45), radio=8, borde=(50, 70, 120))
-        dibujar_texto(pantalla, "Log de batalla", fuente_pequeña, COLOR_SUBTEXTO,
-                      log_rect.x + 8, log_rect.y + 4)
-        # Solo mostramos MAX_LOG líneas (las más recientes)
-        lineas_vis = log_batalla[-MAX_LOG:] if len(log_batalla) > MAX_LOG else log_batalla
-        for j, linea in enumerate(lineas_vis):
-            col_log = COLOR_BORDE_SEL if "murió" in linea or "especial" in linea.lower() else COLOR_TEXTO
-            dibujar_texto(pantalla, linea, fuente_log, col_log,
-                          log_rect.x + 8, log_rect.y + 20 + j * 16)
+        # Log persistente (siempre se dibuja, sea fase de elección o de resultado)
+        _dibujar_log(pantalla, log_global, log_rect, fuente_log, fuente_pequeña)
 
-        # ── Botones de acción (si aún no se eligió acción) ──
-        if resultado is None:
+        if mostrar_botones:
             dibujar_texto(pantalla, "¿Qué hacés?", fuente_cat, COLOR_SUBTEXTO,
-                          ANCHO // 2, 548, centrado=True)
+                          ANCHO // 2, 568, centrado=True)
             for b in botones_accion:
-                # Colores por tipo de acción
                 if not b.activo and not b.hover:
                     col_b = COLOR_ACCION.get(b.tag, COLOR_BOTON)
                     r, g, bl = col_b
@@ -746,14 +711,75 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
                                   centrado=True)
                 else:
                     b.dibujar(pantalla)
+        else:
+            dibujar_texto(pantalla, "Clic o tecla para continuar...",
+                          fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 568, centrado=True)
 
+    # ── FASE 1: esperar que el jugador elija una acción ──
+    accion_elegida = None
+    while accion_elegida is None:
+        mouse_pos = pygame.mouse.get_pos()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return {"cerrado": True}
+            for b in botones_accion:
+                b.actualizar_hover(mouse_pos)
+                if b.fue_clickeado(evento):
+                    accion_elegida = b.tag
+
+        _dibujar_escena(mostrar_botones=True)
         pygame.display.flip()
         clock.tick(60)
 
-    # Mostrar resultado de la ronda brevemente antes de retornar
-    _mostrar_resultado_ronda(pantalla, resultado, fuente_titulo, fuente_cat, fuente_normal, fuente_log)
+    # ── Resolver la ronda ──
+    nuevas_lineas, poke_usu, poke_compu, puntos_usu, puntos_compu = _resolver_ronda(
+        poke_usu, poke_compu, accion_elegida, eventos_random, puntos_usu, puntos_compu
+    )
 
-    return resultado
+    for linea in nuevas_lineas:
+        if "murió" in linea or "cayó" in linea or "ESPECIAL" in linea.upper():
+            color = COLOR_BORDE_SEL
+        elif linea.startswith("CPU eligió"):
+            color = COLOR_SUBTEXTO
+        elif "⚡" in linea:
+            color = COLOR_ADP
+        else:
+            color = COLOR_TEXTO
+        log_global.append((linea, color))
+
+    usu_murio   = poke_usu.vida   <= 0
+    compu_murio = poke_compu.vida <= 0
+
+    # ── FASE 2: mostrar el resultado (log actualizado) hasta que el jugador avance ──
+    clock2  = pygame.time.Clock()
+    inicio  = pygame.time.get_ticks()
+    espera_min_ms = 1100   # si nadie murió, avanza solo tras este tiempo (o con clic/tecla)
+    while True:
+        avanzar = False
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return {"cerrado": True}
+            if evento.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
+                avanzar = True
+
+        if avanzar:
+            break
+        if not (usu_murio or compu_murio) and pygame.time.get_ticks() - inicio >= espera_min_ms:
+            break
+
+        _dibujar_escena(mostrar_botones=False)
+        pygame.display.flip()
+        clock2.tick(60)
+
+    return {
+        "poke_usu":     poke_usu,
+        "poke_compu":   poke_compu,
+        "puntos_usu":   puntos_usu,
+        "puntos_compu": puntos_compu,
+        "usu_murio":    usu_murio,
+        "compu_murio":  compu_murio,
+        "cerrado":      False,
+    }
 
 
 def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu, puntos_compu):
@@ -793,9 +819,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
         puntos_usu = 0
         if poke_compu.vida <= 0:
-            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
         else:
-            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
             puntos_usu += 1
 
     elif accion_cpu == "especial" and accion_usu != "especial":
@@ -803,9 +829,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
         puntos_compu = 0
         if poke_usu.vida <= 0:
-            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
         else:
-            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
             puntos_compu += 1
 
     elif accion_usu == "especial" and accion_cpu == "especial":
@@ -814,17 +840,17 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - d1), 1)
         poke_usu.vida   = round(max(0, poke_usu.vida   - d2), 1)
         puntos_usu = puntos_compu = 0
-        log.append(f"✨ ¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "atacar":
         poke_usu.vida   = round(max(0, poke_usu.vida   - poke_compu.ataque), 1)
         poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque),   1)
         puntos_usu   += 1
         puntos_compu += 1
-        log.append(f"⚔ Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu in ("esquivar", "defender") and accion_cpu in ("esquivar", "defender"):
-        log.append("🛡 Ninguno atacó. Sin cambios en HP.")
+        log.append("Ninguno atacó. Sin cambios en HP.")
 
     elif accion_usu == "atacar" and accion_cpu == "defender":
         dano = round(poke_usu.ataque * poke_compu.defensa, 1)
@@ -833,76 +859,44 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             log.append(f"⚔ Tu {poke_usu.nombre} atacó → ¡{poke_compu.nombre} murió!")
         else:
             puntos_usu += 1
-            log.append(f"⚔ Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "esquivar":
         esquiva = random.choices([True, False],
                                  weights=[poke_compu.velocidad, max(0.01, 1 - poke_compu.velocidad)])[0]
         if esquiva:
-            log.append(f"💨 CPU {poke_compu.nombre} esquivó el ataque de tu {poke_usu.nombre}.")
+            log.append(f"CPU {poke_compu.nombre} esquivó el ataque de tu {poke_usu.nombre}.")
         else:
             poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque), 1)
             if poke_compu.vida <= 0:
-                log.append(f"⚔ No esquivó → ¡{poke_compu.nombre} murió!")
+                log.append(f"No esquivó → ¡{poke_compu.nombre} murió!")
             else:
                 puntos_usu += 1
-                log.append(f"⚔ No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
+                log.append(f"No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "defender" and accion_cpu == "atacar":
         dano = round(poke_compu.ataque * poke_usu.defensa, 1)
         poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
         if poke_usu.vida <= 0:
-            log.append(f"🛡 Tu {poke_usu.nombre} se defendió pero murió.")
+            log.append(f"Tu {poke_usu.nombre} se defendió pero murió.")
         else:
             puntos_compu += 1
-            log.append(f"🛡 Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
+            log.append(f"Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
 
     elif accion_usu == "esquivar" and accion_cpu == "atacar":
         esquiva = random.choices([True, False],
                                  weights=[poke_usu.velocidad, max(0.01, 1 - poke_usu.velocidad)])[0]
         if esquiva:
-            log.append(f"💨 Tu {poke_usu.nombre} esquivó el ataque de CPU {poke_compu.nombre}.")
+            log.append(f"Tu {poke_usu.nombre} esquivó el ataque de CPU {poke_compu.nombre}.")
         else:
             poke_usu.vida = round(max(0, poke_usu.vida - poke_compu.ataque), 1)
             if poke_usu.vida <= 0:
-                log.append(f"⚔ No esquivaste → ¡Tu {poke_usu.nombre} murió!")
+                log.append(f"No esquivaste → ¡Tu {poke_usu.nombre} murió!")
             else:
                 puntos_compu += 1
-                log.append(f"⚔ No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+                log.append(f"No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
 
     return log, poke_usu, poke_compu, puntos_usu, puntos_compu
-
-
-def _mostrar_resultado_ronda(pantalla, resultado, fuente_titulo, fuente_cat, fuente_normal, fuente_log):
-    """Muestra brevemente el resultado de la ronda (1.5 s) si alguien murió."""
-    if not (resultado.get("usu_murio") or resultado.get("compu_murio")):
-        return   # si nadie murió, no hace falta pausa extra
-
-    clock = pygame.time.Clock()
-    inicio = pygame.time.get_ticks()
-    while pygame.time.get_ticks() - inicio < 1800:
-        for ev in pygame.event.get():
-            if ev.type == pygame.QUIT:
-                return
-            if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
-                return   # saltar con cualquier tecla/clic
-
-        pantalla.fill(COLOR_FONDO)
-        if resultado.get("usu_murio") and resultado.get("compu_murio"):
-            msg = "¡Los dos cayeron!"
-            color = COLOR_BORDE
-        elif resultado.get("usu_murio"):
-            msg = f"💀 ¡Tu {resultado['poke_usu'].nombre.capitalize()} cayó!"
-            color = (255, 80, 80)
-        else:
-            msg = f"💀 ¡{resultado['poke_compu'].nombre.capitalize()} de la CPU cayó!"
-            color = COLOR_SPD
-
-        dibujar_texto(pantalla, msg, fuente_titulo, color, ANCHO // 2, ALTO // 2 - 20, centrado=True)
-        dibujar_texto(pantalla, "Clic o cualquier tecla para continuar...",
-                      fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, ALTO // 2 + 30, centrado=True)
-        pygame.display.flip()
-        clock.tick(60)
 
 
 # ─────────────────────────────────────────────
@@ -955,10 +949,10 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
                 return seleccion
 
         pantalla.fill(COLOR_FONDO)
-        dibujar_texto(pantalla, "💀 ¡Tu pokémon cayó! Elegí el siguiente", fuente_titulo,
+        dibujar_texto(pantalla, "¡Tu pokémon cayó! Elegí el siguiente", fuente_titulo,
                       (255, 90, 90), ANCHO // 2, 50, centrado=True)
 
-        PANEL_W = 260
+        PANEL_W = 280
         total_p = len(equipo_disponible) * PANEL_W + (len(equipo_disponible) - 1) * 20
         px0 = (ANCHO - total_p) // 2
         for i, pok in enumerate(equipo_disponible):
@@ -1003,9 +997,9 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
     fuente_boton   = pygame.font.SysFont("Arial", 16, bold=True)
 
     MSGS = {
-        "usuario": ("🏆 ¡Ganaste!", (100, 230, 100)),
-        "cpu":     ("💀 Perdiste...", (255, 80, 80)),
-        "empate":  ("🤝 ¡Empate!", (255, 210, 40)),
+        "usuario": ("¡Ganaste!", (100, 230, 100)),
+        "cpu":     ("Perdiste...", (255, 80, 80)),
+        "empate":  ("¡Empate!", (255, 210, 40)),
     }
     msg, color_msg = MSGS.get(ganador, ("Fin de partida", COLOR_TEXTO))
 
@@ -1105,7 +1099,7 @@ def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
                 return ("empate_final", None)
 
         pantalla.fill(COLOR_FONDO)
-        dibujar_texto(pantalla, "🤝 ¡Empate! ¿Querés desempatar?", fuente_titulo,
+        dibujar_texto(pantalla, "¡Empate! ¿Querés desempatar?", fuente_titulo,
                       COLOR_BORDE_SEL, ANCHO // 2, 50, centrado=True)
         dibujar_texto(pantalla, "Elegí un pokémon para revivir y seguir la batalla:",
                       fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 100, centrado=True)
@@ -1168,15 +1162,16 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
 
     puntos_usu   = 0
     puntos_compu = 0
-    dict_usu     = {}
-    dict_compu   = {}
     info_rondas  = []
+
+    # Log persistente que se va llenando durante TODA la partida (no se reinicia entre rondas)
+    log_global = []
 
     # 3. Bucle principal de batalla
     while True:
         res = pantalla_batalla(
-            pantalla, poke_usu, poke_compu, bench_usu,
-            lista_eventos, puntos_usu, puntos_compu
+            pantalla, poke_usu, poke_compu,
+            lista_eventos, puntos_usu, puntos_compu, log_global
         )
         if res.get("cerrado"):
             return None
@@ -1186,9 +1181,8 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
         puntos_usu   = res["puntos_usu"]
         puntos_compu = res["puntos_compu"]
 
-        # Acumular diccionarios de acciones (el log ya los tiene implícitamente)
-        # (simplificado: contamos los mensajes del log para estadísticas)
-        ataques = sum(1 for l in res["log"] if "⚔" in l or "✨" in l)
+        # Estadísticas simples a partir del log acumulado
+        ataques = sum(1 for txt, _ in log_global if "⚔" in txt or "✨" in txt)
         info_rondas.append([ataques, not res["usu_murio"]])
 
         usu_sin_pokes   = res["usu_murio"]   and len(bench_usu)   == 0
@@ -1243,6 +1237,103 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
 
 
 # ─────────────────────────────────────────────
+#  PANTALLA DE ERROR FATAL
+# ─────────────────────────────────────────────
+
+def pantalla_error_fatal(pantalla, detalle=""):
+    """
+    Pantalla que se muestra cuando la carga de pokémones desde la API falla
+    (nombre inválido, typo, pokémon inexistente, problema de red, etc).
+    Se queda esperando hasta que el usuario cierre la ventana.
+    """
+    pygame.init()
+    if pantalla is None:
+        pantalla = pygame.display.set_mode((ANCHO, ALTO))
+        pygame.display.set_caption("Pokémon Battle — Error")
+
+    clock = pygame.time.Clock()
+    fuente_titulo = pygame.font.SysFont("Arial", 28, bold=True)
+    fuente_normal = pygame.font.SysFont("Arial", 16)
+    fuente_chica  = pygame.font.SysFont("Arial", 13)
+    fuente_boton  = pygame.font.SysFont("Arial", 15, bold=True)
+
+    btn_cerrar = Boton((ANCHO // 2 - 110, 440, 220, 46), "Cerrar", fuente_boton)
+
+    mensaje_principal = "No se pudo cargar la información de los pokémones."
+    mensaje_secundario = (
+        "Uno o más nombres configurados no son reconocidos por la base de datos "
+        "de pokémones. Por favor, comunicate con el equipo de desarrollo para "
+        "que revise la configuración del juego."
+    )
+
+    # Partimos el mensaje secundario en líneas que entren en el panel
+    import textwrap
+    lineas_msg = textwrap.wrap(mensaje_secundario, width=62)
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                return
+            btn_cerrar.actualizar_hover(pygame.mouse.get_pos())
+            if btn_cerrar.fue_clickeado(evento):
+                pygame.quit()
+                return
+
+        pantalla.fill(COLOR_FONDO)
+
+        panel = pygame.Rect(ANCHO // 2 - 320, 100, 640, 380)
+        dibujar_panel(pantalla, panel, COLOR_PANEL, radio=16, borde=(255, 90, 80), grosor_borde=3)
+
+        dibujar_texto(pantalla, "Error al iniciar el juego", fuente_titulo,
+                      (255, 110, 100), ANCHO // 2, 130, centrado=True)
+        dibujar_texto(pantalla, mensaje_principal, fuente_normal, COLOR_TEXTO,
+                      ANCHO // 2, 195, centrado=True)
+
+        y = 235
+        for linea in lineas_msg:
+            dibujar_texto(pantalla, linea, fuente_normal, COLOR_SUBTEXTO,
+                          ANCHO // 2, y, centrado=True)
+            y += 24
+
+        if detalle:
+            dibujar_texto(pantalla, f"Detalle técnico: {detalle}", fuente_chica,
+                          (150, 100, 100), ANCHO // 2, y + 20, centrado=True)
+
+        btn_cerrar.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+def cargar_pokemones_validado(diccio_nombres, pantalla=None):
+    """
+    Envuelve convertir_diccio() en un try/except para validar que todos los
+    nombres de pokémon configurados existan en la PokeAPI antes de seguir.
+
+    Parámetros:
+        diccio_nombres : dict   — {"Novatos": [str, ...], ...} con nombres a consultar
+        pantalla : Surface|None — si ya hay una ventana abierta, se reutiliza
+                                   para mostrar el error; si no, se crea una nueva.
+
+    Retorna:
+        dict de objetos Pokemon (igual que convertir_diccio) si todo salió bien.
+        Si falla, muestra pantalla_error_fatal() y termina el programa
+        (sys.exit) — no retorna nada en ese caso.
+    """
+    import sys
+    from src.pokemones import convertir_diccio
+
+    try:
+        return convertir_diccio(diccio_nombres)
+    except Exception as e:
+        # Cualquier nombre que la PokeAPI no reconozca (typo, pokémon inexistente,
+        # error de red, etc.) cae acá. Mostramos un error claro y cerramos.
+        pantalla_error_fatal(pantalla, detalle=str(e))
+        sys.exit(1)
+
+
+# ─────────────────────────────────────────────
 #  FUNCIÓN DE ENTRADA PRINCIPAL
 # ─────────────────────────────────────────────
 
@@ -1266,8 +1357,7 @@ if __name__ == "__main__":
     import sys, os
     sys.path.insert(0, os.path.dirname(__file__))
 
-    from src.pokemones  import convertir_diccio
-    from src.clases     import Ambiente, Evento_aleatorio
+    from src.clases import Ambiente, Evento_aleatorio
 
     list_poke = {
         "Novatos": ["dragonite", "tyranitar", "metagross", "arcanine"],
@@ -1281,8 +1371,11 @@ if __name__ == "__main__":
     }
 
     print("Cargando pokemones...")
-    pokemones_usu = convertir_diccio(list_poke)
-    pokemones_cpu = convertir_diccio(list_cpu)
+    # Carga validada: si algún nombre no es un pokémon real para la API,
+    # se muestra una pantalla de error profesional y el programa termina
+    # en vez de explotar con un traceback.
+    pokemones_usu = cargar_pokemones_validado(list_poke)
+    pokemones_cpu = cargar_pokemones_validado(list_cpu)
 
     # Ambientes y eventos (idénticos a main.py)
     lista_ambientes = [
@@ -1321,8 +1414,8 @@ if __name__ == "__main__":
 
         if resultado == "nuevo":
             # Recargar pokemones frescos de la API para una partida nueva
-            pokemones_usu = convertir_diccio(list_poke)
-            pokemones_cpu = convertir_diccio(list_cpu)
+            pokemones_usu = cargar_pokemones_validado(list_poke, pantalla)
+            pokemones_cpu = cargar_pokemones_validado(list_cpu, pantalla)
             continue
         else:
             break

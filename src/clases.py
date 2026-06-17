@@ -151,7 +151,7 @@ class Pokemon:
         Muesta los atributos del pokemon.
         Parámetros:
         nombre: bool
-
+        Si la variable es True, imprime la información de los atributos con el nombre del pokemon. Si es False, imprime solo la info de los atributos (sin el nombre del pokemon).
         Retorna: no retorna nada
         '''
         if nombre:
