@@ -1,7 +1,6 @@
 import requests
 from src.clases import Pokemon
 
-
 def poke_api (pokemon):
     '''
     Recibe el nombre de un pokemon, hace la consulta a la API y devuelve un diccionario con los datos crudos del pokemon.
@@ -99,11 +98,15 @@ def crear_pokemon(pokemon):
     Retorna:
     Pokemon: Un objeto Pokemon con los atributos correspondientes al pokemon consultado.
     '''
-    datos_crudos=poke_api(pokemon)
-    datos_casteados=rango_atributos(datos_crudos)
-    poke_creado=Pokemon(datos_casteados)
+    try:
+        datos_crudos=poke_api(pokemon)
+    except:
+        raise ValueError(f'Error con {pokemon}')
+    else:
+        datos_casteados=rango_atributos(datos_crudos)
+        poke_creado=Pokemon(datos_casteados)
 
-    return poke_creado
+        return poke_creado
 
 
 def str_a_pokemones(lista):
@@ -117,8 +120,13 @@ def str_a_pokemones(lista):
     
     lis=[]
     for poke in lista:
-        pokemon=crear_pokemon(poke)
-        lis.append(pokemon)
+        try:
+            pokemon=crear_pokemon(poke)
+        except:
+            raise ValueError(f'Error con {lista}')
+        else:
+            lis.append(pokemon)
+    
     return lis
 
 def convertir_diccio(diccio):
@@ -132,6 +140,11 @@ def convertir_diccio(diccio):
     
     dicc={}
     for clave, valor in diccio.items():
-        pokemon= str_a_pokemones(valor)
-        dicc[clave]=pokemon
+        try:
+            pokemon= str_a_pokemones(valor)
+        except:
+            raise ValueError(f"Error con {diccio}")
+        else:
+            dicc[clave]=pokemon
+            
     return dicc

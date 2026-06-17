@@ -15,7 +15,19 @@ list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
 
-pokemones= p.convertir_diccio(list_poke)
+pokemones=0
+
+while True:
+    try:
+        pokemones= p.convertir_diccio(list_poke)
+    except ValueError as e:
+        print(e)
+        print("Ingresar otro diccionario")
+    else:
+        break
+        
+
+
 #----------------------------------------------------
 #PARES ANALOGOS DE HABILIDADES
 pares = {
@@ -26,6 +38,7 @@ pares = {
 
 #----------------------------------------------------
 #CREACION LISTA DE AMBIENTES
+
 lista_ambientes = []
 playa = c.Ambiente("playa", "water", float(-0.20), float(-0.05), float(-0.25))
 lista_ambientes.append(playa)
