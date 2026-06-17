@@ -38,7 +38,7 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-def grafico_torta(diccionario, titulo, texto=None):
+def grafico_torta(diccionario, titulo,):
 
     """
     Esta función genera un gráfico de torta a partir del registro
@@ -81,8 +81,5 @@ def grafico_torta(diccionario, titulo, texto=None):
 
     plt.title(titulo)
    
-    if texto is not None:
-        plt.figtext(0.5, 0.01, texto, ha="center")
-
 
     plt.show()
