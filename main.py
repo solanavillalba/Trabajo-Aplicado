@@ -105,16 +105,13 @@ list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
 
 pokemones_cpu={}
 
-while True:
-    try:
-        pokemones_cpu=p.convertir_diccio(list_cpu)
-    except ValueError as e:
-        print(e)
-        print("Ingresar otro diccionario para los pokemones de la cpu. El juego no correra hasta que un desarrollador modifique la lista")
-        sys.exit(0)
 
-    else:
-        break
+try:
+    pokemones_cpu=p.convertir_diccio(list_cpu)
+except ValueError as e:
+    print(e)
+    print("Ingresar otro diccionario para los pokemones de la cpu. El juego no correra hasta que un desarrollador modifique la lista")
+    sys.exit(0)
 
 # ELECCION CPU
 for categoria, lista_pokemones in pokemones_cpu.items():

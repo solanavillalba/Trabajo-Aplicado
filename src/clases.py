@@ -113,6 +113,16 @@ class Pokemon:
             self.tipo = dicc['tipo']
 
     def cambiar_atributo(self, atributo1, atributo2, num, print_cambios=True):
+        """
+        Modifica dos valores de ciertos atributos. 
+        Parametros:
+        atributo1 (str): Atributo a mejorar
+        atributo2 (str): Atributo afectado
+        num (float): Cuanto se mejora y empeora cada atributo
+        print_cambios (bool): Si se imprimen en consola los cambios
+
+        Retorna: No retorna nada
+        """
         
         
         setattr(self, atributo2, getattr(self, atributo2) - num)
