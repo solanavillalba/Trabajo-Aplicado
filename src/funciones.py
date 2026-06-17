@@ -71,8 +71,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
     if accion1=="especial" and accion2!="especial":
         pokemon2.vida-= (pokemon1.ataque*(pokemon1.special_attack+1))
         pokemon2.vida=round(pokemon2.vida, 1)
-        if pokemon2.vida < 0:
-            pokemon2.vida = 0
+        if pokemon2.vida <= 0.0:
+            pokemon2.vida = 0.0
             print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y murió")
         else:
             print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
@@ -81,8 +81,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
     elif accion2=="especial" and accion1!="especial":
         pokemon1.vida-= (pokemon2.ataque*(pokemon2.special_attack+1))
         pokemon1.vida=round(pokemon1.vida, 1)
-        if pokemon1.vida < 0:
-            pokemon1.vida = 0
+        if pokemon1.vida <= 0.0:
+            pokemon1.vida = 0.0
             print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y murió")
         else:
             print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
@@ -93,15 +93,15 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         pokemon1.vida=round(pokemon1.vida, 1)
         pokemon2.vida-= (pokemon1.ataque*(pokemon1.special_attack+1))
         pokemon2.vida=round(pokemon2.vida, 1)
-        if pokemon1.vida < 0:
-            pokemon1.vida = 0
+        if pokemon1.vida <= 0.0:
+            pokemon1.vida = 0.0
             print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y murió")
         else:
             print(f"\nEl {pokemon2.nombre} de la cpu usó su ataque especial en tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
             puntos_cpu+=1
 
-        if pokemon2.vida < 0:
-            pokemon2.vida = 0
+        if pokemon2.vida <= 0.0:
+            pokemon2.vida = 0.0
             print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y murió")
         else:
             print(f"\nTu {pokemon1.nombre} usó su ataque especial en el {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
@@ -110,24 +110,24 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
     elif accion1=="atacar" and accion2=="atacar":
         pokemon1.vida-=pokemon2.ataque
         pokemon1.vida=round(pokemon1.vida, 1)
-        if pokemon1.vida < 0:
-            pokemon1.vida = 0
+        if pokemon1.vida <= 0.0:
+            pokemon1.vida = 0.0
         print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
         puntos_cpu+=1
 
         pokemon2.vida-=pokemon1.ataque
         pokemon2.vida=round(pokemon2.vida, 1)
         
-        if pokemon2.vida < 0:
-            pokemon2.vida = 0
+        if pokemon2.vida <= 0.0:
+            pokemon2.vida = 0.0
         print(f"Tu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
         puntos_usuario+=1
 
-        if pokemon1.vida == 0 and pokemon2.vida == 0:
+        if pokemon1.vida == 0.0 and pokemon2.vida == 0.0:
             print("\nAmbos pokemones murieron")
-        elif pokemon1.vida == 0:
+        elif pokemon1.vida == 0.0:
             print(f"\n{pokemon1.nombre} murió")
-        elif pokemon2.vida == 0:
+        elif pokemon2.vida == 0.0:
             print(f"\n{pokemon2.nombre} murió")
 
     elif (accion1=="esquivar" or accion1=="defender") and (accion2=="esquivar" or accion2=="defender"):
@@ -137,8 +137,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         pokemon2.vida-=pokemon1.ataque*pokemon2.defensa
         pokemon2.vida=round(pokemon2.vida, 1)
 
-        if pokemon2.vida < 0:
-            pokemon2.vida = 0
+        if pokemon2.vida <= 0.0:
+            pokemon2.vida = 0.0
             print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
         else:
             print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
@@ -153,8 +153,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         else:
             pokemon2.vida-=pokemon1.ataque
             pokemon2.vida=round(pokemon2.vida, 1)
-            if pokemon2.vida < 0:
-                pokemon2.vida = 0
+            if pokemon2.vida <= 0.0:
+                pokemon2.vida = 0.0
                 print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y murió")
             else:
                 print(f"\nTu {pokemon1.nombre} atacó al {pokemon2.nombre} de la cpu y su vida se bajó a {pokemon2.vida}")
@@ -164,8 +164,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         pokemon1.vida-=pokemon2.ataque*pokemon1.defensa
         pokemon1.vida=round(pokemon1.vida, 1)
 
-        if pokemon1.vida < 0:
-            pokemon1.vida = 0
+        if pokemon1.vida <= 0.0:
+            pokemon1.vida = 0.0
             print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
         else:
             print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")
@@ -180,8 +180,8 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
         else:
             pokemon1.vida-=pokemon2.ataque
             pokemon1.vida=round(pokemon1.vida, 1)
-            if pokemon1.vida < 0:
-                pokemon1.vida = 0
+            if pokemon1.vida <= 0.0:
+                pokemon1.vida = 0.0
                 print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y murió")
             else:    
                 print(f"\nEl {pokemon2.nombre} de la cpu atacó a tu {pokemon1.nombre} y su vida se bajó a {pokemon1.vida}")

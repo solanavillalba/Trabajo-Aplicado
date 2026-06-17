@@ -24,27 +24,24 @@ class Ambiente:
 
         if self.tipo_ambiente == pokemon.tipo:
             pass 
-        elif pokemon.adaptabilidad == 1:
+        elif pokemon.adaptabilidad <= 1:
             pass
-        elif pokemon.adaptabilidad==0.5:
-            pokemon.ataque= round(pokemon.ataque+(self.ataque/2),1)
-            pokemon.defensa= round(pokemon.defensa+(self.defensa/2),1)
-            pokemon.velocidad= round(pokemon.velocidad+(self.velocidad/2), 1)
+        elif pokemon.adaptabilidad <= 0.5:
+            pokemon.ataque= round(pokemon.ataque+(self.ataque/2),2)
+            pokemon.defensa= round(pokemon.defensa+(self.defensa/2),2)
+            pokemon.velocidad= round(pokemon.velocidad+(self.velocidad/2), 2)
         
         else:
-            pokemon.ataque=  round(pokemon.ataque+self.ataque,1)
-            pokemon.defensa= round(pokemon.defensa+self.defensa,1)
-            pokemon.velocidad= round(pokemon.velocidad+self.velocidad,1)
+            pokemon.ataque=  round(pokemon.ataque+self.ataque,2)
+            pokemon.defensa= round(pokemon.defensa+self.defensa,2)
+            pokemon.velocidad= round(pokemon.velocidad+self.velocidad,2)
         
-        pokemon.ataque = round(pokemon.ataque, 1)
-        if pokemon.ataque<0:
-            pokemon.ataque=0
-        pokemon.defensa = round(pokemon.defensa, 1)
-        if pokemon.defensa<0:
-            pokemon.defensa=0
-        pokemon.velocidad = round(pokemon.velocidad, 1)
-        if pokemon.velocidad<0:
-            pokemon.velocidad=0
+        if pokemon.ataque<=0:
+            pokemon.ataque=0.0
+        if pokemon.defensa<=0:
+            pokemon.defensa=0.0
+        if pokemon.velocidad<=0:
+            pokemon.velocidad=0.0
 
         if self.tipo_ambiente == pokemon.tipo:
             if cpu:
@@ -71,9 +68,6 @@ class Ambiente:
 
         return pokemon
 
-
-
-
 class Evento_aleatorio:
     '''
     Inicializa la clase de evento aleatorio, la cual va a modificar la vida del pokemon si sucede.
@@ -95,7 +89,7 @@ class Evento_aleatorio:
         '''
         pokemon.vida+=self.vida
         pokemon.vida=round(pokemon.vida,1)
-        if pokemon.vida<=0:
+        if pokemon.vida<=0.0:
             pokemon.vida==0
         print(f"{pokemon.nombre} recibió un evento aleatorio: Ahora tiene {self.nombre} y su vida se modificó a {pokemon.vida}")
 
@@ -119,11 +113,18 @@ class Pokemon:
 
     def cambiar_atributo(self, atributo1, atributo2, num, print_cambios=True):
         
-        if print_cambios== False:
-            if getattr(self, atributo2) != 0:
-                setattr(self, atributo2, getattr(self, atributo2) - num)
-                
+        
+        setattr(self, atributo2, getattr(self, atributo2) - num)
         setattr(self, atributo1, getattr(self, atributo1) + num)
+        
+        if self.ataque<=0:
+            self.ataque=0.0
+        if self.defensa<=0:
+            self.defensa=0.0
+        if self.velocidad<=0:
+            self.velocidad=0.0
+        if self.adaptabilidad<=0:
+            self.adaptabilidad=0.0
 
         if print_cambios:
             if getattr(self, atributo2) == 0:
