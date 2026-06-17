@@ -22,15 +22,13 @@ while jugar_de_nuevo==True:
 
     pokemones=0
 
-    while True:
-        try:
-            pokemones= p.convertir_diccio(list_poke)
-        except ValueError as e:
-            print(e)
-            print("Ingresar otro diccionario para los pokemones del usuario. El juego no correra hasta que un desarrollador modifique la lista")
-            sys.exit(0)
-        else:
-            break
+    
+    try:
+        pokemones= p.convertir_diccio(list_poke)
+    except ValueError as e:
+        print(e)
+        print("Ingresar otro diccionario para los pokemones del usuario. El juego no correra hasta que un desarrollador modifique la lista")
+        break
             
     #----------------------------------------------------
     #PARES ANALOGOS DE HABILIDADES
@@ -115,7 +113,7 @@ while jugar_de_nuevo==True:
     except ValueError as e:
         print(e)
         print("Ingresar otro diccionario para los pokemones de la cpu. El juego no correra hasta que un desarrollador modifique la lista")
-        sys.exit(0)
+        break
 
     # ELECCION CPU
     for categoria, lista_pokemones in pokemones_cpu.items():
@@ -140,7 +138,7 @@ while jugar_de_nuevo==True:
 
 
 
-    dict_usuario, dict_cpu, info_partida, resultado = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
+    dict_usuario, dict_cpu, info_partida= f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
 
     print("\nAnalizando rendimientos de la batalla...")
 
@@ -158,7 +156,7 @@ while jugar_de_nuevo==True:
 
     jugar_de_nuevo=input('¿Desea jugugar de nuevo? (s/n): ').lower().strip()
 
-    while jugar_de_nuevo!=['s','n']:
+    while jugar_de_nuevo not in ['s','n']:
         jugar_de_nuevo=input('Ingreso inválido. Inténtelo de nuevo (s/n): ').lower().strip()
     
     if jugar_de_nuevo=='s':
