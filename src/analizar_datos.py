@@ -38,7 +38,7 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-def grafico_torta(diccionario):
+def grafico_torta(diccionario,titulo):
     """
     Esta función genera un gráfico de torta a partir del registro
     de acciones realizadas durante la batalla.
@@ -47,37 +47,36 @@ def grafico_torta(diccionario):
     diccionario (dict): registro de acciones
     titulo (str): título del gráfico
     """
-acciones = []
+    acciones = []
 
-for accion in diccionario.keys():
-    acciones.append(accion)
+    for accion in diccionario.keys():
+        acciones.append(accion)
 
-cantidades = []
+    cantidades = []
 
-    
-for cantidad in diccionario.values():
-        cantidades.append(cantidad)
+        
+    for cantidad in diccionario.values():
+            cantidades.append(cantidad)
 
     colores = []
 
-for accion in acciones:
+    for accion in acciones:
+        if accion == "atacar":
+            colores.append("red")
 
-     if accion == "atacar":
-        colores.append("red")
+        elif accion == "defender":
+            colores.append("blue")
 
-     elif accion == "defender":
-         colores.append("blue")
+        elif accion == "esquivar":
+            colores.append("orange")
 
-     elif accion == "esquivar":
-         colores.append("orange")
+        elif accion == "especial":
+            colores.append("purple")
 
-     elif accion == "especial":
-         colores.append("purple")
+    plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
 
-plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
+    # el autopct es funcion de matplotlib para que se muestren los porcentajess
 
-# el autopct es funcion de matplotlib para que se muestren los porcentajess
+    plt.title(titulo)
 
-plt.title(titulo)
-
-plt.show()
+    plt.show()

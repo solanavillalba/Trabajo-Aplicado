@@ -345,7 +345,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
 
         if poke_mostrar:
             # Panel de info — altura aumentada para que no se solapen los stats
-            info_rect = pygame.Rect(ANCHO // 2 - 260, 275, 520, 160)
+            info_rect = pygame.Rect(ANCHO // 2 - 250, 275, 500, 165)
             dibujar_panel(pantalla, info_rect, (20, 30, 55), radio=10,
                           borde=COLOR_BORDE_SEL if poke_mostrar == poke_sel_actual else COLOR_BORDE)
 
@@ -366,14 +366,13 @@ def pantalla_seleccion(pantalla, pokemones_obj):
             # Barras de stats — dos columnas con ancho reducido (110px) para que el valor no invada la columna vecina
             # Columna izquierda: ATK y DEF  |  Columna derecha: SPD y ADP
             # Separación vertical entre filas: 28px (antes 25) para evitar solapamiento
-            max_val = 2.0
             BAR_W   = 110
             COL2_X  = tx + 185   # inicio de la segunda columna
 
-            barra_stat(pantalla, tx,     info_rect.y + 62,  BAR_W, poke_mostrar.ataque,       max_val, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, tx,     info_rect.y + 92,  BAR_W, poke_mostrar.defensa,       max_val, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, COL2_X, info_rect.y + 62,  BAR_W, poke_mostrar.velocidad,     max_val, COLOR_SPD, fuente_pequeña, "SPD")
-            barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, max_val, COLOR_ADP, fuente_pequeña, "ADP")
+            barra_stat(pantalla, tx,     info_rect.y + 62,  BAR_W, poke_mostrar.ataque,       2.15, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, tx,     info_rect.y + 92,  BAR_W, poke_mostrar.defensa,       0.90, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, COL2_X, info_rect.y + 62,  BAR_W, poke_mostrar.velocidad,     0.90, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, 1.00, COLOR_ADP, fuente_pequeña, "ADP")
 
             # Vida
             dibujar_texto(pantalla, f"HP: {poke_mostrar.vida}  |  Sp.Atk: {poke_mostrar.special_attack}",
@@ -430,56 +429,902 @@ def pantalla_seleccion(pantalla, pokemones_obj):
 
 
 # ─────────────────────────────────────────────
-#  FUNCIÓN DE ENTRADA (para integrar desde main)
+#  PANTALLA: ELEGIR POKEMON INICIAL
 # ─────────────────────────────────────────────
+
+def pantalla_elegir_inicial(pantalla, equipo_usu, ambiente):
+    """
+    Muestra el ambiente elegido y deja al jugador elegir con qué pokémon empezar.
+    Retorna el objeto Pokemon elegido o None si se cierra la ventana.
+    """
+    clock = pygame.time.Clock()
+    fuente_titulo  = pygame.font.SysFont("Arial", 26, bold=True)
+    fuente_cat     = pygame.font.SysFont("Arial", 20, bold=True)
+    fuente_normal  = pygame.font.SysFont("Arial", 16)
+    fuente_pequeña = pygame.font.SysFont("Arial", 13)
+    fuente_boton   = pygame.font.SysFont("Arial", 15, bold=True)
+
+    COLOR_AMB = {
+        "water":    (80,  180, 255),
+        "ground":   (180, 140,  60),
+        "electric": (255, 210,  40),
+        "fire":     (255, 100,  40),
+    }
+    color_amb = COLOR_AMB.get(ambiente.tipo_ambiente, COLOR_SUBTEXTO)
+
+    # Botones con los 3 pokemones del equipo
+    CARD_W, CARD_H = 200, 54
+    total_w = len(equipo_usu) * CARD_W + (len(equipo_usu) - 1) * 20
+    sx = (ANCHO - total_w) // 2
+    botones = []
+    for i, pok in enumerate(equipo_usu):
+        b = Boton((sx + i * (CARD_W + 20), 380, CARD_W, CARD_H),
+                  pok.nombre.capitalize(), fuente_boton, tag=pok)
+        botones.append(b)
+
+    sprites_cache = {}
+    for pok in equipo_usu:
+        sprites_cache[pok.nombre.lower()] = obtener_sprite(pok.nombre)
+
+    seleccion = None
+    btn_ok = Boton((ANCHO // 2 - 110, 490, 220, 46), "¡A pelear! →", fuente_boton)
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return None
+            for b in botones:
+                b.actualizar_hover(mouse_pos)
+                if b.fue_clickeado(evento):
+                    for bb in botones:
+                        bb.activo = False
+                    b.activo = True
+                    seleccion = b.tag
+            btn_ok.actualizar_hover(mouse_pos)
+            if seleccion and btn_ok.fue_clickeado(evento):
+                return seleccion
+
+        pantalla.fill(COLOR_FONDO)
+
+        # Título
+        dibujar_texto(pantalla, "¡Comienza la batalla!", fuente_titulo, COLOR_TEXTO, ANCHO // 2, 30, centrado=True)
+
+        # Panel de ambiente
+        amb_rect = pygame.Rect(ANCHO // 2 - 280, 80, 560, 110)
+        dibujar_panel(pantalla, amb_rect, COLOR_PANEL, radio=12, borde=color_amb)
+        dibujar_texto(pantalla, f"Ambiente: {ambiente.nombre.capitalize()}", fuente_cat, color_amb,
+                      ANCHO // 2, 95, centrado=True)
+        dibujar_texto(pantalla, f"Tipo: {ambiente.tipo_ambiente}   |   "
+                      f"ATK {ambiente.ataque:+.2f}  |  DEF {ambiente.defensa:+.2f}  |  SPD {ambiente.velocidad:+.2f}",
+                      fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 128, centrado=True)
+
+        # Estadísticas actualizadas del equipo
+        dibujar_texto(pantalla, "Tu equipo adaptado al ambiente:", fuente_normal,
+                      COLOR_SUBTEXTO, ANCHO // 2, 210, centrado=True)
+
+        PANEL_W = 230
+        total_panels = len(equipo_usu) * PANEL_W + (len(equipo_usu) - 1) * 20
+        px0 = (ANCHO - total_panels) // 2
+        for i, pok in enumerate(equipo_usu):
+            pr = pygame.Rect(px0 + i * (PANEL_W + 20), 235, PANEL_W, 100)
+            dibujar_panel(pantalla, pr, (20, 30, 55), radio=8, borde=COLOR_BORDE)
+            spr = sprites_cache.get(pok.nombre.lower())
+            if spr:
+                spr_s = pygame.transform.scale(spr, (64, 64))
+                pantalla.blit(spr_s, (pr.x + 6, pr.y + 18))
+            dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 76, pr.y + 8)
+            barra_stat(pantalla, pr.x + 76, pr.y + 32, 80, pok.ataque,       2.0, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 76, pr.y + 52, 80, pok.defensa,      2.0, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 76, pr.y + 72, 80, pok.velocidad,    2.0, COLOR_SPD, fuente_pequeña, "SPD")
+
+        dibujar_texto(pantalla, "Elegí tu primer pokémon:", fuente_cat, COLOR_TEXTO, ANCHO // 2, 345, centrado=True)
+        for b in botones:
+            b.dibujar(pantalla)
+
+        if seleccion:
+            btn_ok.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# ─────────────────────────────────────────────
+#  PANTALLA DE BATALLA
+# ─────────────────────────────────────────────
+
+ACCIONES_BASE     = ["atacar", "defender", "esquivar"]
+ACCIONES_ESPECIAL = ["atacar", "defender", "esquivar", "especial"]
+
+COLOR_ACCION = {
+    "atacar":   (255,  90,  80),
+    "defender": ( 80, 180, 255),
+    "esquivar": (100, 230, 100),
+    "especial": (255, 210,  40),
+}
+
+ETIQUETA_ACCION = {
+    "atacar":   "⚔ Atacar",
+    "defender": "🛡 Defender",
+    "esquivar": "💨 Esquivar",
+    "especial": "✨ Especial",
+}
+
+MAX_LOG = 7   # líneas visibles en el log de batalla
+
+
+def _barra_vida(sup, x, y, ancho, vida_actual, vida_max, fuente_p, nombre, invertido=False):
+    """Dibuja la barra de vida de un pokémon con nombre y valores."""
+    ratio = max(0.0, vida_actual / vida_max)
+    if ratio > 0.5:
+        col = (80, 220, 80)
+    elif ratio > 0.25:
+        col = (255, 200, 40)
+    else:
+        col = (255, 60, 60)
+
+    # Si está invertido (CPU) el nombre va a la derecha
+    if invertido:
+        txt = fuente_p.render(f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", True, COLOR_TEXTO)
+        sup.blit(txt, (x + ancho - txt.get_width(), y - 18))
+    else:
+        dibujar_texto(sup, f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", fuente_p, COLOR_TEXTO, x, y - 18)
+
+    bg = pygame.Rect(x, y, ancho, 14)
+    pygame.draw.rect(sup, (50, 60, 90), bg, border_radius=7)
+    fill_w = int(ratio * ancho)
+    if fill_w > 0:
+        pygame.draw.rect(sup, col, (x, y, fill_w, 14), border_radius=7)
+    pygame.draw.rect(sup, COLOR_BORDE, bg, 1, border_radius=7)
+
+
+def pantalla_batalla(pantalla, poke_usu, poke_compu, equipo_usu_restante,
+                     eventos_random, puntos_usu, puntos_compu, log_global=None):
+    """
+    Corre UNA ronda completa de batalla (hasta que el jugador elige acción y se resuelve).
+    También gestiona la espera cuando un pokémon cae y hay que elegir el siguiente.
+
+    Retorna un dict con el estado actualizado:
+    {
+      "poke_usu": obj,
+      "poke_compu": obj,
+      "puntos_usu": int,
+      "puntos_compu": int,
+      "dict_usu": dict,
+      "dict_cpu": dict,
+      "log": [str, ...],           ← mensajes nuevos de esta ronda
+      "usu_murio": bool,
+      "compu_murio": bool,
+      "cerrado": bool,             ← True si el jugador cerró la ventana
+    }
+    """
+    import random
+
+    clock = pygame.time.Clock()
+    fuente_titulo  = pygame.font.SysFont("Arial", 24, bold=True)
+    fuente_cat     = pygame.font.SysFont("Arial", 18, bold=True)
+    fuente_normal  = pygame.font.SysFont("Arial", 15)
+    fuente_pequeña = pygame.font.SysFont("Arial", 13)
+    fuente_boton   = pygame.font.SysFont("Arial", 14, bold=True)
+    fuente_log     = pygame.font.SysFont("Courier", 13)
+
+    sprites_cache = {
+        poke_usu.nombre.lower():    obtener_sprite(poke_usu.nombre),
+        poke_compu.nombre.lower():  obtener_sprite(poke_compu.nombre),
+    }
+
+    # Botones de acción
+    acciones = ACCIONES_ESPECIAL if puntos_usu >= 3 else ACCIONES_BASE
+    BTN_W, BTN_H = 190, 48
+    BTN_GAP = 14
+    total_btns_w = len(acciones) * BTN_W + (len(acciones) - 1) * BTN_GAP
+    bx0 = (ANCHO - total_btns_w) // 2
+    botones_accion = []
+    for i, acc in enumerate(acciones):
+        b = Boton((bx0 + i * (BTN_W + BTN_GAP), 570, BTN_W, BTN_H),
+                  ETIQUETA_ACCION[acc], fuente_boton, tag=acc)
+        botones_accion.append(b)
+
+    log_batalla = []    # mensajes de esta ronda
+    if log_global is None:
+        log_global = []
+    accion_elegida = None
+    resultado = None    # se completa cuando el jugador confirma acción
+    resultado_timer = None   # momento en que se resolvió la acción
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return {"cerrado": True}
+
+            if resultado is None:
+                for b in botones_accion:
+                    b.actualizar_hover(mouse_pos)
+                    if b.fue_clickeado(evento):
+                        # Resolver la ronda con la acción elegida
+                        accion_elegida = b.tag
+                        log_batalla, nuevo_usu, nuevo_compu, ptu, ptc = \
+                            _resolver_ronda(poke_usu, poke_compu, accion_elegida,
+                                            eventos_random, puntos_usu, puntos_compu)
+                        resultado = {
+                            "poke_usu":    nuevo_usu,
+                            "poke_compu":  nuevo_compu,
+                            "puntos_usu":  ptu,
+                            "puntos_compu": ptc,
+                            "log":         log_batalla,
+                            "usu_murio":   nuevo_usu.vida <= 0,
+                            "compu_murio": nuevo_compu.vida <= 0,
+                            "cerrado":     False,
+                        }
+                        # Agregar mensajes al log persistente y arrancar el timer
+                        log_global.extend(log_batalla)
+                        resultado["log_global"] = log_global
+                        resultado_timer = pygame.time.get_ticks()
+
+        # ── DIBUJO ──
+        pantalla.fill(COLOR_FONDO)
+
+        # Título de la batalla
+        dibujar_texto(pantalla, "⚔  Batalla Pokémon", fuente_titulo, COLOR_TEXTO,
+                      ANCHO // 2, 14, centrado=True)
+
+        # Área de combate
+        area_rect = pygame.Rect(20, 45, ANCHO - 40, 380)
+        dibujar_panel(pantalla, area_rect, (18, 26, 50), radio=12, borde=COLOR_BORDE, grosor_borde=1)
+
+        # ── Sprite y vida del JUGADOR (izquierda) ──
+        spr_usu = sprites_cache.get(poke_usu.nombre.lower())
+        if spr_usu:
+            spr_big = pygame.transform.scale(spr_usu, (128, 128))
+            pantalla.blit(spr_big, (50, 130))
+        else:
+            placeholder_sprite(pantalla, 114, 194)
+
+        _barra_vida(pantalla, 40, 90, 260, poke_usu.vida, 5, fuente_normal,
+                    poke_usu.nombre, invertido=False)
+
+        # Mini stats jugador
+        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.0, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     2.0, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   2.0, COLOR_SPD, fuente_pequeña, "SPD")
+
+        # Racha de puntos del jugador
+        dibujar_texto(pantalla, f"Racha: {puntos_usu}/3", fuente_pequeña,
+                      COLOR_BORDE_SEL if puntos_usu >= 3 else COLOR_SUBTEXTO, 40, 310)
+        if puntos_usu >= 3:
+            dibujar_texto(pantalla, "¡ESPECIAL DISPONIBLE!", fuente_pequeña, COLOR_BORDE_SEL, 40, 328)
+
+        # ── Sprite y vida de la CPU (derecha) ──
+        spr_cpu = sprites_cache.get(poke_compu.nombre.lower())
+        if spr_cpu:
+            spr_cpu_big = pygame.transform.scale(spr_cpu, (128, 128))
+            spr_cpu_flip = pygame.transform.flip(spr_cpu_big, True, False)
+            pantalla.blit(spr_cpu_flip, (ANCHO - 180, 130))
+        else:
+            placeholder_sprite(pantalla, ANCHO - 114, 194)
+
+        _barra_vida(pantalla, ANCHO - 300, 90, 260, poke_compu.vida, 5, fuente_normal,
+                    poke_compu.nombre, invertido=True)
+
+        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
+        dibujar_texto(pantalla, f"Racha CPU: {puntos_compu}/3", fuente_pequeña, COLOR_SUBTEXTO,
+                      ANCHO - 180, 310)
+
+        # ── VS central ──
+        dibujar_texto(pantalla, "VS", fuente_titulo, COLOR_BORDE_SEL, ANCHO // 2, 185, centrado=True)
+
+        # ── Log de combate ──
+        log_rect = pygame.Rect(220, 430, ANCHO - 440, 130)
+        dibujar_panel(pantalla, log_rect, (15, 22, 45), radio=8, borde=(50, 70, 120))
+        dibujar_texto(pantalla, "Log de batalla", fuente_pequeña, COLOR_SUBTEXTO,
+                      log_rect.x + 8, log_rect.y + 4)
+        # Solo mostramos MAX_LOG líneas (las más recientes)
+        lineas_vis = log_batalla[-MAX_LOG:] if len(log_batalla) > MAX_LOG else log_batalla
+        for j, linea in enumerate(lineas_vis):
+            col_log = COLOR_BORDE_SEL if "murió" in linea or "especial" in linea.lower() else COLOR_TEXTO
+            dibujar_texto(pantalla, linea, fuente_log, col_log,
+                          log_rect.x + 8, log_rect.y + 20 + j * 16)
+
+        # ── Botones de acción (si aún no se eligió acción) ──
+        if resultado is None:
+            dibujar_texto(pantalla, "¿Qué hacés?", fuente_cat, COLOR_SUBTEXTO,
+                          ANCHO // 2, 548, centrado=True)
+            for b in botones_accion:
+                # Colores por tipo de acción
+                if not b.activo and not b.hover:
+                    col_b = COLOR_ACCION.get(b.tag, COLOR_BOTON)
+                    r, g, bl = col_b
+                    dark = (max(0, r - 110), max(0, g - 110), max(0, bl - 110))
+                    pygame.draw.rect(pantalla, dark, b.rect, border_radius=8)
+                    pygame.draw.rect(pantalla, col_b, b.rect, 2, border_radius=8)
+                    dibujar_texto(pantalla, b.texto, fuente_boton, col_b,
+                                  b.rect.centerx, b.rect.centery - fuente_boton.get_height() // 2,
+                                  centrado=True)
+                else:
+                    b.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    # Mostrar resultado de la ronda brevemente antes de retornar
+    _mostrar_resultado_ronda(pantalla, resultado, fuente_titulo, fuente_cat, fuente_normal, fuente_log)
+
+    return resultado
+
+
+def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu, puntos_compu):
+    """
+    Implementa la misma lógica que funciones.ronda() pero sin input() ni print().
+    Retorna (log:list, poke_usu, poke_compu, puntos_usu, puntos_compu).
+    Trabaja sobre copias de vida (no modifica los objetos originales hasta devolver).
+    """
+    import random, copy
+
+    log = []
+
+    # La CPU elige su acción
+    if puntos_compu >= 3:
+        accion_cpu = random.choice(ACCIONES_ESPECIAL)
+    else:
+        accion_cpu = random.choice(ACCIONES_BASE)
+
+    log.append(f"CPU eligió: {accion_cpu.upper()}")
+
+    # Eventos aleatorios (solo si ninguno usa especial)
+    if accion_usu != "especial" and accion_cpu != "especial":
+        if random.choice([True, False]):
+            ev = random.choice(eventos_random)
+            afectado = random.choice([poke_usu, poke_compu])
+            afectado.vida += ev.vida
+            afectado.vida = round(max(0, afectado.vida), 1)
+            quien = "Tu " + afectado.nombre if afectado is poke_usu else "CPU " + afectado.nombre
+            signo = "+" if ev.vida > 0 else ""
+            log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}) → HP:{afectado.vida}")
+            if afectado.vida <= 0:
+                return log, poke_usu, poke_compu, puntos_usu, puntos_compu
+
+    # ── Resolver acciones ──
+    if accion_usu == "especial" and accion_cpu != "especial":
+        dano = round(poke_usu.ataque * (poke_usu.special_attack + 1), 1)
+        poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
+        puntos_usu = 0
+        if poke_compu.vida <= 0:
+            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
+        else:
+            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
+            puntos_usu += 1
+
+    elif accion_cpu == "especial" and accion_usu != "especial":
+        dano = round(poke_compu.ataque * (poke_compu.special_attack + 1), 1)
+        poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
+        puntos_compu = 0
+        if poke_usu.vida <= 0:
+            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
+        else:
+            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+            puntos_compu += 1
+
+    elif accion_usu == "especial" and accion_cpu == "especial":
+        d1 = round(poke_usu.ataque  * (poke_usu.special_attack  + 1), 1)
+        d2 = round(poke_compu.ataque * (poke_compu.special_attack + 1), 1)
+        poke_compu.vida = round(max(0, poke_compu.vida - d1), 1)
+        poke_usu.vida   = round(max(0, poke_usu.vida   - d2), 1)
+        puntos_usu = puntos_compu = 0
+        log.append(f"✨ ¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+
+    elif accion_usu == "atacar" and accion_cpu == "atacar":
+        poke_usu.vida   = round(max(0, poke_usu.vida   - poke_compu.ataque), 1)
+        poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque),   1)
+        puntos_usu   += 1
+        puntos_compu += 1
+        log.append(f"⚔ Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+
+    elif accion_usu in ("esquivar", "defender") and accion_cpu in ("esquivar", "defender"):
+        log.append("🛡 Ninguno atacó. Sin cambios en HP.")
+
+    elif accion_usu == "atacar" and accion_cpu == "defender":
+        dano = round(poke_usu.ataque * poke_compu.defensa, 1)
+        poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
+        if poke_compu.vida <= 0:
+            log.append(f"⚔ Tu {poke_usu.nombre} atacó → ¡{poke_compu.nombre} murió!")
+        else:
+            puntos_usu += 1
+            log.append(f"⚔ Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
+
+    elif accion_usu == "atacar" and accion_cpu == "esquivar":
+        esquiva = random.choices([True, False],
+                                 weights=[poke_compu.velocidad, max(0.01, 1 - poke_compu.velocidad)])[0]
+        if esquiva:
+            log.append(f"💨 CPU {poke_compu.nombre} esquivó el ataque de tu {poke_usu.nombre}.")
+        else:
+            poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque), 1)
+            if poke_compu.vida <= 0:
+                log.append(f"⚔ No esquivó → ¡{poke_compu.nombre} murió!")
+            else:
+                puntos_usu += 1
+                log.append(f"⚔ No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
+
+    elif accion_usu == "defender" and accion_cpu == "atacar":
+        dano = round(poke_compu.ataque * poke_usu.defensa, 1)
+        poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
+        if poke_usu.vida <= 0:
+            log.append(f"🛡 Tu {poke_usu.nombre} se defendió pero murió.")
+        else:
+            puntos_compu += 1
+            log.append(f"🛡 Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
+
+    elif accion_usu == "esquivar" and accion_cpu == "atacar":
+        esquiva = random.choices([True, False],
+                                 weights=[poke_usu.velocidad, max(0.01, 1 - poke_usu.velocidad)])[0]
+        if esquiva:
+            log.append(f"💨 Tu {poke_usu.nombre} esquivó el ataque de CPU {poke_compu.nombre}.")
+        else:
+            poke_usu.vida = round(max(0, poke_usu.vida - poke_compu.ataque), 1)
+            if poke_usu.vida <= 0:
+                log.append(f"⚔ No esquivaste → ¡Tu {poke_usu.nombre} murió!")
+            else:
+                puntos_compu += 1
+                log.append(f"⚔ No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+
+    return log, poke_usu, poke_compu, puntos_usu, puntos_compu
+
+
+def _mostrar_resultado_ronda(pantalla, resultado, fuente_titulo, fuente_cat, fuente_normal, fuente_log):
+    """Muestra brevemente el resultado de la ronda (1.5 s) si alguien murió."""
+    if not (resultado.get("usu_murio") or resultado.get("compu_murio")):
+        return   # si nadie murió, no hace falta pausa extra
+
+    clock = pygame.time.Clock()
+    inicio = pygame.time.get_ticks()
+    while pygame.time.get_ticks() - inicio < 1800:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                return
+            if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
+                return   # saltar con cualquier tecla/clic
+
+        pantalla.fill(COLOR_FONDO)
+        if resultado.get("usu_murio") and resultado.get("compu_murio"):
+            msg = "¡Los dos cayeron!"
+            color = COLOR_BORDE
+        elif resultado.get("usu_murio"):
+            msg = f"💀 ¡Tu {resultado['poke_usu'].nombre.capitalize()} cayó!"
+            color = (255, 80, 80)
+        else:
+            msg = f"💀 ¡{resultado['poke_compu'].nombre.capitalize()} de la CPU cayó!"
+            color = COLOR_SPD
+
+        dibujar_texto(pantalla, msg, fuente_titulo, color, ANCHO // 2, ALTO // 2 - 20, centrado=True)
+        dibujar_texto(pantalla, "Clic o cualquier tecla para continuar...",
+                      fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, ALTO // 2 + 30, centrado=True)
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# ─────────────────────────────────────────────
+#  PANTALLA: ELEGIR SIGUIENTE POKÉMON
+# ─────────────────────────────────────────────
+
+def pantalla_elegir_siguiente(pantalla, equipo_disponible):
+    """
+    Cuando el pokémon actual del jugador muere, permite elegir el siguiente.
+    equipo_disponible: lista de objetos Pokemon que aún tienen vida (no incluye al que murió).
+    Retorna el Pokemon elegido o None si se cierra la ventana.
+    """
+    clock = pygame.time.Clock()
+    fuente_titulo  = pygame.font.SysFont("Arial", 24, bold=True)
+    fuente_cat     = pygame.font.SysFont("Arial", 18, bold=True)
+    fuente_normal  = pygame.font.SysFont("Arial", 15)
+    fuente_pequeña = pygame.font.SysFont("Arial", 13)
+    fuente_boton   = pygame.font.SysFont("Arial", 15, bold=True)
+
+    sprites_cache = {}
+    for pok in equipo_disponible:
+        sprites_cache[pok.nombre.lower()] = obtener_sprite(pok.nombre)
+
+    CARD_W, CARD_H = 220, 54
+    total_w = len(equipo_disponible) * CARD_W + (len(equipo_disponible) - 1) * 20
+    sx = (ANCHO - total_w) // 2
+    botones = []
+    for i, pok in enumerate(equipo_disponible):
+        b = Boton((sx + i * (CARD_W + 20), 340, CARD_W, CARD_H),
+                  pok.nombre.capitalize(), fuente_boton, tag=pok)
+        botones.append(b)
+
+    seleccion = None
+    btn_ok = Boton((ANCHO // 2 - 110, 440, 220, 46), "¡A pelear! →", fuente_boton)
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return None
+            for b in botones:
+                b.actualizar_hover(mouse_pos)
+                if b.fue_clickeado(evento):
+                    for bb in botones:
+                        bb.activo = False
+                    b.activo = True
+                    seleccion = b.tag
+            btn_ok.actualizar_hover(mouse_pos)
+            if seleccion and btn_ok.fue_clickeado(evento):
+                return seleccion
+
+        pantalla.fill(COLOR_FONDO)
+        dibujar_texto(pantalla, "💀 ¡Tu pokémon cayó! Elegí el siguiente", fuente_titulo,
+                      (255, 90, 90), ANCHO // 2, 50, centrado=True)
+
+        PANEL_W = 260
+        total_p = len(equipo_disponible) * PANEL_W + (len(equipo_disponible) - 1) * 20
+        px0 = (ANCHO - total_p) // 2
+        for i, pok in enumerate(equipo_disponible):
+            pr = pygame.Rect(px0 + i * (PANEL_W + 20), 130, PANEL_W, 160)
+            dibujar_panel(pantalla, pr, (20, 30, 55), radio=10, borde=COLOR_BORDE)
+            spr = sprites_cache.get(pok.nombre.lower())
+            if spr:
+                spr_s = pygame.transform.scale(spr, (80, 80))
+                pantalla.blit(spr_s, (pr.x + 10, pr.y + 40))
+            dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 100, pr.y + 10)
+            barra_stat(pantalla, pr.x + 100, pr.y + 40, 100, pok.ataque,       2.0, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 100, pr.y + 62, 100, pok.defensa,      2.0, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 100, pr.y + 84, 100, pok.velocidad,    2.0, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, pr.x + 100, pr.y + 106, 100, pok.adaptabilidad, 2.0, COLOR_ADP, fuente_pequeña, "ADP")
+            dibujar_texto(pantalla, f"HP: {pok.vida:.1f}", fuente_normal, COLOR_SPD, pr.x + 100, pr.y + 132)
+
+        dibujar_texto(pantalla, "Elegí tu próximo pokémon:", fuente_cat, COLOR_SUBTEXTO,
+                      ANCHO // 2, 310, centrado=True)
+        for b in botones:
+            b.dibujar(pantalla)
+        if seleccion:
+            btn_ok.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# ─────────────────────────────────────────────
+#  PANTALLA FINAL (ganaste / perdiste / empate)
+# ─────────────────────────────────────────────
+
+def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
+    """
+    Muestra la pantalla de fin de partida.
+    ganador: "usuario" | "cpu" | "empate"
+    Retorna True si el jugador quiere jugar de nuevo, False para salir.
+    """
+    clock = pygame.time.Clock()
+    fuente_titulo  = pygame.font.SysFont("Arial", 40, bold=True)
+    fuente_cat     = pygame.font.SysFont("Arial", 20, bold=True)
+    fuente_normal  = pygame.font.SysFont("Arial", 16)
+    fuente_boton   = pygame.font.SysFont("Arial", 16, bold=True)
+
+    MSGS = {
+        "usuario": ("🏆 ¡Ganaste!", (100, 230, 100)),
+        "cpu":     ("💀 Perdiste...", (255, 80, 80)),
+        "empate":  ("🤝 ¡Empate!", (255, 210, 40)),
+    }
+    msg, color_msg = MSGS.get(ganador, ("Fin de partida", COLOR_TEXTO))
+
+    btn_nuevo = Boton((ANCHO // 2 - 230, ALTO - 130, 200, 50), "🔄 Jugar de nuevo", fuente_boton)
+    btn_salir  = Boton((ANCHO // 2 + 30,  ALTO - 130, 200, 50), "🚪 Salir",           fuente_boton)
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return False
+            btn_nuevo.actualizar_hover(mouse_pos)
+            btn_salir.actualizar_hover(mouse_pos)
+            if btn_nuevo.fue_clickeado(evento):
+                return True
+            if btn_salir.fue_clickeado(evento):
+                return False
+
+        pantalla.fill(COLOR_FONDO)
+
+        # Panel central
+        panel = pygame.Rect(ANCHO // 2 - 320, 80, 640, 440)
+        dibujar_panel(pantalla, panel, COLOR_PANEL, radio=16, borde=color_msg, grosor_borde=3)
+
+        dibujar_texto(pantalla, msg, fuente_titulo, color_msg, ANCHO // 2, 120, centrado=True)
+
+        if promedio is not None:
+            dibujar_texto(pantalla, f"Promedio de golpes por combate: {promedio:.1f}",
+                          fuente_cat, COLOR_TEXTO, ANCHO // 2, 220, centrado=True)
+        if mejor_ronda is not None:
+            golpes, num = mejor_ronda
+            dibujar_texto(pantalla, f"Mejor combate: {golpes} golpes (pokémon #{num})",
+                          fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 265, centrado=True)
+
+        dibujar_texto(pantalla, "¿Querés jugar de nuevo?", fuente_normal, COLOR_SUBTEXTO,
+                      ANCHO // 2, 340, centrado=True)
+        btn_nuevo.dibujar(pantalla)
+        btn_salir.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# ─────────────────────────────────────────────
+#  PANTALLA: DESEMPATE
+# ─────────────────────────────────────────────
+
+def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
+    """
+    Cuando hay empate permite al jugador elegir un pokémon para desempatar.
+    Retorna (poke_usu, poke_compu) o ("empate_final", None) si se declara empate.
+    """
+    clock = pygame.time.Clock()
+    fuente_titulo = pygame.font.SysFont("Arial", 24, bold=True)
+    fuente_cat    = pygame.font.SysFont("Arial", 18, bold=True)
+    fuente_normal = pygame.font.SysFont("Arial", 15)
+    fuente_boton  = pygame.font.SysFont("Arial", 14, bold=True)
+    fuente_pequeña = pygame.font.SysFont("Arial", 13)
+
+    sprites_cache = {}
+    for pok in equipo_usu + equipo_compu:
+        sprites_cache[pok.nombre.lower()] = obtener_sprite(pok.nombre)
+
+    CARD_W, CARD_H = 210, 50
+    total_w = len(equipo_usu) * CARD_W + (len(equipo_usu) - 1) * 16
+    sx = (ANCHO - total_w) // 2
+    botones = []
+    for i, pok in enumerate(equipo_usu):
+        b = Boton((sx + i * (CARD_W + 16), 340, CARD_W, CARD_H),
+                  pok.nombre.capitalize(), fuente_boton, tag=pok)
+        botones.append(b)
+
+    seleccion = None
+    btn_ok     = Boton((ANCHO // 2 - 230, 440, 210, 46), "¡Desempatar! →",  fuente_boton)
+    btn_empate = Boton((ANCHO // 2 + 20,  440, 210, 46), "🤝 Declarar empate", fuente_boton)
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return ("empate_final", None)
+            for b in botones:
+                b.actualizar_hover(mouse_pos)
+                if b.fue_clickeado(evento):
+                    for bb in botones:
+                        bb.activo = False
+                    b.activo = True
+                    seleccion = b.tag
+            btn_ok.actualizar_hover(mouse_pos)
+            btn_empate.actualizar_hover(mouse_pos)
+            if seleccion and btn_ok.fue_clickeado(evento):
+                seleccion.vida = 5
+                poke_compu = random.choice(equipo_compu)
+                poke_compu.vida = 5
+                return (seleccion, poke_compu)
+            if btn_empate.fue_clickeado(evento):
+                return ("empate_final", None)
+
+        pantalla.fill(COLOR_FONDO)
+        dibujar_texto(pantalla, "🤝 ¡Empate! ¿Querés desempatar?", fuente_titulo,
+                      COLOR_BORDE_SEL, ANCHO // 2, 50, centrado=True)
+        dibujar_texto(pantalla, "Elegí un pokémon para revivir y seguir la batalla:",
+                      fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 100, centrado=True)
+
+        for i, pok in enumerate(equipo_usu):
+            pr = pygame.Rect(sx + i * (CARD_W + 16), 155, CARD_W, 150)
+            dibujar_panel(pantalla, pr, (20, 30, 55), radio=8, borde=COLOR_BORDE)
+            spr = sprites_cache.get(pok.nombre.lower())
+            if spr:
+                pantalla.blit(pygame.transform.scale(spr, (64, 64)), (pr.x + 6, pr.y + 42))
+            dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 76, pr.y + 8)
+            barra_stat(pantalla, pr.x + 76, pr.y + 38, 90, pok.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 76, pr.y + 58, 90, pok.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 76, pr.y + 78, 90, pok.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
+
+        for b in botones:
+            b.dibujar(pantalla)
+        if seleccion:
+            btn_ok.dibujar(pantalla)
+        btn_empate.dibujar(pantalla)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# ─────────────────────────────────────────────
+#  ORQUESTADOR PRINCIPAL DE PARTIDA
+# ─────────────────────────────────────────────
+
+def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambientes):
+    """
+    Orquesta toda la partida desde que se tienen los equipos hasta la pantalla final.
+    Reproduce exactamente la lógica de funciones.partida() pero con GUI.
+
+    Retorna:
+        "nuevo"  → el jugador quiere jugar de nuevo
+        "salir"  → el jugador quiere salir
+        None     → ventana cerrada
+    """
+    import random
+
+    # 1. Elegir ambiente y aplicarlo
+    ambiente = random.choice(lista_ambientes)
+    for pok in equipo_usu:
+        ambiente.modifica_atributo(pok, cpu=False)
+    for pok in equipo_compu:
+        ambiente.modifica_atributo(pok, cpu=True)
+
+    # 2. Jugador elige su primer pokémon
+    poke_usu = pantalla_elegir_inicial(pantalla, equipo_usu, ambiente)
+    if poke_usu is None:
+        return None
+
+    # CPU elige al azar
+    poke_compu = random.choice(equipo_compu)
+
+    # Listas de los pokemones que aún pueden pelear (sin el que está activo)
+    bench_usu   = [p for p in equipo_usu   if p is not poke_usu]
+    bench_compu = [p for p in equipo_compu if p is not poke_compu]
+
+    puntos_usu   = 0
+    puntos_compu = 0
+    dict_usu     = {}
+    dict_compu   = {}
+    info_rondas  = []
+
+    # 3. Bucle principal de batalla
+    while True:
+        res = pantalla_batalla(
+            pantalla, poke_usu, poke_compu, bench_usu,
+            lista_eventos, puntos_usu, puntos_compu
+        )
+        if res.get("cerrado"):
+            return None
+
+        poke_usu     = res["poke_usu"]
+        poke_compu   = res["poke_compu"]
+        puntos_usu   = res["puntos_usu"]
+        puntos_compu = res["puntos_compu"]
+
+        # Acumular diccionarios de acciones (el log ya los tiene implícitamente)
+        # (simplificado: contamos los mensajes del log para estadísticas)
+        ataques = sum(1 for l in res["log"] if "⚔" in l or "✨" in l)
+        info_rondas.append([ataques, not res["usu_murio"]])
+
+        usu_sin_pokes   = res["usu_murio"]   and len(bench_usu)   == 0
+        compu_sin_pokes = res["compu_murio"]  and len(bench_compu) == 0
+
+        # ── Condición de fin de partida ──
+        if usu_sin_pokes and compu_sin_pokes:
+            # Empate: ofrecer desempate
+            res_desempate = pantalla_desempate(pantalla, equipo_usu, equipo_compu)
+            if res_desempate[0] == "empate_final":
+                ganador = "empate"
+                break
+            else:
+                poke_usu, poke_compu = res_desempate
+                bench_usu   = [p for p in equipo_usu   if p is not poke_usu]
+                bench_compu = [p for p in equipo_compu if p is not poke_compu]
+                puntos_usu = puntos_compu = 0
+                continue
+
+        elif usu_sin_pokes:
+            ganador = "cpu"
+            break
+
+        elif compu_sin_pokes:
+            ganador = "usuario"
+            break
+
+        # ── Reemplazar pokemones caídos ──
+        if res["usu_murio"] and bench_usu:
+            nuevo = pantalla_elegir_siguiente(pantalla, bench_usu)
+            if nuevo is None:
+                return None
+            bench_usu.remove(nuevo)
+            poke_usu = nuevo
+            puntos_usu = 0
+
+        if res["compu_murio"] and bench_compu:
+            poke_compu = random.choice(bench_compu)
+            bench_compu.remove(poke_compu)
+            puntos_compu = 0
+
+    # 4. Calcular estadísticas
+    from src.analizar_datos import promedio as calc_promedio
+    try:
+        prom, mejor = calc_promedio(info_rondas)
+    except Exception:
+        prom, mejor = 0, (0, 0)
+
+    # 5. Pantalla final
+    seguir = pantalla_final(pantalla, ganador, prom, mejor)
+    return "nuevo" if seguir else "salir"
+
+
+# ─────────────────────────────────────────────
+#  FUNCIÓN DE ENTRADA PRINCIPAL
+# ─────────────────────────────────────────────
+
 def run_seleccion(pokemones_obj):
     """
     Inicializa pygame, corre la pantalla de selección y la cierra.
     Retorna la lista de 3 objetos Pokemon del equipo del jugador,
     o None si el usuario cerró la ventana.
-
-    Uso desde main.py:
-        from seleccion import run_seleccion
-        equipo = run_seleccion(pokemones_obj)
     """
     pygame.init()
     pantalla = pygame.display.set_mode((ANCHO, ALTO))
-    pygame.display.set_caption("Pokémon Battle — Seleccioná tu equipo")
-
+    pygame.display.set_caption("Pokémon Battle")
     equipo = pantalla_seleccion(pantalla, pokemones_obj)
-
-    # No llamamos pygame.quit() acá para que la siguiente pantalla
-    # (batalla) siga usando el mismo contexto de pygame.
-    return equipo
+    return equipo, pantalla
 
 
 # ─────────────────────────────────────────────
-#  TEST STANDALONE (python seleccion.py)
+#  TEST STANDALONE (python app.py)
 # ─────────────────────────────────────────────
 if __name__ == "__main__":
-    # Importamos las funciones reales del proyecto
     import sys, os
     sys.path.insert(0, os.path.dirname(__file__))
 
-    from src.pokemones import convertir_diccio
+    from src.pokemones  import convertir_diccio
+    from src.clases     import Ambiente, Evento_aleatorio
 
     list_poke = {
         "Novatos": ["dragonite", "tyranitar", "metagross", "arcanine"],
         "Medios":  ["vaporeon",  "jolteon",   "pikachu",   "eevee"],
         "Altos":   ["psyduck",   "charmander","charizard",  "rattata"],
     }
+    list_cpu = {
+        "Novatos": ["dragonite", "tyranitar", "metagross", "arcanine"],
+        "Medios":  ["vaporeon",  "jolteon",   "pikachu",   "eevee"],
+        "Altos":   ["psyduck",   "charmander","charizard",  "rattata"],
+    }
 
-    print("Cargando pokemones desde la API...")
-    pokemones_obj = convertir_diccio(list_poke)
-    print("Listo. Abriendo pantalla de selección...")
+    print("Cargando pokemones...")
+    pokemones_usu = convertir_diccio(list_poke)
+    pokemones_cpu = convertir_diccio(list_cpu)
 
-    equipo = run_seleccion(pokemones_obj)
+    # Ambientes y eventos (idénticos a main.py)
+    lista_ambientes = [
+        Ambiente("playa",           "water",    -0.20, -0.05, -0.25),
+        Ambiente("bosque",          "ground",   -0.20, -0.15, -0.10),
+        Ambiente("tormenta",        "electric", -0.15, -0.20, -0.30),
+        Ambiente("volcán",          "fire",     -0.50, -0.15, -0.10),
+    ]
+    lista_eventos = [
+        Evento_aleatorio("un kit médico", 1),
+        Evento_aleatorio("un ibuprofeno", 0.5),
+        Evento_aleatorio("una gripe",    -0.5),
+        Evento_aleatorio("asma",         -1),
+    ]
 
-    if equipo:
-        print("\nEquipo elegido:")
-        for p in equipo:
-            print(f"  {p.nombre}  |  ATK:{p.ataque}  DEF:{p.defensa}  SPD:{p.velocidad}  ADP:{p.adaptabilidad}")
-    else:
-        print("Ventana cerrada sin seleccionar.")
+    while True:
+        # Selección del equipo usuario
+        equipo_usu, pantalla = run_seleccion(pokemones_usu)
+        if equipo_usu is None:
+            break
+
+        # CPU elige automáticamente
+        import random
+        equipo_compu = []
+        pares_cpu = {
+            "ataque": "velocidad", "velocidad": "ataque",
+            "defensa": "adaptabilidad", "adaptabilidad": "defensa",
+        }
+        for cat, lista in pokemones_cpu.items():
+            pok = random.choice(lista)
+            atr = random.choice(["ataque", "velocidad", "defensa", "adaptabilidad"])
+            pok.cambiar_atributo(atr, pares_cpu[atr], 0.15, print_cambios=False)
+            equipo_compu.append(pok)
+
+        resultado = run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambientes)
+
+        if resultado == "nuevo":
+            # Recargar pokemones frescos de la API para una partida nueva
+            pokemones_usu = convertir_diccio(list_poke)
+            pokemones_cpu = convertir_diccio(list_cpu)
+            continue
+        else:
+            break
 
     pygame.quit()
