@@ -306,7 +306,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
         pantalla.fill(COLOR_FONDO)
 
         # Título principal
-        dibujar_texto(pantalla, "⚔  Armá tu equipo", fuente_titulo, COLOR_TEXTO, ANCHO // 2, 18, centrado=True)
+        dibujar_texto(pantalla, "Armá tu equipo", fuente_titulo, COLOR_TEXTO, ANCHO // 2, 18, centrado=True)
 
         # Indicador de pasos
         for i, c in enumerate(CATEGORIAS):
@@ -544,10 +544,10 @@ COLOR_ACCION = {
 }
 
 ETIQUETA_ACCION = {
-    "atacar":   "⚔ Atacar",
-    "defender": "🛡 Defender",
-    "esquivar": "💨 Esquivar",
-    "especial": "✨ Especial",
+    "atacar":   "Atacar",
+    "defender": "Defender",
+    "esquivar": "Esquivar",
+    "especial": "Especial",
 }
 
 MAX_LOG = 7   # (legacy, ya no se usa — _dibujar_log calcula el espacio dinámicamente)
@@ -614,7 +614,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
     bx0 = (ANCHO - total_btns_w) // 2
     botones_accion = []
     for i, acc in enumerate(acciones):
-        b = Boton((bx0 + i * (BTN_W + BTN_GAP), 570, BTN_W, BTN_H),
+        b = Boton((bx0 + i * (BTN_W + BTN_GAP), 600, BTN_W, BTN_H),
                   ETIQUETA_ACCION[acc], fuente_boton, tag=acc)
         botones_accion.append(b)
 
@@ -649,7 +649,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
     def _dibujar_escena(mostrar_botones):
         """Dibuja todo el frame de batalla. Se reusa en ambas fases (elegir / resultado)."""
         pantalla.fill(COLOR_FONDO)
-        dibujar_texto(pantalla, "⚔  Batalla Pokémon", fuente_titulo, COLOR_TEXTO,
+        dibujar_texto(pantalla, "Batalla Pokémon", fuente_titulo, COLOR_TEXTO,
                       ANCHO // 2, 14, centrado=True)
 
         area_rect = pygame.Rect(20, 45, ANCHO - 40, 380)
@@ -698,7 +698,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
 
         if mostrar_botones:
             dibujar_texto(pantalla, "¿Qué hacés?", fuente_cat, COLOR_SUBTEXTO,
-                          ANCHO // 2, 548, centrado=True)
+                          ANCHO // 2, 568, centrado=True)
             for b in botones_accion:
                 if not b.activo and not b.hover:
                     col_b = COLOR_ACCION.get(b.tag, COLOR_BOTON)
@@ -713,7 +713,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
                     b.dibujar(pantalla)
         else:
             dibujar_texto(pantalla, "Clic o tecla para continuar...",
-                          fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 552, centrado=True)
+                          fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 568, centrado=True)
 
     # ── FASE 1: esperar que el jugador elija una acción ──
     accion_elegida = None
@@ -819,9 +819,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
         puntos_usu = 0
         if poke_compu.vida <= 0:
-            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
         else:
-            log.append(f"✨ Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
             puntos_usu += 1
 
     elif accion_cpu == "especial" and accion_usu != "especial":
@@ -829,9 +829,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
         puntos_compu = 0
         if poke_usu.vida <= 0:
-            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
         else:
-            log.append(f"✨ CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
             puntos_compu += 1
 
     elif accion_usu == "especial" and accion_cpu == "especial":
@@ -840,17 +840,17 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - d1), 1)
         poke_usu.vida   = round(max(0, poke_usu.vida   - d2), 1)
         puntos_usu = puntos_compu = 0
-        log.append(f"✨ ¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "atacar":
         poke_usu.vida   = round(max(0, poke_usu.vida   - poke_compu.ataque), 1)
         poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque),   1)
         puntos_usu   += 1
         puntos_compu += 1
-        log.append(f"⚔ Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu in ("esquivar", "defender") and accion_cpu in ("esquivar", "defender"):
-        log.append("🛡 Ninguno atacó. Sin cambios en HP.")
+        log.append("Ninguno atacó. Sin cambios en HP.")
 
     elif accion_usu == "atacar" and accion_cpu == "defender":
         dano = round(poke_usu.ataque * poke_compu.defensa, 1)
@@ -859,42 +859,42 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             log.append(f"⚔ Tu {poke_usu.nombre} atacó → ¡{poke_compu.nombre} murió!")
         else:
             puntos_usu += 1
-            log.append(f"⚔ Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "esquivar":
         esquiva = random.choices([True, False],
                                  weights=[poke_compu.velocidad, max(0.01, 1 - poke_compu.velocidad)])[0]
         if esquiva:
-            log.append(f"💨 CPU {poke_compu.nombre} esquivó el ataque de tu {poke_usu.nombre}.")
+            log.append(f"CPU {poke_compu.nombre} esquivó el ataque de tu {poke_usu.nombre}.")
         else:
             poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque), 1)
             if poke_compu.vida <= 0:
-                log.append(f"⚔ No esquivó → ¡{poke_compu.nombre} murió!")
+                log.append(f"No esquivó → ¡{poke_compu.nombre} murió!")
             else:
                 puntos_usu += 1
-                log.append(f"⚔ No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
+                log.append(f"No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
 
     elif accion_usu == "defender" and accion_cpu == "atacar":
         dano = round(poke_compu.ataque * poke_usu.defensa, 1)
         poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
         if poke_usu.vida <= 0:
-            log.append(f"🛡 Tu {poke_usu.nombre} se defendió pero murió.")
+            log.append(f"Tu {poke_usu.nombre} se defendió pero murió.")
         else:
             puntos_compu += 1
-            log.append(f"🛡 Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
+            log.append(f"Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
 
     elif accion_usu == "esquivar" and accion_cpu == "atacar":
         esquiva = random.choices([True, False],
                                  weights=[poke_usu.velocidad, max(0.01, 1 - poke_usu.velocidad)])[0]
         if esquiva:
-            log.append(f"💨 Tu {poke_usu.nombre} esquivó el ataque de CPU {poke_compu.nombre}.")
+            log.append(f"Tu {poke_usu.nombre} esquivó el ataque de CPU {poke_compu.nombre}.")
         else:
             poke_usu.vida = round(max(0, poke_usu.vida - poke_compu.ataque), 1)
             if poke_usu.vida <= 0:
-                log.append(f"⚔ No esquivaste → ¡Tu {poke_usu.nombre} murió!")
+                log.append(f"No esquivaste → ¡Tu {poke_usu.nombre} murió!")
             else:
                 puntos_compu += 1
-                log.append(f"⚔ No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+                log.append(f"No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
 
     return log, poke_usu, poke_compu, puntos_usu, puntos_compu
 
@@ -949,7 +949,7 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
                 return seleccion
 
         pantalla.fill(COLOR_FONDO)
-        dibujar_texto(pantalla, "💀 ¡Tu pokémon cayó! Elegí el siguiente", fuente_titulo,
+        dibujar_texto(pantalla, "¡Tu pokémon cayó! Elegí el siguiente", fuente_titulo,
                       (255, 90, 90), ANCHO // 2, 50, centrado=True)
 
         PANEL_W = 280
@@ -997,9 +997,9 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
     fuente_boton   = pygame.font.SysFont("Arial", 16, bold=True)
 
     MSGS = {
-        "usuario": ("🏆 ¡Ganaste!", (100, 230, 100)),
-        "cpu":     ("💀 Perdiste...", (255, 80, 80)),
-        "empate":  ("🤝 ¡Empate!", (255, 210, 40)),
+        "usuario": ("¡Ganaste!", (100, 230, 100)),
+        "cpu":     ("Perdiste...", (255, 80, 80)),
+        "empate":  ("¡Empate!", (255, 210, 40)),
     }
     msg, color_msg = MSGS.get(ganador, ("Fin de partida", COLOR_TEXTO))
 
@@ -1099,7 +1099,7 @@ def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
                 return ("empate_final", None)
 
         pantalla.fill(COLOR_FONDO)
-        dibujar_texto(pantalla, "🤝 ¡Empate! ¿Querés desempatar?", fuente_titulo,
+        dibujar_texto(pantalla, "¡Empate! ¿Querés desempatar?", fuente_titulo,
                       COLOR_BORDE_SEL, ANCHO // 2, 50, centrado=True)
         dibujar_texto(pantalla, "Elegí un pokémon para revivir y seguir la batalla:",
                       fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 100, centrado=True)
@@ -1285,7 +1285,7 @@ def pantalla_error_fatal(pantalla, detalle=""):
         panel = pygame.Rect(ANCHO // 2 - 320, 100, 640, 380)
         dibujar_panel(pantalla, panel, COLOR_PANEL, radio=16, borde=(255, 90, 80), grosor_borde=3)
 
-        dibujar_texto(pantalla, "⚠  Error al iniciar el juego", fuente_titulo,
+        dibujar_texto(pantalla, "Error al iniciar el juego", fuente_titulo,
                       (255, 110, 100), ANCHO // 2, 130, centrado=True)
         dibujar_texto(pantalla, mensaje_principal, fuente_normal, COLOR_TEXTO,
                       ANCHO // 2, 195, centrado=True)
