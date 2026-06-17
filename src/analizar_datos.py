@@ -75,6 +75,8 @@ def grafico_torta(diccionario, titulo):
         elif accion == "especial":
              colores.append("purple")
 
+    plt.figure()
+
     plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
 
     # el autopct es funcion de matplotlib para que se muestren los porcentajess
