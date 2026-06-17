@@ -315,7 +315,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
             actual     = i == paso_actual
             color_c    = COLOR_BORDE_SEL if actual else (COLOR_TITULO_CAT[c] if completado else COLOR_SUBTEXTO)
             marca      = "✓ " if completado and not actual else ""
-            dibujar_texto(pantalla, f"{marca}{c}", fuente_cat, color_c, cx, 60, centrado=True)
+            dibujar_texto(pantalla, f"{c}", fuente_cat, color_c, cx, 60, centrado=True)
             # línea indicadora
             if actual:
                 pygame.draw.rect(pantalla, COLOR_BORDE_SEL, (cx - 40, 82, 80, 3), border_radius=2)
@@ -514,9 +514,9 @@ def pantalla_elegir_inicial(pantalla, equipo_usu, ambiente):
                 spr_s = pygame.transform.scale(spr, (64, 64))
                 pantalla.blit(spr_s, (pr.x + 6, pr.y + 18))
             dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 76, pr.y + 8)
-            barra_stat(pantalla, pr.x + 76, pr.y + 32, 80, pok.ataque,       2.0, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, pr.x + 76, pr.y + 52, 80, pok.defensa,      2.0, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, pr.x + 76, pr.y + 72, 80, pok.velocidad,    2.0, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, pr.x + 76, pr.y + 32, 80, pok.ataque,       2.15, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 76, pr.y + 52, 80, pok.defensa,      0.90, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 76, pr.y + 72, 80, pok.velocidad,    0.90, COLOR_SPD, fuente_pequeña, "SPD")
 
         dibujar_texto(pantalla, "Elegí tu primer pokémon:", fuente_cat, COLOR_TEXTO, ANCHO // 2, 345, centrado=True)
         for b in botones:
@@ -622,28 +622,49 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
 
     def _barra_vida(sup, x, y, ancho, vida_actual, vida_max, fuente_p, nombre, invertido=False):
         """
-        Dibuja la barra de vida de un pokémon con nombre y valores.
-        """
-        ratio = max(0.0, vida_actual / vida_max)
-        if ratio > 0.5:
-            col = (80, 220, 80)
-        elif ratio > 0.25:
-            col = (255, 200, 40)
-        else:
-            col = (255, 60, 60)
+        Dibuja la barra de vida de un pokémon.
 
-        # Si está invertido (CPU) el nombre va a la derecha
+        - HP se muestra como porcentaje (vida_max = 100%).
+        - Si vida_actual > vida_max, el excedente se representa en dorado
+          superpuesto al final de la barra, al estilo de los juegos de lucha.
+        """
+        vida_base  = min(vida_actual, vida_max)   # la parte que cabe en la barra normal
+        ratio_base = max(0.0, vida_base / vida_max)
+
+        # Color de la barra base según cuánta vida queda
+        if ratio_base > 0.5:
+            col_base = (80, 220, 80)
+        elif ratio_base > 0.25:
+            col_base = (255, 200, 40)
+        else:
+            col_base = (255, 60, 60)
+
+        # Texto: HP como porcentaje (5 HP = 100 %, 6 HP = 120 %, etc.)
+        pct = round(vida_actual / vida_max * 100)
+        label_hp = f"{nombre.capitalize()}  HP: {pct}%"
         if invertido:
-            txt = fuente_p.render(f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", True, COLOR_TEXTO)
+            txt = fuente_p.render(label_hp, True, COLOR_TEXTO)
             sup.blit(txt, (x + ancho - txt.get_width(), y - 18))
         else:
-            dibujar_texto(sup, f"{nombre.capitalize()}  HP: {vida_actual:.1f}/{vida_max}", fuente_p, COLOR_TEXTO, x, y - 18)
+            dibujar_texto(sup, label_hp, fuente_p, COLOR_TEXTO, x, y - 18)
 
+        # Fondo de la barra
         bg = pygame.Rect(x, y, ancho, 14)
         pygame.draw.rect(sup, (50, 60, 90), bg, border_radius=7)
-        fill_w = int(ratio * ancho)
+
+        # Barra base (no supera el 100 %)
+        fill_w = int(ratio_base * ancho)
         if fill_w > 0:
-            pygame.draw.rect(sup, col, (x, y, fill_w, 14), border_radius=7)
+            pygame.draw.rect(sup, col_base, (x, y, fill_w, 14), border_radius=7)
+
+        # Barra de excedente (HP > vida_max) superpuesta al final, en dorado
+        if vida_actual > vida_max:
+            excedente   = vida_actual - vida_max
+            overflow_w  = min(ancho, max(4, int(excedente / vida_max * ancho)))
+            ox = x + ancho - overflow_w
+            pygame.draw.rect(sup, (255, 185, 0), (ox, y, overflow_w, 14), border_radius=7)
+
+        # Borde de la barra
         pygame.draw.rect(sup, COLOR_BORDE, bg, 1, border_radius=7)
 
     def _dibujar_escena(mostrar_botones):
@@ -1003,8 +1024,8 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
     }
     msg, color_msg = MSGS.get(ganador, ("Fin de partida", COLOR_TEXTO))
 
-    btn_nuevo = Boton((ANCHO // 2 - 230, ALTO - 130, 200, 50), "🔄 Jugar de nuevo", fuente_boton)
-    btn_salir  = Boton((ANCHO // 2 + 30,  ALTO - 130, 200, 50), "🚪 Salir",           fuente_boton)
+    btn_nuevo = Boton((ANCHO // 2 - 230, ALTO - 130, 200, 50), "Jugar de nuevo", fuente_boton)
+    btn_salir  = Boton((ANCHO // 2 + 30,  ALTO - 130, 200, 50), "Salir",           fuente_boton)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
