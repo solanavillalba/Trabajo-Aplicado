@@ -123,7 +123,7 @@ def str_a_pokemones(lista):
         try:
             pokemon=crear_pokemon(poke)
         except:
-            raise ValueError(f'Error con {lista}')
+            raise ValueError(f'Error con {lista} en el pokemon {poke}')
         else:
             lis.append(pokemon)
     
@@ -143,8 +143,8 @@ def convertir_diccio(diccio):
         try:
             pokemon= str_a_pokemones(valor)
         except:
-            raise ValueError(f"Error con {diccio}")
+            raise ValueError(f"Error con el diccionario de los pokemones, en la categoria {clave}")
+    
         else:
             dicc[clave]=pokemon
-            
     return dicc
