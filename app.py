@@ -686,9 +686,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, 40, 90, 260, poke_usu.vida, 5, fuente_normal,
                     poke_usu.nombre, invertido=False)
 
-        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.0, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     2.0, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   2.0, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.15, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     0.90, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   0.90, COLOR_SPD, fuente_pequeña, "SPD")
 
         dibujar_texto(pantalla, f"Racha: {puntos_usu}/3", fuente_pequeña,
                       COLOR_BORDE_SEL if puntos_usu >= 3 else COLOR_SUBTEXTO, 40, 310)
@@ -706,9 +706,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, ANCHO - 300, 90, 260, poke_compu.vida, 5, fuente_normal,
                     poke_compu.nombre, invertido=True)
 
-        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.15, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   0.90, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 0.90, COLOR_SPD, fuente_pequeña, "SPD")
         dibujar_texto(pantalla, f"Racha CPU: {puntos_compu}/3", fuente_pequeña, COLOR_SUBTEXTO,
                       ANCHO - 180, 310)
 
