@@ -142,11 +142,10 @@ dict_usuario, dict_cpu, info_partida, resultado = f.partida(pok_usuario, pok_cpu
 print("\nAnalizando rendimientos de la batalla...")
 
 promedio, mejor_ronda = a.promedio(info_partida)
-print(f"En promedio matar al pokemon oponente te costo {promedio} golpes. Y tu mejor pelea es de {mejor_ronda[0]} golpes en el pokemon número {mejor_ronda[1]}")
 
+texto_usuario = ( f"En promedio matar al pokemon oponente te costó {promedio} golpes. "
+    f"Tu mejor ronda fue de {mejor_ronda[0]} golpes en el pokemon número {mejor_ronda[1]}.")
 
-a.grafico_torta(dict_usuario,"Porcentaje de acciones del Usuario")
+a.grafico_torta(dict_usuario, "Porcentaje de acciones del Usuario", texto_usuario)
 
-a.grafico_torta(dict_cpu, "Porcentaje de acciones de la CPU")
-
-
+a.grafico_torta(dict_cpu,"Porcentaje de acciones de la CPU")
