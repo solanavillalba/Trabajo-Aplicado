@@ -328,14 +328,12 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         elif cond_salida_usu==True:
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
-            resultado = "derrota"
-            return dict_usu, dict_usu, info_rondas, resultado
+            return dict_usu, dict_usu, info_rondas, 
 
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
-            resultado = "victoria"
 
-            return dict_usu, dict_usu, info_rondas, resultado
+            return dict_usu, dict_usu, info_rondas, 
         
         if post_usu.vida!=0 and post_compu.vida!=0:
             poke_usu=post_usu
