@@ -334,7 +334,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         elif cond_salida_usu==True:
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
-            return dict_usu, dict_compu, info_rondas, 
+            return dict_usu, dict_compu, info_rondas 
 
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
