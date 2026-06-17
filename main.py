@@ -3,7 +3,7 @@ import src.clases as c
 import src.pokemones as p
 import src.analizar_datos as a
 import src.funciones as f
-import matplotlib.pyplot as plt
+
 
 
 print("¡Bienvenido al juego de Pokemon!")
@@ -114,7 +114,13 @@ print("\nInicia la batalla")
 print("Seleccionando arena de juego...\n")
 
 dict_usuario, dict_cpu, info_partida = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
-promedio, mejor_ronda=a.promedio(info_partida)
+
+dict_usuario, dict_cpu, info_partida = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
+
+a.grafico_torta(dict_usuario,"Resumen de acciones del Usuario")
+
+a.grafico_torta(dict_cpu,"Resumen de acciones de la CPU")
+  
 
 print("\nAnalizando rendimientos de la batalla...")
 
