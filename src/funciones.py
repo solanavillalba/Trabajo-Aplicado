@@ -215,10 +215,12 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
     Retorna: 
     dict_usu: dict
-    dict_usu: dict
-    info_rondas: dict
-
-
+    Diccionario con la siguiente forma {"atacar":int,"defender":int,"esquivar":int}. Contiene información sobre la cantidad de veces que el usuario hizo cada acción.
+    dict_cpu: dict
+    Diccionario con la siguiente forma {"atacar":int,"defender":int,"esquivar":int}. Contiene información sobre la cantidad de veces que el usuario hizo cada acción.
+    info_rondas: list
+    Lista de listas. Cada sublista tiene la siguiente forma: [[int,bool]]. En la posición 0, está la cantidad de ataques que hizo el usuario. En la posición 1, es un valor booleano siendo True si el pokemon del usuario sobrevivió de la ronda o False si se murió.
+    
     '''
     #Consigo solo los nombres de los objetos pokemones
     pokemones_usu=[]
