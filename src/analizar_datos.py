@@ -38,7 +38,7 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-def grafico_torta(diccionario, titulo,):
+def grafico_torta(diccionario, titulo):
 
     """
     Esta función genera un gráfico de torta a partir del registro
@@ -80,6 +80,4 @@ def grafico_torta(diccionario, titulo,):
     # el autopct es funcion de matplotlib para que se muestren los porcentajess
 
     plt.title(titulo)
-   
-
     plt.show()
