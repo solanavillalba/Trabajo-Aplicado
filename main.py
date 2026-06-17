@@ -115,11 +115,14 @@ print("Seleccionando arena de juego...\n")
 
 dict_usuario, dict_cpu, info_partida, resultado = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
 
-promedio, mejor_ronda = a.promedio(info_partida)
-
-a.grafico_torta(dict_usuario,"Resumen de acciones del Usuario", promedio, resultado)
-
-a.grafico_torta(dict_cpu, "Resumen de acciones de la CPU", promedio, resultado)
-
 print("\nAnalizando rendimientos de la batalla...")
+
+promedio, mejor_ronda = a.promedio(info_partida)
+print(f"En promedio matar al pokemon oponente te costo {promedio} golpes. Y tu mejor pelea es de {mejor_ronda[0]} golpes en el pokemon número {mejor_ronda[1]}")
+
+
+a.grafico_torta(dict_usuario,"Porcentaje de acciones del Usuario")
+
+a.grafico_torta(dict_cpu, "Porcentaje de acciones de la CPU")
+
 

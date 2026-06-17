@@ -53,7 +53,6 @@ def grafico_torta(diccionario,titulo):
         acciones.append(accion)
 
     cantidades = []
-
         
     for cantidad in diccionario.values():
             cantidades.append(cantidad)
