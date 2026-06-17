@@ -17,6 +17,7 @@ class Ambiente:
         Parámetros:
         pokemon: pokemon
         Objeto de tipo pokemon, el cual se va a utilizar para ver el tipo y modificar los atributos segun corresponda.
+        cpu: bool. Para ver si se imprime tu pokemon o el pokemon de la cpu. 
 
         Return:
         pokemon: devuelve objeto pokemon con sus atributos modificados segun el ambiente.
