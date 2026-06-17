@@ -3,6 +3,7 @@ import src.clases as c
 import src.pokemones as p
 import src.analizar_datos as a
 import src.funciones as f
+import sys
 
 
 
@@ -22,7 +23,8 @@ while True:
         pokemones= p.convertir_diccio(list_poke)
     except ValueError as e:
         print(e)
-        print("Ingresar otro diccionario")
+        print("Ingresar otro diccionario para los pokemones del usuario. El juego no correra hasta que un desarrollador modifique la lista")
+        sys.exit(0)
     else:
         break
         
@@ -101,7 +103,18 @@ list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
     "Medios": ["vaporeon","jolteon","pikachu","eevee"],
     "Altos": ["psyduck","charmander","charizard","rattata"] }
 
-pokemones_cpu=p.convertir_diccio(list_cpu)
+pokemones_cpu={}
+
+while True:
+    try:
+        pokemones_cpu=p.convertir_diccio(list_cpu)
+    except ValueError as e:
+        print(e)
+        print("Ingresar otro diccionario para los pokemones de la cpu. El juego no correra hasta que un desarrollador modifique la lista")
+        sys.exit(0)
+
+    else:
+        break
 
 # ELECCION CPU
 for categoria, lista_pokemones in pokemones_cpu.items():
