@@ -324,7 +324,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
             resultado=empate(equipo_usu,equipo_compu)
             if type(resultado)==str:
                 print(resultado)
-                return dict_usu, dict_usu, info_rondas
+                return dict_usu, dict_compu, info_rondas
             else:
                 poke_usu=resultado[0]
                 poke_compu=resultado[1]
@@ -334,12 +334,12 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
 
         elif cond_salida_usu==True:
             print("La batalla ha finalizado. La computadora se consagra como ganadora.")
-            return dict_usu, dict_usu, info_rondas, 
+            return dict_usu, dict_compu, info_rondas, 
 
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
 
-            return dict_usu, dict_usu, info_rondas
+            return dict_usu, dict_compu, info_rondas
         
         if post_usu.vida!=0 and post_compu.vida!=0:
             poke_usu=post_usu
