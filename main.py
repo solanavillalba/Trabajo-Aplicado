@@ -138,7 +138,7 @@ while jugar_de_nuevo==True:
 
 
 
-    dict_usuario, dict_cpu, info_partida, resultado = f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
+    dict_usuario, dict_cpu, info_partida= f.partida(pok_usuario, pok_cpu, lista_eventos_aleatorios, lista_ambientes)
 
     print("\nAnalizando rendimientos de la batalla...")
 
