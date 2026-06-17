@@ -213,7 +213,11 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
     Objeto del tipo Ambiente el cual modificará los atributos de los pokemones según sean del mismo tipo 
     (favoreciéndolos) o no (perjudicándolos).
 
-    Retorna: no retorna nada
+    Retorna: 
+    dict_usu: dict
+    dict_usu: dict
+    info_rondas: dict
+
 
     '''
     #Consigo solo los nombres de los objetos pokemones
@@ -333,7 +337,7 @@ def partida(equipo_usu,equipo_compu,lista_eventos,lista_ambientes):
         elif cond_salida_compu==True:
             print("La batalla ha finalizado. Te has consagrado como ganador. ¡Felicitaciones!")
 
-            return dict_usu, dict_usu, info_rondas, 
+            return dict_usu, dict_usu, info_rondas
         
         if post_usu.vida!=0 and post_compu.vida!=0:
             poke_usu=post_usu
