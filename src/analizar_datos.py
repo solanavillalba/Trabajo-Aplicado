@@ -38,7 +38,8 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-def grafico_torta(diccionario,titulo):
+def grafico_torta(diccionario, titulo, texto=None):
+
     """
     Esta función genera un gráfico de torta a partir del registro
     de acciones realizadas durante la batalla.
@@ -53,29 +54,35 @@ def grafico_torta(diccionario,titulo):
         acciones.append(accion)
 
     cantidades = []
-        
+
+    
     for cantidad in diccionario.values():
-            cantidades.append(cantidad)
+        cantidades.append(cantidad)
 
     colores = []
 
     for accion in acciones:
+
         if accion == "atacar":
             colores.append("red")
 
         elif accion == "defender":
-            colores.append("blue")
+             colores.append("blue")
 
         elif accion == "esquivar":
-            colores.append("orange")
+             colores.append("orange")
 
         elif accion == "especial":
-            colores.append("purple")
+             colores.append("purple")
 
     plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
 
     # el autopct es funcion de matplotlib para que se muestren los porcentajess
 
     plt.title(titulo)
+   
+    if texto is not None:
+        plt.figtext(0.5, 0.01, texto, ha="center")
+
 
     plt.show()
