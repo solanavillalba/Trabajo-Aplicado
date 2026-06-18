@@ -38,49 +38,75 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-def grafico_torta(diccionario, titulo):
 
+def grafico_torta_pokemon_pro(diccionario, titulo):
     """
-    Esta función genera un gráfico de torta a partir del registro
-    de acciones realizadas durante la batalla.
-     
-    Parámetro:
-    diccionario (dict): registro de acciones
-    titulo (str): título del gráfico
-        Parámetro:
-        diccionario (dict): registro de acciones
-        titulo (str): título del gráfico
+    Genera un gráfico de dona con tipografía moderna unificada y 
+    un título en color blanco, haciendo juego con las etiquetas exteriores.
     """
+    acciones = list(diccionario.keys())
+    cantidades = list(diccionario.values())
 
-    acciones = []
-
-    for accion in diccionario.keys():
-        acciones.append(accion)
-
-    cantidades = []
-
-    for cantidad in diccionario.values():
-        cantidades.append(cantidad)
-
+    # 1. Colores de los Tipos Pokémon
     colores = []
-
     for accion in acciones:
-
         if accion == "atacar":
-            colores.append("red")
-
+            colores.append("#FF421C")      # Fuego
         elif accion == "defender":
-             colores.append("blue")
-
+            colores.append("#2E94FA")    # Agua
         elif accion == "esquivar":
-             colores.append("orange")
-
+            colores.append("#FAC000")    # Eléctrico
         elif accion == "especial":
-             colores.append("purple")
+            colores.append("#A040A0")    # Psíquico
 
-    plt.figure()
+    desplazamiento = [0.03 for _ in acciones]
 
-    plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
+    # 2. Configurar fondo oscuro estilo interfaz
+    color_fondo = "#1F2326" 
+    fig, ax = plt.subplots(figsize=(7, 7), dpi=110, facecolor=color_fondo)
+    ax.set_facecolor(color_fondo)
+    
+    # 3. Configuración de tipografía global
+    config_fuente = {"family": "sans-serif", "weight": "black"}
 
-    plt.title(titulo)
+    # 4. Dibujar la dona
+    porciones, textos, porcentajes = ax.pie(
+        cantidades, 
+        labels=[accion.upper() for accion in acciones], 
+        colors=colores, 
+        explode=desplazamiento,
+        autopct="%1.0f%%", 
+        startangle=140,                         
+        pctdistance=0.75,                        
+        wedgeprops={"linewidth": 3, "edgecolor": color_fondo},  
+        textprops={"fontsize": 12, **config_fuente}          
+    )
+
+    # 5. Círculo central (Dona) con texto interno estilizado
+    circulo_central = plt.Circle((0,0), 0.52, fc=color_fondo, ec=color_fondo)
+    fig.gca().add_artist(circulo_central)
+    
+    ax.text(0, 0, "STATS", color="#7F8C8D", fontsize=14, 
+            va='center', ha='center', weight="black", family="sans-serif")
+
+    # 6. Estilizar los textos de las categorías exteriores (Blanco puro)
+    for texto in textos:
+        texto.set_color("#FFFFFF")               
+        texto.set_fontsize(13)
+
+    # Estilizar los porcentajes internos (Texto oscuro para máximo contraste)
+    for porcentaje in porcentajes:
+        porcentaje.set_color("#1F2326")         
+        porcentaje.set_fontsize(12)
+
+    # 7. --- CORRECCIÓN AQUÍ: Título con el color blanco del label (#FFFFFF) ---
+    ax.set_title(
+        titulo.upper(), 
+        fontsize=18, 
+        pad=30, 
+        color="#FFFFFF",  # Mismo color blanco que las etiquetas externas
+        fontdict={"family": "sans-serif", "weight": "black"}
+    )
+    
+    plt.tight_layout()
     plt.show()
