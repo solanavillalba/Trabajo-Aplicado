@@ -38,8 +38,7 @@ def promedio(lista):
 
     return round(promedio_final, 1), mejor_encuentro
 
-
-def grafico_torta_pokemon_pro(diccionario, titulo):
+def grafico_torta(diccionario, titulo):
     """
     Genera un gráfico de dona con tipografía moderna unificada y 
     un título en color blanco, haciendo juego con las etiquetas exteriores.
