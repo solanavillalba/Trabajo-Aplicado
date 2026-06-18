@@ -2,6 +2,7 @@ import pygame
 import requests
 import io
 import random
+import os
 
 # ─────────────────────────────────────────────
 #  PALETA Y TIPOGRAFÍA
@@ -26,6 +27,16 @@ COLOR_TITULO_CAT  = {
 }
 
 ANCHO, ALTO = 1100, 680
+
+# Paths de las imágenes de fondo según ambiente
+# Las imágenes deben estar en la subcarpeta "imagenes/" junto a app.py
+_DIR_APP = os.path.dirname(os.path.abspath(__file__))
+IMAGENES_AMBIENTE = {
+    "playa":             os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_playa.png"),
+    "bosque":            os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_bosque.png"),
+    "volcán":            os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_volcan.png"),
+    "tormenta de rayos": os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_rayos.png"),
+}
 
 # ─────────────────────────────────────────────
 #  HELPERS PYGAME
@@ -578,7 +589,7 @@ def _dibujar_log(sup, log_global, log_rect, fuente_log, fuente_pequeña):
 
 
 def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
-                     puntos_usu, puntos_compu, log_global):
+                     puntos_usu, puntos_compu, log_global, ambiente=None):
     """
     Muestra la pantalla de batalla y espera que el jugador elija una acción.
     Una vez elegida, resuelve la ronda, agrega los mensajes nuevos a log_global
@@ -605,6 +616,22 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         poke_usu.nombre.lower():    obtener_sprite(poke_usu.nombre),
         poke_compu.nombre.lower():  obtener_sprite(poke_compu.nombre),
     }
+
+    # Cargar imagen de fondo del ambiente (una sola vez, escalada al área de batalla)
+    _BG_W, _BG_H = ANCHO - 40, 380
+    bg_imagen = None
+    if ambiente is not None:
+        ruta = IMAGENES_AMBIENTE.get(ambiente.nombre)
+        print(f"[DEBUG] Ambiente: '{ambiente.nombre}'  →  ruta: {ruta}")
+        print(f"[DEBUG] Archivo existe: {os.path.exists(ruta) if ruta else False}")
+        if ruta and os.path.exists(ruta):
+            try:
+                raw = pygame.image.load(ruta).convert()
+                bg_imagen = pygame.transform.scale(raw, (_BG_W, _BG_H))
+                print("[DEBUG] Imagen cargada OK")
+            except Exception as e:
+                print(f"[DEBUG] Error cargando imagen: {e}")
+                bg_imagen = None
 
     # Botones de acción
     acciones = ACCIONES_ESPECIAL if puntos_usu >= 3 else ACCIONES_BASE
@@ -676,6 +703,14 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         area_rect = pygame.Rect(20, 45, ANCHO - 40, 380)
         dibujar_panel(pantalla, area_rect, (18, 26, 50), radio=12, borde=COLOR_BORDE, grosor_borde=1)
 
+        # Fondo de ambiente (debajo de sprites, barras y texto)
+        if bg_imagen is not None:
+            pantalla.blit(bg_imagen, (area_rect.x, area_rect.y))
+            overlay = pygame.Surface((area_rect.w, area_rect.h), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 110))   # oscurece un poco para que se lea el texto
+            pantalla.blit(overlay, (area_rect.x, area_rect.y))
+            pygame.draw.rect(pantalla, COLOR_BORDE, area_rect, 1, border_radius=12)
+
         # Jugador (izquierda)
         spr_usu = sprites_cache.get(poke_usu.nombre.lower())
         if spr_usu:
@@ -686,9 +721,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, 40, 90, 260, poke_usu.vida, 5, fuente_normal,
                     poke_usu.nombre, invertido=False)
 
-        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.15, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     0.90, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   0.90, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.0, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     2.0, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   2.0, COLOR_SPD, fuente_pequeña, "SPD")
 
         dibujar_texto(pantalla, f"Racha: {puntos_usu}/3", fuente_pequeña,
                       COLOR_BORDE_SEL if puntos_usu >= 3 else COLOR_SUBTEXTO, 40, 310)
@@ -706,9 +741,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, ANCHO - 300, 90, 260, poke_compu.vida, 5, fuente_normal,
                     poke_compu.nombre, invertido=True)
 
-        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.15, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   0.90, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 0.90, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
         dibujar_texto(pantalla, f"Racha CPU: {puntos_compu}/3", fuente_pequeña, COLOR_SUBTEXTO,
                       ANCHO - 180, 310)
 
@@ -1192,7 +1227,8 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
     while True:
         res = pantalla_batalla(
             pantalla, poke_usu, poke_compu,
-            lista_eventos, puntos_usu, puntos_compu, log_global
+            lista_eventos, puntos_usu, puntos_compu, log_global,
+            ambiente=ambiente
         )
         if res.get("cerrado"):
             return None
