@@ -35,7 +35,7 @@ IMAGENES_AMBIENTE = {
     "playa":             os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_playa.png"),
     "bosque":            os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_bosque.png"),
     "volcán":            os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_volcan.png"),
-    "tormenta de rayos": os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_rayos.png"),
+    "tormenta": os.path.join(_DIR_APP, "imagenes", "imagen_pokemon_tormenta.png"),
 }
 
 # ─────────────────────────────────────────────
@@ -212,7 +212,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
         bots = []
         for i, nombre in enumerate(LISTA_POKEMONES[cat]):
             rx = start_x + i * (CARD_W + CARD_GAP)
-            ry = 220
+            ry = 200
             bots.append(Boton((rx, ry, CARD_W, CARD_H), nombre.capitalize(), fuente_boton, tag=nombre))
         botones_pokemones[cat] = bots
 
@@ -336,8 +336,8 @@ def pantalla_seleccion(pantalla, pokemones_obj):
 
         # ── Título de categoría ──
         color_cat = COLOR_TITULO_CAT[cat]
-        dibujar_texto(pantalla, f"Categoría: {cat}", fuente_cat, color_cat, ANCHO // 2, 115, centrado=True)
-        dibujar_texto(pantalla, "Elegí tu pokémon:", fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 140, centrado=True)
+        dibujar_texto(pantalla, f"Categoría: {cat}", fuente_cat, color_cat, ANCHO // 2, 135, centrado=True)
+        dibujar_texto(pantalla, "Elegí tu pokémon:", fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 160, centrado=True)
 
         # ── Tarjetas de pokemones ──
         for bot in botones_pokemones[cat]:
