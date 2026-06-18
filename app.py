@@ -589,7 +589,7 @@ def _dibujar_log(sup, log_global, log_rect, fuente_log, fuente_pequeña):
 
 
 def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
-                     puntos_usu, puntos_compu, log_global, ambiente=None):
+                     puntos_usu, puntos_compu, log_global, dict_usu, dict_cpu, ambiente=None):
     """
     Muestra la pantalla de batalla y espera que el jugador elija una acción.
     Una vez elegida, resuelve la ronda, agrega los mensajes nuevos a log_global
@@ -597,6 +597,10 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
 
     log_global : list de tuplas (texto:str, color:tuple). Se modifica in-place
                  y también se usa para pintar el log en cada frame.
+    dict_usu, dict_cpu : dict que cuenta cuántas veces se eligió cada acción
+                 (atacar/defender/esquivar/especial). Se modifican in-place,
+                 igual que dict_usu/dict_cpu en funciones.ronda() del CLI original.
+                 Se usan después para los gráficos de torta de analizar_datos.py.
 
     Retorna un dict:
     {
@@ -788,9 +792,14 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         clock.tick(60)
 
     # ── Resolver la ronda ──
-    nuevas_lineas, poke_usu, poke_compu, puntos_usu, puntos_compu = _resolver_ronda(
+    nuevas_lineas, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu = _resolver_ronda(
         poke_usu, poke_compu, accion_elegida, eventos_random, puntos_usu, puntos_compu
     )
+
+    # Registrar las acciones elegidas en los diccionarios de conteo
+    # (mismo patrón que dict_usu/dict_cpu en funciones.ronda del CLI)
+    dict_usu[accion_elegida] = dict_usu.get(accion_elegida, 0) + 1
+    dict_cpu[accion_cpu]     = dict_cpu.get(accion_cpu, 0) + 1
 
     for linea in nuevas_lineas:
         if "murió" in linea or "cayó" in linea or "ESPECIAL" in linea.upper():
@@ -841,7 +850,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
 def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu, puntos_compu):
     """
     Implementa la misma lógica que funciones.ronda() pero sin input() ni print().
-    Retorna (log:list, poke_usu, poke_compu, puntos_usu, puntos_compu).
+    Retorna (log:list, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu:str).
     Trabaja sobre copias de vida (no modifica los objetos originales hasta devolver).
     """
     import random, copy
@@ -867,7 +876,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             signo = "+" if ev.vida > 0 else ""
             log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}) → HP:{afectado.vida}")
             if afectado.vida <= 0:
-                return log, poke_usu, poke_compu, puntos_usu, puntos_compu
+                return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
     # ── Resolver acciones ──
     if accion_usu == "especial" and accion_cpu != "especial":
@@ -952,7 +961,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
                 puntos_compu += 1
                 log.append(f"No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
 
-    return log, poke_usu, poke_compu, puntos_usu, puntos_compu
+    return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
 
 # ─────────────────────────────────────────────
@@ -1040,17 +1049,24 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
 #  PANTALLA FINAL (ganaste / perdiste / empate)
 # ─────────────────────────────────────────────
 
-def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
+def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None, dict_usu=None, dict_cpu=None):
     """
     Muestra la pantalla de fin de partida.
     ganador: "usuario" | "cpu" | "empate"
+    dict_usu, dict_cpu : dict de conteo de acciones (atacar/defender/esquivar/especial)
+                         de cada lado. Si se proveen, se muestran botones para abrir
+                         los gráficos de torta (analizar_datos.grafico_torta), igual
+                         que en la versión de consola.
     Retorna True si el jugador quiere jugar de nuevo, False para salir.
     """
+    from src.analizar_datos import grafico_torta
+
     clock = pygame.time.Clock()
     fuente_titulo  = pygame.font.SysFont("Arial", 40, bold=True)
     fuente_cat     = pygame.font.SysFont("Arial", 20, bold=True)
     fuente_normal  = pygame.font.SysFont("Arial", 16)
     fuente_boton   = pygame.font.SysFont("Arial", 16, bold=True)
+    fuente_chica   = pygame.font.SysFont("Arial", 14, bold=True)
 
     MSGS = {
         "usuario": ("¡Ganaste!", (100, 230, 100)),
@@ -1059,8 +1075,12 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
     }
     msg, color_msg = MSGS.get(ganador, ("Fin de partida", COLOR_TEXTO))
 
-    btn_nuevo = Boton((ANCHO // 2 - 230, ALTO - 130, 200, 50), "Jugar de nuevo", fuente_boton)
-    btn_salir  = Boton((ANCHO // 2 + 30,  ALTO - 130, 200, 50), "Salir",           fuente_boton)
+    btn_nuevo = Boton((ANCHO // 2 - 230, ALTO - 70, 200, 50), "Jugar de nuevo", fuente_boton)
+    btn_salir  = Boton((ANCHO // 2 + 30,  ALTO - 70, 200, 50), "Salir",           fuente_boton)
+
+    hay_graficos = bool(dict_usu) or bool(dict_cpu)
+    btn_grafico_usu = Boton((ANCHO // 2 - 310, 360, 300, 44), "Ver gráfico: tus acciones", fuente_chica)
+    btn_grafico_cpu = Boton((ANCHO // 2 +  10, 360, 300, 44), "Ver gráfico: acciones CPU", fuente_chica)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
@@ -1074,6 +1094,16 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
             if btn_salir.fue_clickeado(evento):
                 return False
 
+            if hay_graficos:
+                btn_grafico_usu.actualizar_hover(mouse_pos)
+                btn_grafico_cpu.actualizar_hover(mouse_pos)
+                if dict_usu and btn_grafico_usu.fue_clickeado(evento):
+                    # Igual que en el CLI: abre una ventana de matplotlib (bloqueante
+                    # hasta que se cierre) con el porcentaje de acciones del usuario.
+                    grafico_torta(dict_usu, "Porcentaje de acciones del Usuario")
+                if dict_cpu and btn_grafico_cpu.fue_clickeado(evento):
+                    grafico_torta(dict_cpu, "Porcentaje de acciones de la CPU")
+
         pantalla.fill(COLOR_FONDO)
 
         # Panel central
@@ -1082,16 +1112,26 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None):
 
         dibujar_texto(pantalla, msg, fuente_titulo, color_msg, ANCHO // 2, 120, centrado=True)
 
-        if promedio is not None:
+        if promedio is not None and mejor_ronda is not None and mejor_ronda[1] != 0:
             dibujar_texto(pantalla, f"Promedio de golpes por combate: {promedio:.1f}",
                           fuente_cat, COLOR_TEXTO, ANCHO // 2, 220, centrado=True)
-        if mejor_ronda is not None:
             golpes, num = mejor_ronda
             dibujar_texto(pantalla, f"Mejor combate: {golpes} golpes (pokémon #{num})",
                           fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 265, centrado=True)
+        else:
+            dibujar_texto(pantalla, "No derrotaste a ningún pokémon en esta partida.",
+                          fuente_normal, COLOR_SUBTEXTO, ANCHO // 2, 240, centrado=True)
+
+        if hay_graficos:
+            dibujar_texto(pantalla, "Análisis de acciones de la batalla:", fuente_normal,
+                          COLOR_SUBTEXTO, ANCHO // 2, 320, centrado=True)
+            if dict_usu:
+                btn_grafico_usu.dibujar(pantalla)
+            if dict_cpu:
+                btn_grafico_cpu.dibujar(pantalla)
 
         dibujar_texto(pantalla, "¿Querés jugar de nuevo?", fuente_normal, COLOR_SUBTEXTO,
-                      ANCHO // 2, 340, centrado=True)
+                      ANCHO // 2, ALTO - 130, centrado=True)
         btn_nuevo.dibujar(pantalla)
         btn_salir.dibujar(pantalla)
 
@@ -1223,12 +1263,17 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
     # Log persistente que se va llenando durante TODA la partida (no se reinicia entre rondas)
     log_global = []
 
+    # Diccionarios de conteo de acciones — igual que dict_usu/dict_cpu del CLI original,
+    # se usan al final para los gráficos de torta (analizar_datos.grafico_torta)
+    dict_usu = {}
+    dict_cpu = {}
+
     # 3. Bucle principal de batalla
     while True:
         res = pantalla_batalla(
             pantalla, poke_usu, poke_compu,
             lista_eventos, puntos_usu, puntos_compu, log_global,
-            ambiente=ambiente
+            dict_usu, dict_cpu, ambiente=ambiente
         )
         if res.get("cerrado"):
             return None
@@ -1238,9 +1283,16 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
         puntos_usu   = res["puntos_usu"]
         puntos_compu = res["puntos_compu"]
 
-        # Estadísticas simples a partir del log acumulado
-        ataques = sum(1 for txt, _ in log_global if "⚔" in txt or "✨" in txt)
-        info_rondas.append([ataques, not res["usu_murio"]])
+        # Estadísticas por ronda — replica exactamente la lógica de funciones.partida():
+        # solo se registra una entrada cuando algún pokémon muere en la ronda.
+        # El booleano es True salvo que SOLO haya muerto el pokémon del usuario.
+        if res["usu_murio"] or res["compu_murio"]:
+            if "atacar" in dict_usu:
+                golpes = dict_usu["atacar"] + dict_usu.get("especial", 0)
+            else:
+                golpes = 0
+            gano_usu = not (res["usu_murio"] and not res["compu_murio"])
+            info_rondas.append([golpes, gano_usu])
 
         usu_sin_pokes   = res["usu_murio"]   and len(bench_usu)   == 0
         compu_sin_pokes = res["compu_murio"]  and len(bench_compu) == 0
@@ -1289,7 +1341,7 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
         prom, mejor = 0, (0, 0)
 
     # 5. Pantalla final
-    seguir = pantalla_final(pantalla, ganador, prom, mejor)
+    seguir = pantalla_final(pantalla, ganador, prom, mejor, dict_usu, dict_cpu)
     return "nuevo" if seguir else "salir"
 
 
