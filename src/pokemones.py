@@ -48,45 +48,27 @@ def rango_atributos(diccio):
     '''
     diccio["hp"]=5
 
-    if diccio['ataque'] < 80:
+    suma= diccio['ataque']+diccio['defensa']+diccio['special_attack']+diccio['adaptabilidad']+diccio['speed']
+
+    if suma<300:
         diccio['ataque']=1
-    elif 80<=diccio['ataque']<=110:
-        diccio['ataque']=1.5
-    else:
-        diccio['ataque']=2
-    
-
-    if diccio['defensa'] < 80:
         diccio['defensa']=0.75
-    elif 80<=diccio['defensa']<=110:
-        diccio['defensa']=0.5
-    else:
-        diccio['defensa']=0.25
-
-
-    if diccio["special_attack"] < 60:
-        diccio["special_attack"]=0.25
-
-    elif 60<=diccio["special_attack"]<=80:
-        diccio["special_attack"]=0.5
-
-    else:
-        diccio["special_attack"]=1
-    
-    
-    if diccio['speed']< 80:
+        diccio['special_attack']=0.25
+        diccio['adaptabilidad']=0
         diccio['speed']=0.25
-    elif 80<=diccio['speed']<=110:
+    elif 300<=suma<=400:
+        diccio['ataque']=1.5
+        diccio['defensa']=0.5
+        diccio['special_attack']=0.5
+        diccio['adaptabilidad']=0.5
         diccio['speed']=0.5
     else:
+        diccio['ataque']=2
+        diccio['defensa']=0.25
+        diccio['special_attack']=1
+        diccio['adaptabilidad']=1
         diccio['speed']=0.75
     
-    if diccio["adaptabilidad"] < 60:
-        diccio["adaptabilidad"]=0
-    elif 60<=diccio["adaptabilidad"]<=80:
-        diccio["adaptabilidad"]=0.5
-    else:
-        diccio["adaptabilidad"]=1
     return diccio
 
 def crear_pokemon(pokemon):
