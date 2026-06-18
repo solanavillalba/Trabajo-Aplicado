@@ -43,11 +43,15 @@ def grafico_torta(diccionario, titulo):
     """
     Esta función genera un gráfico de torta a partir del registro
     de acciones realizadas durante la batalla.
-
+     
     Parámetro:
     diccionario (dict): registro de acciones
     titulo (str): título del gráfico
+        Parámetro:
+        diccionario (dict): registro de acciones
+        titulo (str): título del gráfico
     """
+
     acciones = []
 
     for accion in diccionario.keys():
@@ -55,7 +59,6 @@ def grafico_torta(diccionario, titulo):
 
     cantidades = []
 
-    
     for cantidad in diccionario.values():
         cantidades.append(cantidad)
 
@@ -78,8 +81,6 @@ def grafico_torta(diccionario, titulo):
     plt.figure()
 
     plt.pie(cantidades, labels=acciones, colors=colores, autopct="%1.0f%%")
-
-    # el autopct es funcion de matplotlib para que se muestren los porcentajess
 
     plt.title(titulo)
     plt.show()
