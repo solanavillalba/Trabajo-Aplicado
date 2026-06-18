@@ -149,8 +149,8 @@ CATEGORIAS = ["Novatos", "Medios", "Altos"]
 
 LISTA_POKEMONES = {
     "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-    "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
-    "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]}
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
+        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]}
 
 ATRIBUTOS = ["ataque", "velocidad", "defensa", "adaptabilidad"]
 PARES_ATRIBUTOS = {
@@ -1469,13 +1469,13 @@ if __name__ == "__main__":
 
     list_poke = {
         "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
         "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]
     }
     list_cpu = {
         "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] 
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
+        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]
     }
 
     print("Cargando pokemones...")

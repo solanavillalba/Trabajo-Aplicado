@@ -16,7 +16,7 @@ while jugar_de_nuevo==True:
 
     list_poke = {
         "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
         "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
 
     pokemones=0
@@ -101,7 +101,7 @@ while jugar_de_nuevo==True:
 
     list_cpu = {
         "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
         "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
 
     pokemones_cpu={}
