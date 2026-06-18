@@ -725,9 +725,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, 40, 90, 260, poke_usu.vida, 5, fuente_normal,
                     poke_usu.nombre, invertido=False)
 
-        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.0, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     2.0, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   2.0, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, 40, 245, 80, poke_usu.ataque,      2.15, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, 40, 265, 80, poke_usu.defensa,     0.90, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, 40, 285, 80, poke_usu.velocidad,   0.90, COLOR_SPD, fuente_pequeña, "SPD")
 
         dibujar_texto(pantalla, f"Racha: {puntos_usu}/3", fuente_pequeña,
                       COLOR_BORDE_SEL if puntos_usu >= 3 else COLOR_SUBTEXTO, 40, 310)
@@ -745,9 +745,9 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         _barra_vida(pantalla, ANCHO - 300, 90, 260, poke_compu.vida, 5, fuente_normal,
                     poke_compu.nombre, invertido=True)
 
-        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
-        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
-        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
+        barra_stat(pantalla, ANCHO - 180, 245, 80, poke_compu.ataque,    2.15, COLOR_ATK, fuente_pequeña, "ATK")
+        barra_stat(pantalla, ANCHO - 180, 265, 80, poke_compu.defensa,   0.90, COLOR_DEF, fuente_pequeña, "DEF")
+        barra_stat(pantalla, ANCHO - 180, 285, 80, poke_compu.velocidad, 0.90, COLOR_SPD, fuente_pequeña, "SPD")
         dibujar_texto(pantalla, f"Racha CPU: {puntos_compu}/3", fuente_pequeña, COLOR_SUBTEXTO,
                       ANCHO - 180, 310)
 
@@ -1028,10 +1028,10 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
                 spr_s = pygame.transform.scale(spr, (80, 80))
                 pantalla.blit(spr_s, (pr.x + 10, pr.y + 40))
             dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 100, pr.y + 10)
-            barra_stat(pantalla, pr.x + 100, pr.y + 40, 100, pok.ataque,       2.0, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, pr.x + 100, pr.y + 62, 100, pok.defensa,      2.0, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, pr.x + 100, pr.y + 84, 100, pok.velocidad,    2.0, COLOR_SPD, fuente_pequeña, "SPD")
-            barra_stat(pantalla, pr.x + 100, pr.y + 106, 100, pok.adaptabilidad, 2.0, COLOR_ADP, fuente_pequeña, "ADP")
+            barra_stat(pantalla, pr.x + 100, pr.y + 40, 100, pok.ataque,       2.15, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 100, pr.y + 62, 100, pok.defensa,      0.90, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 100, pr.y + 84, 100, pok.velocidad,    0.90, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, pr.x + 100, pr.y + 106, 100, pok.adaptabilidad, 1.00, COLOR_ADP, fuente_pequeña, "ADP")
             dibujar_texto(pantalla, f"HP: {pok.vida:.1f}", fuente_normal, COLOR_SPD, pr.x + 100, pr.y + 132)
 
         dibujar_texto(pantalla, "Elegí tu próximo pokémon:", fuente_cat, COLOR_SUBTEXTO,
@@ -1207,9 +1207,9 @@ def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
             if spr:
                 pantalla.blit(pygame.transform.scale(spr, (64, 64)), (pr.x + 6, pr.y + 42))
             dibujar_texto(pantalla, pok.nombre.capitalize(), fuente_cat, COLOR_TEXTO, pr.x + 76, pr.y + 8)
-            barra_stat(pantalla, pr.x + 76, pr.y + 38, 90, pok.ataque,    2.0, COLOR_ATK, fuente_pequeña, "ATK")
-            barra_stat(pantalla, pr.x + 76, pr.y + 58, 90, pok.defensa,   2.0, COLOR_DEF, fuente_pequeña, "DEF")
-            barra_stat(pantalla, pr.x + 76, pr.y + 78, 90, pok.velocidad, 2.0, COLOR_SPD, fuente_pequeña, "SPD")
+            barra_stat(pantalla, pr.x + 76, pr.y + 38, 90, pok.ataque,    2.15, COLOR_ATK, fuente_pequeña, "ATK")
+            barra_stat(pantalla, pr.x + 76, pr.y + 58, 90, pok.defensa,   0.90, COLOR_DEF, fuente_pequeña, "DEF")
+            barra_stat(pantalla, pr.x + 76, pr.y + 78, 90, pok.velocidad, 0.90, COLOR_SPD, fuente_pequeña, "SPD")
 
         for b in botones:
             b.dibujar(pantalla)
