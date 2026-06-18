@@ -148,9 +148,9 @@ class Boton:
 CATEGORIAS = ["Novatos", "Medios", "Altos"]
 
 LISTA_POKEMONES = {
-    "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]}
+    "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
+    "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
+    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]}
 
 ATRIBUTOS = ["ataque", "velocidad", "defensa", "adaptabilidad"]
 PARES_ATRIBUTOS = {
@@ -1468,14 +1468,14 @@ if __name__ == "__main__":
     from src.clases import Ambiente, Evento_aleatorio
 
     list_poke = {
-        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]
+        "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
+        "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
+        "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]
     }
     list_cpu = {
-        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"]
+        "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
+    "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
+    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]
     }
 
     print("Cargando pokemones...")

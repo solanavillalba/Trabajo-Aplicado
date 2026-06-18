@@ -15,9 +15,9 @@ jugar_de_nuevo=True
 while jugar_de_nuevo==True:
 
     list_poke = {
-        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
+        "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
+    "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
+    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"] }
 
     pokemones=0
 
@@ -100,9 +100,9 @@ while jugar_de_nuevo==True:
         pok_usuario.append(pokemon_elegido) #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
     list_cpu = {
-        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
-        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmeleon","⁠⁠luxio"],
-        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
+       "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
+    "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
+    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"] }
 
     pokemones_cpu={}
 
