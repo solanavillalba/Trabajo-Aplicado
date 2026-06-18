@@ -150,7 +150,7 @@ CATEGORIAS = ["Novatos", "Medios", "Altos"]
 LISTA_POKEMONES = {
     "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
     "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
-    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]}
+    "Altos": ["milotic", "hippowdon", "arcanine", "jolteon"]}
 
 ATRIBUTOS = ["ataque", "velocidad", "defensa", "adaptabilidad"]
 PARES_ATRIBUTOS = {
@@ -385,7 +385,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
             barra_stat(pantalla, COL2_X, info_rect.y + 92,  BAR_W, poke_mostrar.adaptabilidad, 1.00, COLOR_ADP, fuente_pequeña, "ADP")
 
             # Vida
-            dibujar_texto(pantalla, f"HP: {poke_mostrar.vida}  |  Sp.Atk: {poke_mostrar.special_attack}",
+            dibujar_texto(pantalla, f"Vida: {poke_mostrar.vida}  |  Sp.Atk: {poke_mostrar.special_attack}",
                           fuente_pequeña, COLOR_SUBTEXTO, tx, info_rect.y + 128)
 
         else:
@@ -654,7 +654,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         """
         Dibuja la barra de vida de un pokémon.
 
-        - HP se muestra como porcentaje (vida_max = 100%).
+        - Vida se muestra como porcentaje (vida_max = 100%).
         - Si vida_actual > vida_max, el excedente se representa en dorado
           superpuesto al final de la barra, al estilo de los juegos de lucha.
         """
@@ -669,14 +669,14 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         else:
             col_base = (255, 60, 60)
 
-        # Texto: HP como porcentaje (5 HP = 100 %, 6 HP = 120 %, etc.)
+        # Texto: Vida como porcentaje (5 Vida = 100 %, 6 Vida = 120 %, etc.)
         pct = round(vida_actual / vida_max * 100)
-        label_hp = f"{nombre.capitalize()}  HP: {pct}%"
+        label_Vida = f"{nombre.capitalize()}  Vida: {pct}%"
         if invertido:
-            txt = fuente_p.render(label_hp, True, COLOR_TEXTO)
+            txt = fuente_p.render(label_Vida, True, COLOR_TEXTO)
             sup.blit(txt, (x + ancho - txt.get_width(), y - 18))
         else:
-            dibujar_texto(sup, label_hp, fuente_p, COLOR_TEXTO, x, y - 18)
+            dibujar_texto(sup, label_Vida, fuente_p, COLOR_TEXTO, x, y - 18)
 
         # Fondo de la barra
         bg = pygame.Rect(x, y, ancho, 14)
@@ -687,7 +687,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
         if fill_w > 0:
             pygame.draw.rect(sup, col_base, (x, y, fill_w, 14), border_radius=7)
 
-        # Barra de excedente (HP > vida_max) superpuesta al final, en dorado
+        # Barra de excedente (Vida > vida_max) superpuesta al final, en dorado
         if vida_actual > vida_max:
             excedente   = vida_actual - vida_max
             overflow_w  = min(ancho, max(4, int(excedente / vida_max * ancho)))
@@ -873,7 +873,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             afectado.vida = round(max(0, afectado.vida), 1)
             quien = "Tu " + afectado.nombre if afectado is poke_usu else "CPU " + afectado.nombre
             signo = "+" if ev.vida > 0 else ""
-            log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}) → HP:{afectado.vida}")
+            log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}) → Vida:{afectado.vida}")
             if afectado.vida <= 0:
                 return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
@@ -885,7 +885,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         if poke_compu.vida <= 0:
             log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
         else:
-            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} Vida:{poke_compu.vida}")
             puntos_usu += 1
 
     elif accion_cpu == "especial" and accion_usu != "especial":
@@ -895,7 +895,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         if poke_usu.vida <= 0:
             log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
         else:
-            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} Vida:{poke_usu.vida}")
             puntos_compu += 1
 
     elif accion_usu == "especial" and accion_cpu == "especial":
@@ -904,17 +904,17 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - d1), 1)
         poke_usu.vida   = round(max(0, poke_usu.vida   - d2), 1)
         puntos_usu = puntos_compu = 0
-        log.append(f"¡Doble ESPECIAL! Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"¡Doble ESPECIAL! Tu {poke_usu.nombre} Vida:{poke_usu.vida}  |  CPU {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "atacar":
         poke_usu.vida   = round(max(0, poke_usu.vida   - poke_compu.ataque), 1)
         poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque),   1)
         puntos_usu   += 1
         puntos_compu += 1
-        log.append(f"Ambos atacan → Tu {poke_usu.nombre} HP:{poke_usu.vida}  |  CPU {poke_compu.nombre} HP:{poke_compu.vida}")
+        log.append(f"Ambos atacan → Tu {poke_usu.nombre} Vida:{poke_usu.vida}  |  CPU {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu in ("esquivar", "defender") and accion_cpu in ("esquivar", "defender"):
-        log.append("Ninguno atacó. Sin cambios en HP.")
+        log.append("Ninguno atacó. Sin cambios en Vida.")
 
     elif accion_usu == "atacar" and accion_cpu == "defender":
         dano = round(poke_usu.ataque * poke_compu.defensa, 1)
@@ -923,7 +923,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             log.append(f"⚔ Tu {poke_usu.nombre} atacó → ¡{poke_compu.nombre} murió!")
         else:
             puntos_usu += 1
-            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} HP:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "esquivar":
         esquiva = random.choices([True, False],
@@ -936,7 +936,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
                 log.append(f"No esquivó → ¡{poke_compu.nombre} murió!")
             else:
                 puntos_usu += 1
-                log.append(f"No esquivó → {poke_compu.nombre} HP:{poke_compu.vida}")
+                log.append(f"No esquivó → {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu == "defender" and accion_cpu == "atacar":
         dano = round(poke_compu.ataque * poke_usu.defensa, 1)
@@ -945,7 +945,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             log.append(f"Tu {poke_usu.nombre} se defendió pero murió.")
         else:
             puntos_compu += 1
-            log.append(f"Tu {poke_usu.nombre} se defendió → HP:{poke_usu.vida}")
+            log.append(f"Tu {poke_usu.nombre} se defendió → Vida:{poke_usu.vida}")
 
     elif accion_usu == "esquivar" and accion_cpu == "atacar":
         esquiva = random.choices([True, False],
@@ -958,7 +958,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
                 log.append(f"No esquivaste → ¡Tu {poke_usu.nombre} murió!")
             else:
                 puntos_compu += 1
-                log.append(f"No esquivaste → tu {poke_usu.nombre} HP:{poke_usu.vida}")
+                log.append(f"No esquivaste → tu {poke_usu.nombre} Vida:{poke_usu.vida}")
 
     return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
@@ -1031,7 +1031,7 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
             barra_stat(pantalla, pr.x + 100, pr.y + 62, 100, pok.defensa,      0.90, COLOR_DEF, fuente_pequeña, "DEF")
             barra_stat(pantalla, pr.x + 100, pr.y + 84, 100, pok.velocidad,    0.90, COLOR_SPD, fuente_pequeña, "SPD")
             barra_stat(pantalla, pr.x + 100, pr.y + 106, 100, pok.adaptabilidad, 1.00, COLOR_ADP, fuente_pequeña, "ADP")
-            dibujar_texto(pantalla, f"HP: {pok.vida:.1f}", fuente_normal, COLOR_SPD, pr.x + 100, pr.y + 132)
+            dibujar_texto(pantalla, f"Vida: {pok.vida:.1f}", fuente_normal, COLOR_SPD, pr.x + 100, pr.y + 132)
 
         dibujar_texto(pantalla, "Elegí tu próximo pokémon:", fuente_cat, COLOR_SUBTEXTO,
                       ANCHO // 2, 310, centrado=True)
@@ -1470,12 +1470,12 @@ if __name__ == "__main__":
     list_poke = {
         "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
         "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
-        "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]
+        "Altos": ["milotic", "hippowdon", "arcanine", "jolteon"]
     }
     list_cpu = {
         "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
     "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
-    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"]
+    "Altos": ["milotic", "hippowdon", "arcanine", "jolteon"]
     }
 
     print("Cargando pokemones...")
