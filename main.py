@@ -3,7 +3,6 @@ import src.clases as c
 import src.pokemones as p
 import src.analizar_datos as a
 import src.funciones as f
-import sys
 
 
 
@@ -15,10 +14,10 @@ jugar_de_nuevo=True
  
 while jugar_de_nuevo==True:
 
-    list_poke = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
-        "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
-        "Medios": ["vaporeon","jolteon","pikachu","eevee"],
-        "Altos": ["psyduck","charmander","charizard","rattata"] }
+    list_poke = {
+        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
+        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
 
     pokemones=0
 
@@ -100,10 +99,10 @@ while jugar_de_nuevo==True:
         pokemon_elegido.cambiar_atributo(atributo, atributo2, 0.15)
         pok_usuario.append(pokemon_elegido) #VERIFICAR STRING UNA VEZ Q SE CREE BIEN EL OBJETO
 
-    list_cpu = { #ESTA SERIA EL DICCIONARIO CREADO POR LA API
-        "Novatos": ["dragonite","tyranitar","metagross","arcanine"],
-        "Medios": ["vaporeon","jolteon","pikachu","eevee"],
-        "Altos": ["psyduck","charmander","charizard","rattata"] }
+    list_cpu = {
+        "Novatos": ["magikarp", "sandshrew", "⁠⁠tepig", "pikachu"],
+        "Medios": ["wartortle", "⁠⁠marowak","⁠⁠charmaleon","⁠⁠luxio"],
+        "Altos": ["gyarados","g⁠archomp", "⁠⁠arcanine", "jolteon"] }
 
     pokemones_cpu={}
 
