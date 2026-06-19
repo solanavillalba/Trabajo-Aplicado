@@ -1,7 +1,7 @@
 from src.clases import Pokemon
 from data.api import poke_api
 
-def rango_atributos(diccio):
+def rango_atributos(dicci):
     '''
     Convierte los valores de los datos del pokemon sacados de la API a rangos entre 0 y 2. Esto es con el objetivo de diferenciar pokemones de niveles bajos, medios y altos.
     Parámetros:
@@ -12,6 +12,7 @@ def rango_atributos(diccio):
     Retorna: dict
     Retorna el mismo diccionario con los valores modificados al rango de 0 y 2.
     '''
+    diccio = dicci.copy()
     diccio["hp"]=5
     categoria=''
     rangos={}
@@ -35,6 +36,7 @@ def rango_atributos(diccio):
             'defensa':(0.05,0.22),
             'speed':(0.05,0.22),
             'adaptabilidad':(0.05,0.25)}
+        
     elif categoria=='Medios':
         rangos={
             'ataque': (0.70,1.30),
@@ -42,6 +44,7 @@ def rango_atributos(diccio):
             'defensa':(0.25,0.48),
             'speed':(0.25,0.48),
             'adaptabilidad':(0.30,0.55)}
+        
     else:
          rangos = {
             'ataque': (1.40, 2.00),
