@@ -309,8 +309,6 @@ def pantalla_introduccion(pantalla):
                         scroll_y = min(max_scroll, scroll_y + paso)
                 else:
                     avanzar = True
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                avanzar = True
             if evento.type == pygame.MOUSEWHEEL:
                 scroll_y = max(0, min(max_scroll, scroll_y - evento.y * 28))
 
@@ -318,9 +316,9 @@ def pantalla_introduccion(pantalla):
         pantalla.fill(COLOR_FONDO)
 
         dibujar_texto(pantalla, "Pokémon Battle", fuente_titulo, COLOR_TEXTO,
-                      ANCHO // 2, 26, centrado=True)
+                      ANCHO // 2, 10, centrado=True)
         dibujar_texto(pantalla, "Guía rápida antes de empezar", fuente_subtitulo, COLOR_SUBTEXTO,
-                      ANCHO // 2, 64, centrado=True)
+                      ANCHO // 2, 48, centrado=True)
 
         panel_rect = pygame.Rect(PANEL_X, PANEL_Y, PANEL_W, PANEL_H)
         dibujar_panel(pantalla, panel_rect, COLOR_PANEL, radio=16, borde=COLOR_BORDE, grosor_borde=2)
@@ -359,12 +357,12 @@ def pantalla_introduccion(pantalla):
         # ── Indicación para avanzar ──
         pulso = 150 + int(80 * abs((pygame.time.get_ticks() % 1400) / 700 - 1))
         color_pulso = (pulso, pulso - 30 if pulso > 60 else 0, 40)
-        msg = "Haz clic o pulsá cualquier tecla para continuar"
+        msg = "Pulsá cualquier tecla para continuar"
         dibujar_texto(pantalla, msg, fuente_chica, COLOR_BORDE_SEL,
                       ANCHO // 2, ALTO - 34, centrado=True)
         if max_scroll > 0:
-            dibujar_texto(pantalla, "↑ ↓ / rueda del mouse para desplazarte", fuente_chica,
-                          COLOR_SUBTEXTO, ANCHO // 2, PANEL_Y - 26, centrado=True)
+            dibujar_texto(pantalla, "Utiliza la rueda del mouse para desplazarte", fuente_chica,
+                          COLOR_SUBTEXTO, ANCHO // 2, PANEL_Y - 21, centrado=True)
 
         pygame.display.flip()
         clock.tick(60)
