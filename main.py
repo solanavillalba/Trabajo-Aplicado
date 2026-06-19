@@ -65,8 +65,7 @@ while jugar_de_nuevo==True:
 
     #----------------------------------------------------
     #CREACION LISTA DE USUARIO Y CPU DE POKEMONES
-    print("Cargando Pokemones....")
-    print("Es hora de conformar tu equipo")
+    print("\nEs hora de conformar tu equipo...")
     pok_usuario = []
     pok_cpu = []
 
