@@ -27,6 +27,7 @@ def rango_atributos(diccio):
         categoria='Altos'
     
     max_base=140
+
     if categoria=='Novatos':
         rangos={
             'ataque': (0.10,0.60),
@@ -51,7 +52,7 @@ def rango_atributos(diccio):
         }
 
     for atributo,(mini,maxi) in rangos.items():
-        valor_base=(diccio[atributo],0)
+        valor_base= diccio.get(atributo, 0)
         valor_escalado=mini+(valor_base/max_base)*(maxi-mini)
         valor_redondeado=round(valor_escalado,2)
 
