@@ -1158,7 +1158,7 @@ def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
     for pok in equipo_usu + equipo_compu:
         sprites_cache[pok.nombre.lower()] = obtener_sprite(pok.nombre)
 
-    CARD_W, CARD_H = 210, 50
+    CARD_W, CARD_H = 270, 50
     total_w = len(equipo_usu) * CARD_W + (len(equipo_usu) - 1) * 16
     sx = (ANCHO - total_w) // 2
     botones = []
@@ -1305,8 +1305,9 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
                 break
             else:
                 poke_usu, poke_compu = res_desempate
-                bench_usu   = [p for p in equipo_usu   if p is not poke_usu]
-                bench_compu = [p for p in equipo_compu if p is not poke_compu]
+                # Una sola ronda: si un pokemon muere no hay reemplazos
+                bench_usu   = []
+                bench_compu = []
                 puntos_usu = puntos_compu = 0
                 continue
 
