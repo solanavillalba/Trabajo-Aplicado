@@ -190,10 +190,10 @@ def pantalla_seleccion(pantalla, pokemones_obj):
     fuente_boton   = pygame.font.SysFont("Arial", 15, bold=True)
 
     # ── Estado de la pantalla ──
-    paso_actual   = 0          # 0,1,2 → qué categoría estamos eligiendo
+    paso_actual   = 0          # 0,1,2 : qué categoría estamos eligiendo
     selecciones   = {}         # {"Novatos": obj_pokemon, ...}
     atrib_sel     = {}         # {"Novatos": "ataque", ...}
-    sprites_cache = {}         # nombre → Surface o None
+    sprites_cache = {}         # nombre : Surface o None
 
     # Precargamos sprites (en hilo principal para no complicar)
     def cargar_sprite_si_falta(nombre):
@@ -207,7 +207,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
     total_w        = 4 * CARD_W + 3 * CARD_GAP
     start_x        = (ANCHO - total_w) // 2
 
-    botones_pokemones = {}   # cat → [Boton, ...]
+    botones_pokemones = {}   # cat : [Boton, ...]
     for cat in CATEGORIAS:
         bots = []
         for i, nombre in enumerate(LISTA_POKEMONES[cat]):
@@ -228,7 +228,7 @@ def pantalla_seleccion(pantalla, pokemones_obj):
         botones_atributos.append(Boton((rx, 490, ATR_W, ATR_H), atr.capitalize(), fuente_boton, tag=atr))
 
     # ── Botón Confirmar ──
-    btn_confirmar = Boton((ANCHO // 2 - 100, 570, 200, 46), "Confirmar →", fuente_boton)
+    btn_confirmar = Boton((ANCHO // 2 - 100, 570, 200, 46), "Confirmar", fuente_boton)
 
     # ── Sprite actual ──
     sprite_actual   = None
@@ -416,13 +416,13 @@ def pantalla_seleccion(pantalla, pokemones_obj):
             # Mostrar el par afectado
             if atrib_sel_actual:
                 par = PARES_ATRIBUTOS[atrib_sel_actual]
-                msg = f"↑ {atrib_sel_actual.capitalize()} +0.15   |   ↓ {par.capitalize()} -0.15"
+                msg = f" {atrib_sel_actual.capitalize()} +0.15   |    {par.capitalize()} -0.15"
                 dibujar_texto(pantalla, msg, fuente_pequeña, COLOR_SUBTEXTO, ANCHO // 2, 540, centrado=True)
 
         # ── Botón Confirmar ──
         puede_confirmar = (poke_sel_actual is not None and atrib_sel_actual is not None)
         if puede_confirmar:
-            label = "Confirmar →" if paso_actual < 2 else "¡Iniciar batalla! →"
+            label = "Confirmar" if paso_actual < 2 else "¡Iniciar batalla!"
             btn_confirmar.texto = label
             btn_confirmar.dibujar(pantalla)
         else:
@@ -477,7 +477,7 @@ def pantalla_elegir_inicial(pantalla, equipo_usu, ambiente):
         sprites_cache[pok.nombre.lower()] = obtener_sprite(pok.nombre)
 
     seleccion = None
-    btn_ok = Boton((ANCHO // 2 - 110, 490, 220, 46), "¡A pelear! →", fuente_boton)
+    btn_ok = Boton((ANCHO // 2 - 110, 490, 220, 46), "¡A pelear!", fuente_boton)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
@@ -625,7 +625,7 @@ def pantalla_batalla(pantalla, poke_usu, poke_compu, eventos_random,
     bg_imagen = None
     if ambiente is not None:
         ruta = IMAGENES_AMBIENTE.get(ambiente.nombre)
-        print(f"[DEBUG] Ambiente: '{ambiente.nombre}'  →  ruta: {ruta}")
+        print(f"[DEBUG] Ambiente: '{ambiente.nombre}':  ruta: {ruta}")
         print(f"[DEBUG] Archivo existe: {os.path.exists(ruta) if ruta else False}")
         if ruta and os.path.exists(ruta):
             try:
@@ -873,7 +873,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             afectado.vida = round(max(0, afectado.vida), 1)
             quien = "Tu " + afectado.nombre if afectado is poke_usu else "CPU " + afectado.nombre
             signo = "+" if ev.vida > 0 else ""
-            log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}) → Vida:{afectado.vida}")
+            log.append(f"Evento: {quien} recibió {ev.nombre} (vida {signo}{ev.vida}): Vida:{afectado.vida}")
             if afectado.vida <= 0:
                 return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
@@ -883,9 +883,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
         puntos_usu = 0
         if poke_compu.vida <= 0:
-            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → ¡{poke_compu.nombre} murió!")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL: ¡{poke_compu.nombre} murió!")
         else:
-            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL → {poke_compu.nombre} Vida:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} usó ESPECIAL: {poke_compu.nombre} Vida:{poke_compu.vida}")
             puntos_usu += 1
 
     elif accion_cpu == "especial" and accion_usu != "especial":
@@ -893,9 +893,9 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_usu.vida = round(max(0, poke_usu.vida - dano), 1)
         puntos_compu = 0
         if poke_usu.vida <= 0:
-            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → ¡Tu {poke_usu.nombre} murió!")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL: ¡Tu {poke_usu.nombre} murió!")
         else:
-            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL → tu {poke_usu.nombre} Vida:{poke_usu.vida}")
+            log.append(f"CPU {poke_compu.nombre} usó ESPECIAL: tu {poke_usu.nombre} Vida:{poke_usu.vida}")
             puntos_compu += 1
 
     elif accion_usu == "especial" and accion_cpu == "especial":
@@ -911,7 +911,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque),   1)
         puntos_usu   += 1
         puntos_compu += 1
-        log.append(f"Ambos atacan → Tu {poke_usu.nombre} Vida:{poke_usu.vida}  |  CPU {poke_compu.nombre} Vida:{poke_compu.vida}")
+        log.append(f"Ambos atacan: Tu {poke_usu.nombre} Vida:{poke_usu.vida}  |  CPU {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu in ("esquivar", "defender") and accion_cpu in ("esquivar", "defender"):
         log.append("Ninguno atacó. Sin cambios en Vida.")
@@ -920,10 +920,10 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         dano = round(poke_usu.ataque * poke_compu.defensa, 1)
         poke_compu.vida = round(max(0, poke_compu.vida - dano), 1)
         if poke_compu.vida <= 0:
-            log.append(f"⚔ Tu {poke_usu.nombre} atacó → ¡{poke_compu.nombre} murió!")
+            log.append(f"Tu {poke_usu.nombre} atacó: ¡{poke_compu.nombre} murió!")
         else:
             puntos_usu += 1
-            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) → {poke_compu.nombre} Vida:{poke_compu.vida}")
+            log.append(f"Tu {poke_usu.nombre} atacó (defensa CPU activa) {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu == "atacar" and accion_cpu == "esquivar":
         esquiva = random.choices([True, False],
@@ -933,10 +933,10 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         else:
             poke_compu.vida = round(max(0, poke_compu.vida - poke_usu.ataque), 1)
             if poke_compu.vida <= 0:
-                log.append(f"No esquivó → ¡{poke_compu.nombre} murió!")
+                log.append(f"No esquivó ¡{poke_compu.nombre} murió!")
             else:
                 puntos_usu += 1
-                log.append(f"No esquivó → {poke_compu.nombre} Vida:{poke_compu.vida}")
+                log.append(f"No esquivó {poke_compu.nombre} Vida:{poke_compu.vida}")
 
     elif accion_usu == "defender" and accion_cpu == "atacar":
         dano = round(poke_compu.ataque * poke_usu.defensa, 1)
@@ -945,7 +945,7 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
             log.append(f"Tu {poke_usu.nombre} se defendió pero murió.")
         else:
             puntos_compu += 1
-            log.append(f"Tu {poke_usu.nombre} se defendió → Vida:{poke_usu.vida}")
+            log.append(f"Tu {poke_usu.nombre} se defendió: Vida:{poke_usu.vida}")
 
     elif accion_usu == "esquivar" and accion_cpu == "atacar":
         esquiva = random.choices([True, False],
@@ -955,10 +955,10 @@ def _resolver_ronda(poke_usu, poke_compu, accion_usu, eventos_random, puntos_usu
         else:
             poke_usu.vida = round(max(0, poke_usu.vida - poke_compu.ataque), 1)
             if poke_usu.vida <= 0:
-                log.append(f"No esquivaste → ¡Tu {poke_usu.nombre} murió!")
+                log.append(f"No esquivaste: ¡Tu {poke_usu.nombre} murió!")
             else:
                 puntos_compu += 1
-                log.append(f"No esquivaste → tu {poke_usu.nombre} Vida:{poke_usu.vida}")
+                log.append(f"No esquivaste: tu {poke_usu.nombre} Vida:{poke_usu.vida}")
 
     return log, poke_usu, poke_compu, puntos_usu, puntos_compu, accion_cpu
 
@@ -994,7 +994,7 @@ def pantalla_elegir_siguiente(pantalla, equipo_disponible):
         botones.append(b)
 
     seleccion = None
-    btn_ok = Boton((ANCHO // 2 - 110, 440, 220, 46), "¡A pelear! →", fuente_boton)
+    btn_ok = Boton((ANCHO // 2 - 110, 440, 220, 46), "¡A pelear!", fuente_boton)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
@@ -1168,8 +1168,8 @@ def pantalla_desempate(pantalla, equipo_usu, equipo_compu):
         botones.append(b)
 
     seleccion = None
-    btn_ok     = Boton((ANCHO // 2 - 230, 440, 210, 46), "¡Desempatar! →",  fuente_boton)
-    btn_empate = Boton((ANCHO // 2 + 20,  440, 210, 46), "🤝 Declarar empate", fuente_boton)
+    btn_ok     = Boton((ANCHO // 2 - 230, 440, 210, 46), "¡Desempatar!",  fuente_boton)
+    btn_empate = Boton((ANCHO // 2 + 20,  440, 210, 46), "Declarar empate", fuente_boton)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
@@ -1230,9 +1230,9 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
     Reproduce exactamente la lógica de funciones.partida() pero con GUI.
 
     Retorna:
-        "nuevo"  → el jugador quiere jugar de nuevo
-        "salir"  → el jugador quiere salir
-        None     → ventana cerrada
+        "nuevo"  : el jugador quiere jugar de nuevo
+        "salir"  : el jugador quiere salir
+        None     : ventana cerrada
     """
     import random
 
