@@ -1,5 +1,6 @@
 
 from src.pokemones import crear_pokemon
+import random
 
 def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario=0, puntos_cpu=0):
     """Simula una ronda de batalla entre dos pokemones, teniendo en cuenta sus atributos y eventos aleatorios que pueden afectar el resultado.
@@ -37,7 +38,7 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
     
     if accion1=="especial":
-        puntos_usuario=0import random
+        puntos_usuario=0
 
     if accion1 not in dict_usu:
         dict_usu[accion1]=1
