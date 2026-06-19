@@ -1268,9 +1268,9 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
     _G = (100, 220, 130)          # verde    — inicio
     log_global += [
         (">> 3 acciones disponibles:",                              _A),
-        ("  Atacar:   baja vida al rival segun tu ataque",         _B),
-        ("  Defender: reduce el dano recibido segun tu defensa",   _B),
-        ("  Esquivar: chance de esquivar segun tu velocidad",      _B),
+        ("  Atacar: reducir vida al rival segun tu ataque",         _B),
+        ("  Defender: reduce el daño recibido segun tu defensa",   _B),
+        ("  Esquivar: chance de esquivar totalmente o recibir el ataque según velocidad",      _B),
         ("  (Si ambos eligen lo mismo: sin ventaja para nadie)",   COLOR_SUBTEXTO),
         (">> iComienza la batalla! iBuena suerte!",                _G),
     ]
