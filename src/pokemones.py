@@ -50,7 +50,7 @@ def rango_atributos(diccio):
             'adaptabilidad': (0.60, 0.85)
         }
 
-    for atributo,(mini,maxi) in rango.items():
+    for atributo,(mini,maxi) in rangos.items():
         valor_base=(diccio[atributo],0)
         valor_escalado=mini+(valor_base/max_base)*(maxi-mini)
         valor_redondeado=round(valor_escalado,2)
