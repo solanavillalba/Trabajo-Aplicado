@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-
-
-=======
-c
->>>>>>> Stashed changes
 from src.clases import Pokemon
 from data.api import poke_api
 
