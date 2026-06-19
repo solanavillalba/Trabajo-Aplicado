@@ -83,17 +83,21 @@ Clase Ambiente: inicializa una clase de ambiente. Como atributos tiene: nombre, 
 Clase Evento_aleatorio: inicializa una clase de evento aleatorio. Como atributos tiene: nombre (del evento) y vida (a sumar o a quitar del pokemon). Como método tiene eventos donde se modifica la vida del pokémon según sea un evento afortunado (le otorga más vida) o desafortunado (le disminuye la vida).
 
 Explicación breve de las funciones principales
+
 ronda(): Simula una ronda de batalla entre dos pokemones. Le pregunta al usuario qué acción quiere realizar (ataque, defensa o esquive). Y teniendo en cuenta sus atributos y eventos aleatorios calcula el resultado de la pelea.
 partida(): Mantiene a los pokemons batallando (llama a la función ronda()) hasta que uno muera. Cuando eso sucede, el usuario o la computadora pueden elegir alguno de los otros pokemones previamente seleccionados para seguir batallando, aquel que mantuvo su pokemon con vida lo va a seguir utilizando hasta que muera. Esto continuará hasta que uno de los dos equipos se quede sin pokemones con vida.
 empate(): Si ocurre un empate (todos los pokemones de ambos equipos se encuentran sin vida), esta función se encarga de darle dos opciones al usuario. Si desea dejarlo como un empate, lo deja como un empate. Sino, da la opción de revivir a ambos equipos uno de los pokemones y volver a batallar.
+
 convertir_diccio(): Recibe un diccionario con los values que son una lista de nombres (strings) de los pokemones. Después, devuelve otro diccionario con los Pokemones ya creados como objetos.
 crear_pokemon(): Recibe el nombre de un pokemon, hace la consulta a la API, convierte los datos a rangos y devuelve un objeto Pokemon con los atributos correspondientes.
+
 rango_atributos(): Convierte los valores de los datos del pokémon sacados de la API a rangos entre 0 y 2. Esto es con el objetivo de diferenciar pokemones de niveles bajos, medios y altos.
+
 str_a_pokemones(): Recibe una lista con los nombres de los pokemones y los convierte en objetos.
+
 Resultados y gráficos
 Al final del programa, se le indicará al usuario si ganó o perdió la partida según las condiciones mencionadas anteriormente. Además, en caso de que el usuario haya derrotado como mínimo a uno de los pokemons del equipo contrario, entonces se le mostrará el promedio de la cantidad de golpes que le costó para matar a/los pokemon/s del contrincante y, también, cuál fue su mejor ronda según el pokemon del contrincante que le costó matar con la menor cantidad de golpes.
 Además, genera dos gráficos de torta con las acciones realizadas en la partida y expresadas de una forma porcentual, permitiendo analizar las decisiones tomadas. 
-Ejemplo del gráfico: 
 
 Diagramas de diseño
 https://github.com/solanavillalba/Trabajo-Aplicado/tree/main/docs/diagramas-de-flujo
