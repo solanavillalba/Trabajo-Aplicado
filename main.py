@@ -163,52 +163,7 @@ while jugar_de_nuevo==True:
     else:
         break
 
-¡Bienvenido!
-
-Tu misión será formar un equipo de 3 Pokémon y
-derrotar al equipo rival antes de que todos tus
-Pokémon sean vencidos.
-
-¿Cómo se juega?
-
-1. Selecciona un Pokémon de cada categoría:
-   • Novato
-   • Medio
-   • Alto
-
-2. Antes de comenzar la batalla podrás modificar
-   algunos atributos de tus Pokémon para adaptarlos
-   a tu estrategia. Ten en cuenta que mejorar una
-   estadística implica reducir otra.
-
-3. Se elegirá aleatoriamente un ambiente para el
-   combate:
-   🏖️ Playa
-   🌲 Bosque
-   ⛈️ Tormenta de Rayos
-   🌋 Volcán
-
-   Dependiendo de su tipo, algunos Pokémon se verán
-   beneficiados por el ambiente y otros perjudicados.
-   La adaptabilidad les permitirá resistir mejor los
-   efectos negativos.
-
-4. Elige cuál de tus Pokémon iniciará el combate.
-   La computadora hará lo mismo con uno de los suyos.
-
- Durante cada turno podrás:
-
-   ⚔️ Atacar
-      Inflige daño al rival.
-
-   🛡️ Defender
-      Reduce el daño recibido.
-
-   💨 Esquivar
-      Intenta evitar completamente un ataque.
-      La probabilidad de éxito depende de la velocidad.
-
-Ataque especial
+"¡Bienvenido!\nTu misión será formar un equipo de 3 Pokémon y derrotar al equipo rival antes de que todos tus Pokémons sean vencidos.\n¿Cómo se juega?\n1. Selecciona un Pokémon de cada categoría:\n• Novato\n• Medio\n• Alto\n2. Antes de comenzar la batalla podrás modificar algunos atributos de tus Pokémon para adaptarlos a tu estrategia. Ten en cuenta que mejorar una estadística implica reducir otra.\n3. Se elegirá aleatoriamente un ambiente para el combate:\nPlaya\nBosque\nTormenta de Rayos\nVolcán\nDependiendo de su tipo, algunos Pokémon se verán beneficiados por el ambiente y otros perjudicados. La adaptabilidad les permitirá resistir mejor los efectos negativos.\n4. Elige cuál de tus Pokémon iniciará el combate. La computadora hará lo mismo con uno de los suyos.\nDurante cada turno podrás:\nAtacar: inflige daño al rival.\nDefender:reduce el daño recibido.\nEsquivar:intenta evitar completamente un ataque. La probabilidad de éxito depende de la velocidad.\nAtaque especial
 
 Si tu Pokémon consigue 3 ataques exitosos
 consecutivos, desbloqueará un poderoso ataque
