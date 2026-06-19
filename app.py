@@ -221,7 +221,7 @@ def pantalla_introduccion(pantalla):
         ("vineta",  "Esquivar — intenta evitar el ataque por completo; la probabilidad "
                     "de éxito depende de la velocidad."),
         ("vineta",  "Ataque especial — tras 3 ataques exitosos consecutivos, desbloqueás "
-                    "un golpe poderoso según tu ataque especial."),
+                    "un golpe poderoso según tu ataque especial. Este ataque si o si te provoca su maximo daño"),
         ("texto",   "Eventos aleatorios: durante la batalla pueden ocurrir sucesos "
                     "inesperados que suban o bajen la vida de algún Pokémon, cambiando "
                     "el rumbo del combate."),
