@@ -1,0 +1,10 @@
+﻿Librerías necesarias para correr el programa:
+
+Matplotlib
+
+Requests
+
+Pygame
+
+Tutorial para instalar:
+
