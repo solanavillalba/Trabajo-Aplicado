@@ -167,6 +167,211 @@ COLOR_ATRIBUTOS = {
 }
 
 
+def pantalla_introduccion(pantalla):
+    """
+    Pantalla de bienvenida / instrucciones del juego, mostrada antes de elegir
+    el equipo. Sigue la misma estética que el resto de la app (panel oscuro,
+    borde azul eléctrico, acentos amarillo "pikachu").
+
+    Se avanza con clic o cualquier tecla. Si el contenido no entra en pantalla,
+    se puede hacer scroll con la rueda del mouse o las flechas ↑ / ↓.
+
+    Retorna True si se avanzó normalmente, o False si el usuario cerró la ventana.
+    """
+    import textwrap
+
+    clock = pygame.time.Clock()
+
+    fuente_titulo   = pygame.font.SysFont("Arial", 30, bold=True)
+    fuente_subtitulo = pygame.font.SysFont("Arial", 16, italic=True)
+    fuente_seccion  = pygame.font.SysFont("Arial", 18, bold=True)
+    fuente_normal   = pygame.font.SysFont("Arial", 15)
+    fuente_chica    = pygame.font.SysFont("Arial", 13)
+
+    # ── Contenido estructurado en bloques ──
+    # tipo: "seccion" (título de paso, en amarillo) | "texto" (párrafo normal)
+    #       "vineta"  (línea con bullet, p. ej. una categoría o acción)
+    CONTENIDO = [
+        ("seccion", "1. Armá tu equipo"),
+        ("texto",   "Seleccioná un Pokémon de cada categoría para formar tu equipo de 3:"),
+        ("vineta",  "Novato"),
+        ("vineta",  "Medio"),
+        ("vineta",  "Alto"),
+
+        ("seccion", "2. Personalizá tus atributos"),
+        ("texto",   "Antes de la batalla podrás modificar algunos atributos de tus Pokémon "
+                    "para adaptarlos a tu estrategia. Tené en cuenta que mejorar una "
+                    "estadística implica reducir otra."),
+
+        ("seccion", "3. El ambiente de combate"),
+        ("texto",   "Se elegirá aleatoriamente uno de estos escenarios:"),
+        ("vineta",  "Playa"),
+        ("vineta",  "Bosque"),
+        ("vineta",  "Tormenta de Rayos"),
+        ("vineta",  "Volcán"),
+        ("texto",   "Según su tipo, algunos Pokémon se verán beneficiados por el ambiente "
+                    "y otros perjudicados. La adaptabilidad les permite resistir mejor los "
+                    "efectos negativos."),
+
+        ("seccion", "4. La batalla"),
+        ("texto",   "Elegí cuál de tus Pokémon inicia el combate. La computadora hará lo "
+                    "mismo con uno de los suyos. En cada turno podrás:"),
+        ("vineta",  "Atacar — inflige daño al rival."),
+        ("vineta",  "Defender — reduce el daño recibido."),
+        ("vineta",  "Esquivar — intenta evitar el ataque por completo; la probabilidad "
+                    "de éxito depende de la velocidad."),
+        ("vineta",  "Ataque especial — tras 3 ataques exitosos consecutivos, desbloqueás "
+                    "un golpe poderoso según tu ataque especial."),
+        ("texto",   "Eventos aleatorios: durante la batalla pueden ocurrir sucesos "
+                    "inesperados que suban o bajen la vida de algún Pokémon, cambiando "
+                    "el rumbo del combate."),
+
+        ("seccion", "5. Cuando un Pokémon cae"),
+        ("texto",   "Si uno de tus Pokémon es derrotado, elegís otro integrante de tu "
+                    "equipo para seguir luchando. La batalla termina cuando un equipo se "
+                    "queda sin Pokémon disponibles."),
+
+        ("seccion", "6. Empate"),
+        ("texto",   "Si los últimos Pokémon de ambos equipos caen al mismo tiempo, podés "
+                    "aceptar el empate o disputar un combate de desempate."),
+
+        ("seccion", "7. Estadísticas finales"),
+        ("texto",   "Al terminar la partida vas a ver estadísticas y gráficos sobre las "
+                    "acciones realizadas durante el combate."),
+    ]
+
+    # ── Layout del panel ──
+    PANEL_W = 760
+    PANEL_X = (ANCHO - PANEL_W) // 2
+    PANEL_Y = 96
+    PANEL_H = ALTO - PANEL_Y - 60
+    PAD_X   = 36
+    WRAP_W  = PANEL_W - 2 * PAD_X
+
+    # Anchos de envoltura de texto aproximados según fuente (caracteres por línea)
+    def envolver(texto, fuente, ancho_px):
+        """Envuelve un texto en líneas que entren en ancho_px, midiendo con la fuente real."""
+        palabras = texto.split(" ")
+        lineas, actual = [], ""
+        for palabra in palabras:
+            prueba = (actual + " " + palabra).strip()
+            if fuente.size(prueba)[0] <= ancho_px:
+                actual = prueba
+            else:
+                if actual:
+                    lineas.append(actual)
+                actual = palabra
+        if actual:
+            lineas.append(actual)
+        return lineas
+
+    # ── Pre-renderizamos todas las líneas con su estilo, una sola vez ──
+    # cada item: (texto, fuente, color, indent_x, espacio_extra_arriba)
+    lineas_render = []
+    for tipo, contenido in CONTENIDO:
+        if tipo == "seccion":
+            lineas_render.append(("", None, None, 0, 10))   # espacio antes de cada sección
+            lineas_render.append((contenido, fuente_seccion, COLOR_BORDE_SEL, 0, 0))
+        elif tipo == "texto":
+            for ln in envolver(contenido, fuente_normal, WRAP_W):
+                lineas_render.append((ln, fuente_normal, COLOR_TEXTO, 0, 0))
+        elif tipo == "vineta":
+            sub_ancho = WRAP_W - 22
+            partes = envolver(contenido, fuente_normal, sub_ancho)
+            for j, ln in enumerate(partes):
+                prefijo = "•  " if j == 0 else "    "
+                lineas_render.append((prefijo + ln, fuente_normal, COLOR_SUBTEXTO, 14, 0))
+
+    LINE_H = 24
+    SECTION_GAP = 10
+
+    # Calculamos la altura total del contenido para el scroll
+    contenido_alto = 0
+    for texto, fuente, color, indent, extra in lineas_render:
+        contenido_alto += LINE_H + extra
+
+    max_scroll = max(0, contenido_alto - (PANEL_H - 40))
+    scroll_y = 0
+
+    # ── "¡Buena suerte!" como cierre fijo debajo del panel con scroll ──
+    avanzar = False
+
+    while not avanzar:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return False
+            if evento.type == pygame.KEYDOWN:
+                if evento.key in (pygame.K_UP, pygame.K_DOWN, pygame.K_PAGEUP, pygame.K_PAGEDOWN):
+                    paso = 60 if evento.key in (pygame.K_PAGEUP, pygame.K_PAGEDOWN) else 28
+                    if evento.key in (pygame.K_UP, pygame.K_PAGEUP):
+                        scroll_y = max(0, scroll_y - paso)
+                    else:
+                        scroll_y = min(max_scroll, scroll_y + paso)
+                else:
+                    avanzar = True
+            if evento.type == pygame.MOUSEBUTTONDOWN:
+                avanzar = True
+            if evento.type == pygame.MOUSEWHEEL:
+                scroll_y = max(0, min(max_scroll, scroll_y - evento.y * 28))
+
+        # ── DIBUJO ──
+        pantalla.fill(COLOR_FONDO)
+
+        dibujar_texto(pantalla, "Pokémon Battle", fuente_titulo, COLOR_TEXTO,
+                      ANCHO // 2, 26, centrado=True)
+        dibujar_texto(pantalla, "Guía rápida antes de empezar", fuente_subtitulo, COLOR_SUBTEXTO,
+                      ANCHO // 2, 64, centrado=True)
+
+        panel_rect = pygame.Rect(PANEL_X, PANEL_Y, PANEL_W, PANEL_H)
+        dibujar_panel(pantalla, panel_rect, COLOR_PANEL, radio=16, borde=COLOR_BORDE, grosor_borde=2)
+
+        # Intro narrativa, siempre visible arriba del texto con scroll
+        intro_y = PANEL_Y + 18
+        for ln in envolver(
+            "Tu misión será formar un equipo de 3 Pokémon y derrotar al equipo rival "
+            "antes de que todos tus Pokémon sean vencidos.",
+            fuente_normal, WRAP_W
+        ):
+            dibujar_texto(pantalla, ln, fuente_normal, COLOR_TEXTO, PANEL_X + PAD_X, intro_y)
+            intro_y += LINE_H
+
+        # Área con scroll para el resto del contenido
+        scroll_top = intro_y + 12
+        scroll_rect = pygame.Rect(PANEL_X + 4, scroll_top, PANEL_W - 8, PANEL_Y + PANEL_H - scroll_top - 10)
+
+        clip_prev = pantalla.get_clip()
+        pantalla.set_clip(scroll_rect)
+        y = scroll_rect.y - scroll_y
+        for texto, fuente, color, indent, extra in lineas_render:
+            y += extra
+            if texto and fuente is not None:
+                dibujar_texto(pantalla, texto, fuente, color, PANEL_X + PAD_X + indent, y)
+            y += LINE_H
+        pantalla.set_clip(clip_prev)
+
+        # Línea divisoria sutil para indicar que hay scroll si corresponde
+        if max_scroll > 0:
+            pygame.draw.line(pantalla, COLOR_BORDE,
+                             (PANEL_X + 10, scroll_rect.y - 4), (PANEL_X + PANEL_W - 10, scroll_rect.y - 4), 1)
+            pygame.draw.line(pantalla, COLOR_BORDE,
+                             (PANEL_X + 10, scroll_rect.bottom + 4), (PANEL_X + PANEL_W - 10, scroll_rect.bottom + 4), 1)
+
+        # ── Indicación para avanzar ──
+        pulso = 150 + int(80 * abs((pygame.time.get_ticks() % 1400) / 700 - 1))
+        color_pulso = (pulso, pulso - 30 if pulso > 60 else 0, 40)
+        msg = "Haz clic o pulsá cualquier tecla para continuar"
+        dibujar_texto(pantalla, msg, fuente_chica, COLOR_BORDE_SEL,
+                      ANCHO // 2, ALTO - 34, centrado=True)
+        if max_scroll > 0:
+            dibujar_texto(pantalla, "↑ ↓ / rueda del mouse para desplazarte", fuente_chica,
+                          COLOR_SUBTEXTO, ANCHO // 2, PANEL_Y - 26, centrado=True)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    return True
+
+
 def pantalla_seleccion(pantalla, pokemones_obj):
     """
     Muestra la pantalla de selección de pokemones.
@@ -1459,15 +1664,23 @@ def cargar_pokemones_validado(diccio_nombres, pantalla=None):
 #  FUNCIÓN DE ENTRADA PRINCIPAL
 # ─────────────────────────────────────────────
 
-def run_seleccion(pokemones_obj):
+def run_seleccion(pokemones_obj, mostrar_intro=True):
     """
-    Inicializa pygame, corre la pantalla de selección y la cierra.
-    Retorna la lista de 3 objetos Pokemon del equipo del jugador,
-    o None si el usuario cerró la ventana.
+    Inicializa pygame y muestra la pantalla de selección de equipo.
+    Si mostrar_intro=True, antes muestra la pantalla de introducción/instrucciones
+    (pensada para la primera partida; en revanchas conviene pasar False).
+
+    Retorna (equipo, pantalla) o (None, pantalla) si el usuario cerró la ventana
+    en cualquiera de las dos pantallas.
     """
     pygame.init()
     pantalla = pygame.display.set_mode((ANCHO, ALTO))
     pygame.display.set_caption("Pokémon Battle")
+
+    if mostrar_intro:
+        if not pantalla_introduccion(pantalla):
+            return None, pantalla
+
     equipo = pantalla_seleccion(pantalla, pokemones_obj)
     return equipo, pantalla
 
