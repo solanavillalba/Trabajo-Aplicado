@@ -17,7 +17,7 @@ while jugar_de_nuevo==True:
     list_poke = {
         "Novatos": ["magikarp", "sandshrew", "tepig", "pikachu"],
     "Medios": ["wartortle", "marowak", "charmeleon", "luxio"],
-    "Altos": ["gyarados", "garchomp", "arcanine", "jolteon"] }
+    "Altos": ["milotic", "hippowdon", "arcanine", "jolteon"] }
 
     pokemones=0
 
