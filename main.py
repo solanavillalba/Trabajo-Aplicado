@@ -163,6 +163,81 @@ while jugar_de_nuevo==True:
     else:
         break
 
+¡Bienvenido!
 
+Tu misión será formar un equipo de 3 Pokémon y
+derrotar al equipo rival antes de que todos tus
+Pokémon sean vencidos.
+
+¿Cómo se juega?
+
+1. Selecciona un Pokémon de cada categoría:
+   • Novato
+   • Medio
+   • Alto
+
+2. Antes de comenzar la batalla podrás modificar
+   algunos atributos de tus Pokémon para adaptarlos
+   a tu estrategia. Ten en cuenta que mejorar una
+   estadística implica reducir otra.
+
+3. Se elegirá aleatoriamente un ambiente para el
+   combate:
+   🏖️ Playa
+   🌲 Bosque
+   ⛈️ Tormenta de Rayos
+   🌋 Volcán
+
+   Dependiendo de su tipo, algunos Pokémon se verán
+   beneficiados por el ambiente y otros perjudicados.
+   La adaptabilidad les permitirá resistir mejor los
+   efectos negativos.
+
+4. Elige cuál de tus Pokémon iniciará el combate.
+   La computadora hará lo mismo con uno de los suyos.
+
+ Durante cada turno podrás:
+
+   ⚔️ Atacar
+      Inflige daño al rival.
+
+   🛡️ Defender
+      Reduce el daño recibido.
+
+   💨 Esquivar
+      Intenta evitar completamente un ataque.
+      La probabilidad de éxito depende de la velocidad.
+
+Ataque especial
+
+Si tu Pokémon consigue 3 ataques exitosos
+consecutivos, desbloqueará un poderoso ataque
+especial cuyo daño dependerá de su atributo de
+ataque especial.
+
+Eventos aleatorios
+
+Durante la batalla pueden ocurrir eventos inesperados
+que aumenten o disminuyan la vida de alguno de los
+Pokémon, modificando el curso del combate.
+
+Cuando un Pokémon es derrotado
+
+Si uno de tus Pokémon cae en combate, podrás elegir
+otro integrante de tu equipo para continuar luchando.
+La batalla termina cuando uno de los equipos se queda
+sin Pokémon disponibles.
+
+Empate
+
+Si los últimos Pokémon de ambos equipos son derrotados
+al mismo tiempo, podrás aceptar el empate o disputar
+un combate de desempate.
+
+Al finalizar la partida se mostrarán estadísticas
+y gráficos sobre las acciones realizadas durante el
+combate.
+
+¡Buena suerte, entrenador!
 
 

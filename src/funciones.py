@@ -1,4 +1,4 @@
-import random
+
 from src.pokemones import crear_pokemon
 
 def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario=0, puntos_cpu=0):
@@ -37,7 +37,7 @@ def ronda(pokemon1, pokemon2, eventos_random, dict_usu, dict_cpu, puntos_usuario
             accion1= input("\n¿Qué acción quieres realizar? (atacar, defender o esquivar) ").lower().strip()
     
     if accion1=="especial":
-        puntos_usuario=0
+        puntos_usuario=0import random
 
     if accion1 not in dict_usu:
         dict_usu[accion1]=1
