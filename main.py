@@ -238,6 +238,5 @@ Al finalizar la partida se mostrarán estadísticas
 y gráficos sobre las acciones realizadas durante el
 combate.
 
-¡Buena suerte, entrenador!
-
+¡Buena suerte
 
