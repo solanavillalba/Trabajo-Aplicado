@@ -1262,6 +1262,19 @@ def run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambient
     # Log persistente que se va llenando durante TODA la partida (no se reinicia entre rondas)
     log_global = []
 
+    # Instrucciones iniciales en el log (caben 6 líneas)
+    _A = COLOR_BORDE_SEL          # amarillo — encabezados
+    _B = COLOR_TEXTO              # blanco   — descripciones
+    _G = (100, 220, 130)          # verde    — inicio
+    log_global += [
+        (">> 3 acciones disponibles:",                              _A),
+        ("  Atacar:   baja vida al rival segun tu ataque",         _B),
+        ("  Defender: reduce el dano recibido segun tu defensa",   _B),
+        ("  Esquivar: chance de esquivar segun tu velocidad",      _B),
+        ("  (Si ambos eligen lo mismo: sin ventaja para nadie)",   COLOR_SUBTEXTO),
+        (">> iComienza la batalla! iBuena suerte!",                _G),
+    ]
+
     # Diccionarios de conteo de acciones — igual que dict_usu/dict_cpu del CLI original,
     # se usan al final para los gráficos de torta (analizar_datos.grafico_torta)
     dict_usu = {}
