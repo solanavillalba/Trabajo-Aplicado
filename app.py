@@ -1302,9 +1302,13 @@ def pantalla_final(pantalla, ganador, promedio=None, mejor_ronda=None, dict_usu=
                 if dict_usu and btn_grafico_usu.fue_clickeado(evento):
                     # Igual que en el CLI: abre una ventana de matplotlib (bloqueante
                     # hasta que se cierre) con el porcentaje de acciones del usuario.
+                    pygame.display.iconify()
                     grafico_torta(dict_usu, "Porcentaje de acciones del Usuario")
+                    pygame.display.set_mode((ANCHO, ALTO))
                 if dict_cpu and btn_grafico_cpu.fue_clickeado(evento):
+                    pygame.display.iconify()
                     grafico_torta(dict_cpu, "Porcentaje de acciones de la CPU")
+                    pygame.display.set_mode((ANCHO, ALTO))
 
         pantalla.fill(COLOR_FONDO)
 
@@ -1723,10 +1727,11 @@ if __name__ == "__main__":
         Evento_aleatorio("una gripe",    -0.5),
         Evento_aleatorio("asma",         -1),
     ]
-
+    primera_vez = True
     while True:
         # Selección del equipo usuario
         equipo_usu, pantalla = run_seleccion(pokemones_usu)
+        primera_vez = False
         if equipo_usu is None:
             break
 
@@ -1744,6 +1749,7 @@ if __name__ == "__main__":
             equipo_compu.append(pok)
 
         resultado = run_partida(pantalla, equipo_usu, equipo_compu, lista_eventos, lista_ambientes)
+        print(f"[DEBUG] resultado de run_partida: {resultado}")  # ← temporal
 
         if resultado == "nuevo":
             # Recargar pokemones frescos de la API para una partida nueva
