@@ -97,37 +97,8 @@ Ejemplo del gráfico:
 
 Diagramas de diseño
 https://github.com/solanavillalba/Trabajo-Aplicado/tree/main/docs/diagramas-de-flujo
-Declaración de uso de IA
-Si bien el uso de la IA no fue descartado, es necesario aclarar que su uso fue puramente de apoyo (cuando no sabíamos hacer alguna acción en específico, ej. “Hola chat, tengo este código … y quiero agregar un golpe especial pero no estoy segura de como hacerlo, tiene que tener una racha de 3 golpes efectivos. ayudame explicandome de a líneas”). El código en sí mismo y la lógica detrás fueron producciones nuestras.
-La IA fue utilizada para dos tipos de acciones principales:
-Uso de API
-Se le solicito a la IA que genere un código para poder llamar a la API de Poké API y poder solicitar los datos que se necesitaban para el trabajo. Estos son: nombre de pokemon, ataque, defensa, speed, special attack, special defense, type, hp y sprite (imagen). A continuación se adjunta un ejemplo de prompt: 
-“hola chat, necesito que me ayudes a comprender y generar una función para mi juego de pokemon. La idea es que use la librería requests para llamar a la pokeapi y que reciba como parámetro el nombre de un pokemon. Con esa informacion quiero obtener los datos necesarios para mi juego y devolverlos en un diccionario, en este caso hp, attack, defense, special attack, special defense, speed y el tipo del pokemon. Tambien me gustaria que me expliques mas o menos como se accede a esos datos dentro de la respuesta de la api para poder entenderlo mejor. Si el pokemon ingresado no existe o hay algun problema con la consulta, la función deberia tirar un ValueError. No necesito algo muy complicado, pero si que este bien explicado para poder adaptarlo despues al resto del proyecto”
-q: “qué significa eso de status_code != 200? 
-A: “El status_code es un código que devuelve el servidor para indicar si la solicitud fue exitosa o no. El código 200 significa que todo salió bien y que la información fue encontrada correctamente.
-Por ejemplo:
-200: consulta exitosa.
-404: recurso no encontrado (por ejemplo, el Pokémon no existe).
-500: error interno del servidor.
-Por eso en el código aparece:
-if respuesta.status_code != 200:
-   	 raise ValueError(f"Error con {pokemon}")
-La idea es verificar que la API respondió correctamente antes de intentar acceder a los datos.”
-Creación de dashboard en archivo app.py con ejemplos de prompts.
-Para desarrollar la interfaz gráfica del juego, se le pidió a la inteligencia artificial Claude que la produjera utilizando la librería Gamepy. Para que haga esto, primero, se le explicó a la IA el contexto y el objetivo del juego y bajo qué lógica desarrollamos el programa. Después, se les paso todos los archivos del programa (main, funciones, clases, pokemones, analizar_datos, imagenes) y que, utilizando las funciones ya creadas, y observando la lógica que observe en el programa, desarrolle un dashboard visual para poder jugar. A continuación se adjuntan ejemplos de prompts:
-“Hola claude como estas, mira estoy haciendo un programa de batalla de pokemones. te dejo los archivos del programa. ahora tengo que hacer la interfaz grafica, para eso estoy usando gamepy. YO NO SE NADA DE GAMEPY, de python si. necesito que me ayudes a armar la interfaz grafica, te dejo los archivos. en el de app.py esta lo de la interfaz que ya pude armar un poquito”
-“Q: ¿Cómo querés arrancar con la interfaz gráfica?
-A: Ir pantalla por pantalla (primero selección de pokemones, después la batalla)
-Q: ¿Tenés sprites/imágenes de los pokemones o usamos los de la PokeAPI?
-A: Usemos los sprites de la PokeAPI (se descargan automático)”
-Posteriormente, Claude nos preguntó como queríamos que lo hiciera y le dijimos que queríamos dividir el programa en varias pantallas, la de selección de equipo de pokemon, selección de pokemon a utilizar en la ronda, pantalla de batalla y pantalla de finalización.
-Una vez que creó el programa, surgieron unos cuantos problemas, como por ejemplo el historial de acciones no se actualizaba o que la ronda quedaba congelada, por lo que también se le solicitó a Claude que solucionara eso.
-“Claude, ya estuve laburando en la app.py, ya hice lo de la selección de personajes y lo de batalla. Ahi te paso el archivo. Ahora, necesito que me ayudes con dos cosas. 
-Sabes que, primero, en el LOG de la batalla el texto de las acciones desaparece al instante, sale un instante y se va. Necesito que soluciones eso para que quede y despues vaya subiendo, y desapareciendo del cuadro, a medida que nuevo texto aparece.
-Ademas, a la hora de elegir los personajes necesito hacer un cambio en la barra de las stats. Necesito que adaptes la barrita teniendo en cuenta que los maximos por stat son: 1. Ataque: 2,15 2. Defensa: 0,90 3. Adaptabilidad: 1 4. Velocidad: 0,90”
 
-Eventualmente, la base del programa quedó totalmente funcional y de acuerdo a lo que se le solicitó. Al final, también se le pidió a la IA que arreglara algunos detalles visuales y cuestiones estéticas. 
-“perfecto claude, posta quedo muy bien, ahora te puedo pedir otro favor. Viste que hay 4 tipos de ambientes, bosque, playa, volcan y tormenta de rayos. Tengo una imagen para cada ambiente, en las partidas podes generar un codigo para setear las imagenes de los ambientes? mira te las paso por las dudas, nose bien si podes ponerlas directamente o tengo que copiar la url de mi computadora, pero por lo menos podes ir viendo las dimensiones. Por las dudas, quiero que coloques la imagen donde van los pokemones, no a los costados sino en ese mismo panel, haciendo que los pokemones queden por encima de la imagen.”
+El Uso de inteligencia artificial esta en la documentacion.
 
 Notas o explicaciones adicionales para correr correctamente el programa
 En caso de tener problemas con la instalación de las librerías o de python en sí, adjunto el link de las páginas oficiales de cada librería, donde se puede consultar o ver mas información sobre su debida instalación.
