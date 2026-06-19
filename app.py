@@ -1492,7 +1492,7 @@ if __name__ == "__main__":
     "Altos": ["milotic", "hippowdon", "arcanine", "jolteon"]
     }
 
-    print("Cargando pokemones...")
+    print("Cargando juego...")
     # Carga validada: si algún nombre no es un pokémon real para la API,
     # se muestra una pantalla de error profesional y el programa termina
     # en vez de explotar con un traceback.
