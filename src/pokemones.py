@@ -13,28 +13,55 @@ def rango_atributos(diccio):
     Retorna el mismo diccionario con los valores modificados al rango de 0 y 2.
     '''
     diccio["hp"]=5
-
+    categoria=''
+    rangos={}
     suma= diccio['ataque']+diccio['defensa']+diccio['special_attack']+diccio['adaptabilidad']+diccio['speed']
-
-    if suma<300:
-        diccio['ataque']=1
-        diccio['defensa']=0.75
-        diccio['special_attack']=0.25
-        diccio['adaptabilidad']=0
-        diccio['speed']=0.25
-    elif 300<=suma<=400:
-        diccio['ataque']=1.5
-        diccio['defensa']=0.5
-        diccio['special_attack']=0.5
-        diccio['adaptabilidad']=0.5
-        diccio['speed']=0.5
-    else:
-        diccio['ataque']=2
-        diccio['defensa']=0.25
-        diccio['special_attack']=1
-        diccio['adaptabilidad']=1
-        diccio['speed']=0.75
     
+    if suma<300:
+        categoria='Novatos'
+        
+    elif 300<=suma<=400:
+        categoria='Medios'
+        
+    else:
+        categoria='Altos'
+    
+    max_base=140
+    if categoria=='Novatos':
+        rangos={
+            'ataque': (0.10,0.60),
+            'special_attack':(0.05,0.30),
+            'defensa':(0.05,0.22),
+            'speed':(0.05,0.22),
+            'adaptabilidad':(0.05,0.25)}
+    elif categoria=='Medios':
+        rangos={
+            'ataque': (0.70,1.30),
+            'special_attack':(0.35,0.60),
+            'defensa':(0.25,0.48),
+            'speed':(0.25,0.48),
+            'adaptabilidad':(0.30,0.55)}
+    else:
+         rangos = {
+            'ataque': (1.40, 2.00),
+            'special_attack': (0.70, 1.00),
+            'defensa': (0.50, 0.75),
+            'speed': (0.50, 0.75),
+            'adaptabilidad': (0.60, 0.85)
+        }
+
+    for atributo,(mini,maxi) in rango.items():
+        valor_base=(diccio[atributo],0)
+        valor_escalado=mini+(valor_base/max_base)*(maxi-mini)
+        valor_redondeado=round(valor_escalado,2)
+
+        if valor_redondeado>maxi:
+            diccio[atributo]=maxi
+        elif valor_redondeado<mini:
+            diccio[atributo]=mini
+        else:
+            diccio[atributo]=valor_redondeado
+
     return diccio
 
 def crear_pokemon(pokemon):
