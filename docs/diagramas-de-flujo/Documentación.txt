@@ -1,0 +1,223 @@
+Documentación
+
+Tema elegido: simulador de combate y adaptación pokémon.
+
+Objetivo del programa: desarrollar un juego interactivo que permita simular combates entre Pokémons en distintos ambientes. 
+Lograr producir una experiencia de dinamismo en el usuario al poder modificar características de los pokémons, y enfrentarse a 
+distintas circunstancias (ambientes y eventos aleatorios que modifican el desarrollo de la partida).
+
+Usuario esperado: el programa está dirigido a cualquier persona interesada en los videojuegos de estrategia y en el universo Pokémon.
+
+Descripción general del funcionamiento: el juego contará con un conjunto de 12 Pokémon obtenidos a partir de la PokéAPI, pertenecientes a 
+distintos tipos. Estos Pokémon estarán organizados en tres categorías: “Novatos”, “Medios” y “Altos”. Al momento de conformar el equipo, el 
+usuario deberá seleccionar un Pokémon de cada categoría disponible, mientras que la computadora realizará sus selecciones de forma automática y 
+aleatoria siguiendo el mismo criterio. 
+Cada Pokémon será modelado mediante una clase que almacenará información relevante para el combate. Entre sus atributos se encuentran:
+• Nombre.
+• Vida (HP).
+• Ataque.
+• Defensa.
+• Ataque especial.
+• Adaptabilidad (defensa especial).
+• Velocidad.
+• Tipo.
+Para crear cada Pokémon, el programa realizará consultas a la PokéAPI utilizando su nombre. El sistema validará que todos los Pokémon definidos para
+la partida existan en la PokéAPI. Si alguna consulta falla, se informará el error correspondiente y se impedirá continuar con la ejecución del juego. 
+A partir de la información obtenida, se extraerán  estadísticas reales como vida, ataque, defensa, ataque especial, defensa especial, velocidad y 
+tipo, las cuales serán utilizadas para construir los objetos Pokémon dentro del juego.
+Las estadísticas obtenidas desde la PokéAPI serán transformadas a una escala adaptada al sistema de combate del juego. Esto permitirá clasificar 
+los atributos en distintos niveles de desempeño y mantener un mejor equilibrio entre los Pokémon durante las batallas. Cada Pokémon contará con un 
+método que permitirá modificar algunos de sus atributos. Estos cambios consisten en aumentar una estadística a cambio de disminuir otra. Por ejemplo, 
+si se incrementa el ataque, la velocidad disminuirá en la misma cantidad; si se aumenta la defensa, se reducirá la adaptabilidad; si se mejora la 
+adaptabilidad, disminuirá la defensa; y si se incrementa la velocidad, se reducirá el ataque. Esta mecánica permitirá al jugador ajustar las 
+características de su Pokémon según la estrategia que desee utilizar durante la batalla. De manera similar, la computadora también realizará 
+modificaciones automáticas sobre los atributos de los Pokémon que seleccione, utilizando criterios aleatorios. El sistema controlará que ningún 
+atributo pueda tomar valores negativos, estableciendo un límite mínimo de cero para todas las estadísticas modificables. 
+Antes de comenzar cada partida, se seleccionará aleatoriamente un ambiente donde se desarrollará el enfrentamiento. Los ambientes posibles serán 
+playa, bosque, tormenta de rayos y volcán. Cada uno estará asociado a un tipo específico y aplicará modificadores distintos sobre los atributos de 
+ataque, defensa y velocidad. Este ambiente afectará a todos los Pokémon de ambos equipos antes de iniciar el combate, modificando sus atributos de 
+ataque, defensa y velocidad. Dependiendo de la compatibilidad entre el tipo del Pokémon y el ambiente seleccionado, sus estadísticas podrán verse 
+perjudicadas. El atributo de adaptabilidad también influirá en este proceso. Cuando un Pokémon se encuentre en un ambiente desfavorable, una mayor 
+adaptabilidad le permitirá reducir o evitar parte de las penalizaciones provocadas por dicho ambiente, mientras que los Pokémon con menor 
+adaptabilidad se verán más afectados por sus efectos. Si el Pokémon tiene el máximo de adaptabilidad o si es del mismo tipo que el ambiente, 
+entonces no se verá afectado.
+Durante el transcurso de la partida, pueden suceder eventos aleatorios, los cuales afectarán a uno de los Pokémon participantes y modificarán su 
+cantidad de vida. Algunos eventos serán beneficiosos, como recibir un kit médico o un ibuprofeno, mientras que otros serán perjudiciales, como 
+sufrir una gripe o un episodio de asma. Dependiendo del evento ocurrido, la vida del Pokémon podrá aumentar o disminuir, alterando el desarrollo del
+combate. 
+Cada jugador contará con un equipo de tres Pokémon seleccionados previamente. Una vez aplicados los efectos del ambiente, el usuario elegirá con 
+qué pokémon empezar la batalla; la computadora hace lo mismo de forma aleatoria. De esta manera, comienza la partida. En cada ronda, el usuario y 
+la computadora podrán elegir entre tres acciones principales: atacar, defender o esquivar. El resultado de cada ronda dependerá de las acciones 
+elegidas por ambos participantes. Si ambos Pokémon deciden atacar, los dos recibirán daño. Si un Pokémon ataca y el otro se defiende, el daño 
+recibido se verá reducido según el valor de defensa que tenga. Si un Pokémon ataca y el otro intenta esquivar, existirá una probabilidad de evitar 
+completamente el ataque o de recibirle de lleno, determinada por la velocidad del Pokémon que esquiva. Si ambos participantes eligen defenderse o 
+esquivar, ninguno de los dos recibirá daño durante ese turno. Por otra parte, si un jugador (ya sea el usuario o la computadora) logra tres ataques 
+exitosos seguidos, desbloquea un ataque especial cuyo poder dependerá del pokémon en juego. Este ataque especial es un gran generador de daño.
+Un pokémon es derrotado cuando no tiene más vida. En ese caso, será reemplazado por otro pokémon disponible de su equipo; y si el Pokémon 
+contrincante permanece con vida, el mismo continuará combatiendo hasta también ser derrotado. Este proceso se repetirá hasta que uno de los dos 
+equipos se quede sin pokémons con vida. Es entonces que se declara como ganador al equipo contrincante. Puede suceder que haya un empate (los 
+últimos pokemons de ambos equipos mueren al mismo tiempo), en ese caso, se le da dos opciones al usuario. Por un lado, dejar la partida así y que 
+termine en un empate; o por otro, revivir uno de sus pokémons en su equipo y combatir con el pokémon revivido de forma aleatoria del equipo de la 
+computadora. En este último, se declara como ganador a aquel pokémon que viva cuando el contrincante muere.
+Es importante notar que el sistema almacenará información sobre el desempeño de cada combate, registrando las acciones realizadas, la cantidad de 
+ataques efectuados y los resultados obtenidos. A partir de estos datos se calcularán estadísticas, como el promedio de ataques necesarios para 
+derrotar a los Pokémon rivales y el enfrentamiento en el que se logró una victoria utilizando la menor cantidad de ataques. De esta forma, se 
+generarán gráficos de torta para visualizar la distribución porcentual de las acciones realizadas por el usuario y por la computadora durante la 
+partida. Estas visualizaciones facilitarán el análisis de las estrategias utilizadas por el jugador.
+Una vez finalizada la partida y mostradas las estadísticas correspondientes, el usuario podrá decidir si desea iniciar una nueva partida o finalizar 
+el programa. 
+
+Entradas y salidas del sistema:  
+
+Función                     Entrada                         Tipo                                Salida                              Tipo
+
+poke_api()            Nombre de un Pokémon                  str                 Datos del Pokémon obtenidos desde la PokéAPI        dict
+                                                                                  (vida, ataque, defensa, velocidad, tipo)
+
+rango_atributos()   Diccionario con estadísticas            dict                 Diccionario con estadísticas adaptadas             dict
+                       originales de la API                                            la escala del juego
+ 
+crear_pokemon()        Nombre de un Pokémon                 str                 Pokémon creado con sus atributos cargados        Objeto Pokemon
+
+str_a_pokemones()   Lista de nombres de Pokémon           list[str]                     Lista de objetos Pokémon                  list[Pokemon]
+
+convertir_diccio()    Diccionario con categorías            dict                Diccionario con categorías y objetos Pokémon         dict
+                        y nombres de Pokémon
+
+cambiar_atributo()    Atributo a modificar y              str, float                  Pokémon con atributos modificados           Objeto Pokemon
+                        valor del cambio 
+
+modifica_atributo()     Ambiente y Pokémon              Objeto Ambiente,            Pokémon afectado por el ambiente              Objeto Pokemon
+                                                        Objeto Pokemon
+
+evento()            Evento aleatorio y Pokémon      Objeto Evento_aleatorio,            Pokémon con vida modificada               Objeto Pokemon
+                                                        Objeto Pokemon
+
+ronda()             Dos Pokémon, acciones elegidas  Objetos y variables varias     Estado actualizado de la ronda, puntos     Objetos Pokemon, dict 
+                        y eventos posibles                                              y registros de acciones                        e int
+                        
+partida()           Equipos de usuario y CPU,      list[Pokemon], list[Ambiente],    Estadísticas completas de la partida       dict, dict, list
+                        ambientes y eventos           list[Evento_aleatorio]
+
+promedio()          Información de las rondas               list                  Promedio de ataques y mejor enfrentamiento        float, list
+
+grafico_torta()         Registro de acciones                dict                Gráfico de torta con la distribución de acciones    Visualización 
+                                                                                                                                        gráfica
+
+
+Funcionalidades principales: simular una batalla entre dos equipos de  pokemones con sus atributos modificados a través de la repetición de varias 
+rondas. 
+
+Información que el programa utilizará: datos de la PokéAPI. Específicamente, los datos sobre el nombre, tipo, ataque, defensa, defensa_especial, 
+ataque_especial y velocidad de la siguiente lista de pokemons: magikarp, sanshrew, tepig, pikachu, wartortle, marowak, charmaleon, luxio, milotic, 
+hippowdon, arcanine, jolteon.
+
+Información que el programa mostrará: el ganador de la batalla. También, en caso de que el usuario haya derrotado como mínimo a uno de los pokemons 
+el equipo contrario, se le mostrará el promedio de la cantidad de golpes que le costó para matar a/los pokemon/s del contrincante y, también, cuál 
+fue su mejor ronda según el pokemon del contrincante que le costó matar con la menor cantidad de golpes. Por último, se le mostrará dos gráficos de 
+torta con las acciones realizadas en la partida y expresadas de una forma porcentual, permitiendo analizar las decisiones tomadas. 
+
+Librearías a utilizar: matplotlib, random, requests, pygame, io, os, sys.
+
+División de tareas: es importante aclarar que todos los integrantes fueron partícipes en el diseño del programa.
+
+Portillo, Victoria: código sobre la generación de la partida y el empate, y la redefinición de los rangos de cada pokémon para que estén acoplados 
+al programa.
+
+Ramírez Osorio, María José: la entrada de datos (PokéAPI), generación de gráficos, parte de la creación del pokémon.
+
+Ruiz, Bruno: unificación de todo el código, creación de la interfaz visual.
+
+Villalba, Solana: código sobre la generación de las rondas, parte de la creación del pokémon, análisis de los golpes dados en cada ronda y la 
+creación de los ambientes y eventos aleatorios.
+
+Uso de inteligencia artificial:
+Si bien el uso de la IA no fue descartado, es necesario aclarar que su uso fue puramente de apoyo (cuando no sabíamos hacer alguna acción en 
+específico, ej. “Hola chat, tengo este código … y quiero agregar un golpe especial pero no estoy segura de como hacerlo, tiene que tener una racha 
+de 3 golpes efectivos. ayudame explicandome de a líneas”). El código en sí mismo y la lógica detrás fueron producciones nuestras.
+La IA fue utilizada para dos tipos de acciones principales:
+
+1. Uso de API
+Se le solicito a la IA que genere un código para poder llamar a la API de Poké API y poder solicitar los datos que se necesitaban para el trabajo. 
+Estos son: nombre de pokemon, ataque, defensa, speed, special attack, special defense, type, hp y sprite (imagen). A continuación se adjunta un 
+ejemplo de prompt: 
+“hola chat, necesito que me ayudes a comprender y generar una función para mi juego de pokemon. La idea es que use la librería requests para llamar 
+a la pokeapi y que reciba como parámetro el nombre de un pokemon. Con esa informacion quiero obtener los datos necesarios para mi juego y devolverlos
+en un diccionario, en este caso hp, attack, defense, special attack, special defense, speed y el tipo del pokemon. Tambien me gustaria que me 
+expliques mas o menos como se accede a esos datos dentro de la respuesta de la api para poder entenderlo mejor. Si el pokemon ingresado no existe o 
+hay algun problema con la consulta, la función deberia tirar un ValueError. No necesito algo muy complicado, pero si que este bien explicado para 
+poder adaptarlo despues al resto del proyecto”
+q: “qué significa eso de status_code != 200? 
+A: “El status_code es un código que devuelve el servidor para indicar si la solicitud fue exitosa o no. El código 200 significa que todo salió bien 
+y que la información fue encontrada correctamente.
+Por ejemplo:
+200: consulta exitosa.
+404: recurso no encontrado (por ejemplo, el Pokémon no existe).
+500: error interno del servidor.
+Por eso en el código aparece:
+if respuesta.status_code != 200:
+   	 raise ValueError(f"Error con {pokemon}")
+La idea es verificar que la API respondió correctamente antes de intentar acceder a los datos.”
+
+2. Creación de dashboard en archivo app.py con ejemplos de prompts.
+Para desarrollar la interfaz gráfica del juego, se le pidió a la inteligencia artificial Claude que la produjera utilizando la librería Gamepy. 
+Para que haga esto, primero, se le explicó a la IA el contexto y el objetivo del juego y bajo qué lógica desarrollamos el programa. Después, se les 
+paso todos los archivos del programa (main, funciones, clases, pokemones, analizar_datos, imagenes) y que, utilizando las funciones ya creadas, y 
+observando la lógica que observe en el programa, desarrolle un dashboard visual para poder jugar. A continuación se adjuntan ejemplos de prompts:
+“Hola claude como estas, mira estoy haciendo un programa de batalla de pokemones. te dejo los archivos del programa. ahora tengo que hacer la 
+interfaz grafica, para eso estoy usando gamepy. YO NO SE NADA DE GAMEPY, de python si. necesito que me ayudes a armar la interfaz grafica, te dejo 
+los archivos. en el de app.py esta lo de la interfaz que ya pude armar un poquito”
+“Q: ¿Cómo querés arrancar con la interfaz gráfica?
+A: Ir pantalla por pantalla (primero selección de pokemones, después la batalla)
+Q: ¿Tenés sprites/imágenes de los pokemones o usamos los de la PokeAPI?
+A: Usemos los sprites de la PokeAPI (se descargan automático)”
+Posteriormente, Claude nos preguntó como queríamos que lo hiciera y le dijimos que queríamos dividir el programa en varias pantallas, la de selección
+de equipo de pokemon, selección de pokemon a utilizar en la ronda, pantalla de batalla y pantalla de finalización.
+Una vez que creó el programa, surgieron unos cuantos problemas, como por ejemplo el historial de acciones no se actualizaba o que la ronda quedaba 
+congelada, por lo que también se le solicitó a Claude que solucionara eso.
+“Claude, ya estuve laburando en la app.py, ya hice lo de la selección de personajes y lo de batalla. Ahi te paso el archivo. Ahora, necesito que me 
+ayudes con dos cosas. 
+Sabes que, primero, en el LOG de la batalla el texto de las acciones desaparece al instante, sale un instante y se va. Necesito que soluciones eso 
+para que quede y despues vaya subiendo, y desapareciendo del cuadro, a medida que nuevo texto aparece.
+Ademas, a la hora de elegir los personajes necesito hacer un cambio en la barra de las stats. Necesito que adaptes la barrita teniendo en cuenta 
+que los maximos por stat son: 1. Ataque: 2,15 2. Defensa: 0,90 3. Adaptabilidad: 1 4. Velocidad: 0,90”
+
+Eventualmente, la base del programa quedó totalmente funcional y de acuerdo a lo que se le solicitó. Al final, también se le pidió a la IA que 
+arreglara algunos detalles visuales y cuestiones estéticas. 
+“perfecto claude, posta quedo muy bien, ahora te puedo pedir otro favor. Viste que hay 4 tipos de ambientes, bosque, playa, volcan y tormenta de 
+rayos. Tengo una imagen para cada ambiente, en las partidas podes generar un codigo para setear las imagenes de los ambientes? mira te las paso por 
+las dudas, nose bien si podes ponerlas directamente o tengo que copiar la url de mi computadora, pero por lo menos podes ir viendo las dimensiones. 
+Por las dudas, quiero que coloques la imagen donde van los pokemones, no a los costados sino en ese mismo panel, haciendo que los pokemones queden 
+por encima de la imagen.”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
