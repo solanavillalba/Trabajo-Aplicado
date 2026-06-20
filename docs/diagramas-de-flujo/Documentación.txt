@@ -189,35 +189,3 @@ rayos. Tengo una imagen para cada ambiente, en las partidas podes generar un cod
 las dudas, nose bien si podes ponerlas directamente o tengo que copiar la url de mi computadora, pero por lo menos podes ir viendo las dimensiones. 
 Por las dudas, quiero que coloques la imagen donde van los pokemones, no a los costados sino en ese mismo panel, haciendo que los pokemones queden 
 por encima de la imagen.”
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
